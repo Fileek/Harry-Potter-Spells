@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">Harry Potter Spells</string>
+    <string name="type">Type:</string>
+    <string name="effect">Effect:</string>
 </resources>

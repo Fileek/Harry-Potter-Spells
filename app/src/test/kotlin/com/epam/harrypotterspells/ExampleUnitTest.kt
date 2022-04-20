@@ -1,4 +1,4 @@
-package com.example.harrypotterspells
+package com.epam.harrypotterspells
 
 import org.junit.Test
 

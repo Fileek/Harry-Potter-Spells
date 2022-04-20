@@ -12,7 +12,7 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.HarryPotterSpells">
         <activity
-            android:name="com.epam.harrypotterspells.ui.MainActivity"
+            android:name="com.epam.harrypotterspells.MainActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
