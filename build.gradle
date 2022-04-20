@@ -10,12 +10,12 @@ ext {
     appcompat_version = '1.4.1'
     material_version = '1.5.0'
     viewbinding_delegate_version = '1.5.3'
+    navigation_version = '2.4.2'
     lifecycle_version = '2.5.0-alpha06'
     rxandroid_version = '3.0.0'
     rxjava_version = '3.1.4'
     retrofit_version = '2.9.0'
     rxjava_adapter_version = '3.0.0'
-    room_version = '2.4.2'
     junit_version = '4.13.2'
     mockk_version = '1.12.3'
 }

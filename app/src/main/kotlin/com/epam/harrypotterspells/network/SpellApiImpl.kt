@@ -5,7 +5,7 @@ import io.reactivex.rxjava3.core.Observable
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 
-object SpellApiImpl {
+object SpellApiImpl : SpellApi {
     private val retrofit = Retrofit.Builder()
         .baseUrl("https://wizard-world-api.herokuapp.com")
         .addConverterFactory(GsonConverterFactory.create())
@@ -14,7 +14,7 @@ object SpellApiImpl {
 
     private val spellService = retrofit.create(SpellApi::class.java)
 
-    fun getCats(): Observable<List<Spell>> {
+    override fun getSpells(): Observable<List<Spell>> {
         return spellService.getSpells()
     }
 }
