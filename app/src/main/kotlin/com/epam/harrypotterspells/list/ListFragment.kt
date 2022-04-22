@@ -5,17 +5,19 @@ import android.util.Log
 import android.view.View
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.navigation.fragment.findNavController
 import by.kirich1409.viewbindingdelegate.viewBinding
+import com.epam.harrypotterspells.details.DetailsFragment
 import com.epam.harrypotterspells.network.Spell
 import com.example.harrypotterspells.R
-import com.example.harrypotterspells.databinding.FragmentMainBinding
+import com.example.harrypotterspells.databinding.FragmentListBinding
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
 import io.reactivex.rxjava3.schedulers.Schedulers
 
-class ListFragment : Fragment(R.layout.fragment_main) {
+class ListFragment : Fragment(R.layout.fragment_list) {
 
     private val spellAdapter = SpellAdapter()
-    private val binding by viewBinding(FragmentMainBinding::bind)
+    private val binding by viewBinding(FragmentListBinding::bind)
     private val viewModel: ListViewModel by viewModels()
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {

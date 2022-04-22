@@ -29,6 +29,6 @@
         android:layout_height="match_parent"
         app:layoutManager="LinearLayoutManager"
         tools:context="com.epam.harrypotterspells.list.ListFragment"
-        tools:listitem="@layout/fragment_main"
+        tools:listitem="@layout/fragment_list"
         tools:visibility="gone" />
 </FrameLayout>
