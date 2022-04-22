@@ -20,8 +20,6 @@ class Store<S : State, A : Action>(
         Log.v(TAG, "dispatch ${action.javaClass}")
         val newState = reducer.reduce(_state.value ?: initialState, action)
         _state.accept(newState)
-        if (action is ListAction.Loading) {
-            middleware.process(this)
-        }
+        middleware.process(action, this)
     }
 }

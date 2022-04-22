@@ -20,6 +20,10 @@ class DetailsFragment : Fragment(R.layout.fragment_details) {
             spellType.text = spell.type
             spellEffect.text = spell.effect
             spellIncantation.text = spell.incantation ?: "Unknown"
+            spellLight.text = spell.light
+            spellCreator.text = spell.creator ?: "Unknown"
+            canBeVerbal.text =
+                if (spell.canBeVerbal == true) "Can be verbal" else "Can not be verbal"
         }
     }
 }

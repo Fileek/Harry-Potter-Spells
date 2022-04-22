@@ -6,15 +6,21 @@ import io.reactivex.rxjava3.schedulers.Schedulers
 
 class ListMiddleware(private val api: SpellApi) : Middleware<ListState, ListAction> {
 
-    override fun process(store: Store<ListState, ListAction>) {
+    override fun process(action: ListAction, store: Store<ListState, ListAction>) {
+        if (action is ListAction.Loading) {
+            observeApiResponse(store)
+        }
+    }
+
+    private fun observeApiResponse(store: Store<ListState, ListAction>) {
         api.getSpells()
             .subscribeOn(Schedulers.io())
             .subscribe({
-                val action = ListAction.Success(it)
-                store.dispatch(action)
+                val newAction = ListAction.Success(it)
+                store.dispatch(newAction)
             }, {
-                val action = ListAction.Failure(it)
-                store.dispatch(action)
+                val newAction = ListAction.Failure(it)
+                store.dispatch(newAction)
             })
     }
 }
