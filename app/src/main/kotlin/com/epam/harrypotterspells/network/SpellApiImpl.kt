@@ -6,8 +6,10 @@ import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 
 object SpellApiImpl : SpellApi {
+    private const val BASE_URL = "https://wizard-world-api.herokuapp.com"
+
     private val retrofit = Retrofit.Builder()
-        .baseUrl("https://wizard-world-api.herokuapp.com")
+        .baseUrl(BASE_URL)
         .addConverterFactory(GsonConverterFactory.create())
         .addCallAdapterFactory(RxJava3CallAdapterFactory.create())
         .build()

@@ -1,141 +1,218 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:padding="@dimen/double_spacing">
 
-    <TextView
-        android:id="@+id/spell_name"
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:gravity="center"
-        android:textAppearance="@style/TextAppearance.AppCompat.Title"
-        android:textSize="32sp"
-        app:layout_constraintBottom_toTopOf="@id/spell_incantation"
-        app:layout_constraintTop_toTopOf="parent"
-        tools:text="Locking Spell" />
+        android:layout_height="wrap_content">
 
-    <TextView
-        android:id="@+id/pronunciation"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:text="@string/pronunciation"
-        android:textAppearance="@style/TextAppearance.AppCompat.Large"
-        app:layout_constraintBottom_toBottomOf="@id/spell_incantation"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@id/spell_incantation" />
+        <TextView
+            android:id="@+id/spell_name"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/double_spacing"
+            android:gravity="center"
+            android:textAppearance="@style/TextAppearance.AppCompat.Title"
+            android:textSize="@dimen/title_text_size"
+            app:layout_constraintBottom_toTopOf="@id/incantation_layout"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:text="Locking Spell" />
 
-    <TextView
-        android:id="@+id/spell_incantation"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="@dimen/single_spacing"
-        android:textAppearance="@style/TextAppearance.AppCompat.Large"
-        android:textStyle="italic|bold"
-        app:layout_constraintBottom_toTopOf="@id/spell_type"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@id/pronunciation"
-        app:layout_constraintTop_toBottomOf="@id/spell_name"
-        tools:text="Colloportus" />
+        <LinearLayout
+            android:id="@+id/incantation_layout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginVertical="@dimen/quadruple_spacing"
+            android:orientation="horizontal"
+            app:layout_constraintBottom_toTopOf="@id/type"
+            app:layout_constraintTop_toBottomOf="@id/spell_name">
 
-    <TextView
-        android:id="@+id/type"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:text="@string/type"
-        android:textAppearance="@style/TextAppearance.AppCompat.Large"
-        app:layout_constraintBottom_toBottomOf="@id/spell_type"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@id/spell_type" />
+            <TextView
+                android:id="@+id/pronunciation"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_weight="1.6"
+                android:text="@string/pronunciation"
+                android:textAppearance="@style/TextAppearance.AppCompat.Large" />
 
-    <TextView
-        android:id="@+id/spell_type"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="@dimen/single_spacing"
-        android:textAppearance="@style/TextAppearance.AppCompat.Large"
-        app:layout_constraintBottom_toTopOf="@id/spell_effect"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@id/type"
-        app:layout_constraintTop_toBottomOf="@id/spell_incantation"
-        tools:text="Charm" />
+            <TextView
+                android:id="@+id/spell_incantation"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginStart="@dimen/single_spacing"
+                android:layout_weight="2"
+                android:textAppearance="@style/TextAppearance.AppCompat.Large"
+                android:textStyle="italic|bold"
+                tools:text="Colloportus" />
 
-    <TextView
-        android:id="@+id/effect"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:text="@string/effect"
-        android:textAppearance="@style/TextAppearance.AppCompat.Large"
-        app:layout_constraintBottom_toBottomOf="@id/spell_effect"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@id/spell_effect" />
+            <ImageButton
+                android:id="@+id/edit_incantation_button"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_weight="0.5"
+                android:backgroundTint="@android:color/transparent"
+                android:src="@drawable/edit_icon" />
 
-    <TextView
-        android:id="@+id/spell_effect"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="@dimen/single_spacing"
-        android:textAppearance="@style/TextAppearance.AppCompat.Large"
-        app:layout_constraintBottom_toTopOf="@id/spell_light"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@id/effect"
-        app:layout_constraintTop_toBottomOf="@id/spell_type"
-        tools:text="Locks doors" />
+            <EditText
+                android:id="@+id/spell_incantation_input"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/single_spacing"
+                android:layout_weight="1.5"
+                android:textAppearance="@style/TextAppearance.AppCompat.Large"
+                android:visibility="gone"
+                tools:text="Albus Dumbledore" />
 
-    <TextView
-        android:id="@+id/light"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:text="@string/light"
-        android:textAppearance="@style/TextAppearance.AppCompat.Large"
-        app:layout_constraintBottom_toBottomOf="@id/spell_light"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@id/spell_light" />
+            <Button
+                android:id="@+id/save_incantation_button"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginStart="@dimen/double_spacing"
+                android:layout_weight="0.8"
+                android:text="@string/save"
+                android:visibility="gone" />
+        </LinearLayout>
 
-    <TextView
-        android:id="@+id/spell_light"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="@dimen/single_spacing"
-        android:textAppearance="@style/TextAppearance.AppCompat.Large"
-        app:layout_constraintBottom_toTopOf="@id/spell_creator"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@id/light"
-        app:layout_constraintTop_toBottomOf="@id/spell_effect"
-        tools:text="Red" />
+        <TextView
+            android:id="@+id/type"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:text="@string/type"
+            android:textAppearance="@style/TextAppearance.AppCompat.Large"
+            app:layout_constraintBottom_toBottomOf="@id/spell_type"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="@id/spell_type" />
 
-    <TextView
-        android:id="@+id/creator"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:text="@string/creator"
-        android:textAppearance="@style/TextAppearance.AppCompat.Large"
-        app:layout_constraintBottom_toBottomOf="@id/spell_creator"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@id/spell_creator" />
+        <TextView
+            android:id="@+id/spell_type"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/single_spacing"
+            android:textAppearance="@style/TextAppearance.AppCompat.Large"
+            app:layout_constraintBottom_toTopOf="@id/spell_effect"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@id/type"
+            app:layout_constraintTop_toBottomOf="@id/incantation_layout"
+            tools:text="Charm" />
 
-    <TextView
-        android:id="@+id/spell_creator"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="@dimen/single_spacing"
-        android:textAppearance="@style/TextAppearance.AppCompat.Large"
-        app:layout_constraintBottom_toTopOf="@id/canBeVerbal"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@id/creator"
-        app:layout_constraintTop_toBottomOf="@id/spell_light"
-        tools:text="Albus Dumbledore" />
+        <TextView
+            android:id="@+id/effect"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:text="@string/effect"
+            android:textAppearance="@style/TextAppearance.AppCompat.Large"
+            app:layout_constraintBottom_toBottomOf="@id/spell_effect"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="@id/spell_effect" />
 
-    <TextView
-        android:id="@+id/canBeVerbal"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:textAppearance="@style/TextAppearance.AppCompat.Large"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/spell_creator"
-        tools:text="Can be verbal"/>
-</androidx.constraintlayout.widget.ConstraintLayout>
+        <TextView
+            android:id="@+id/spell_effect"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/single_spacing"
+            android:textAppearance="@style/TextAppearance.AppCompat.Large"
+            app:layout_constraintBottom_toTopOf="@id/spell_light"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@id/effect"
+            app:layout_constraintTop_toBottomOf="@id/spell_type"
+            tools:text="Locks doors" />
+
+        <TextView
+            android:id="@+id/light"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:text="@string/light"
+            android:textAppearance="@style/TextAppearance.AppCompat.Large"
+            app:layout_constraintBottom_toBottomOf="@id/spell_light"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="@id/spell_light" />
+
+        <TextView
+            android:id="@+id/spell_light"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/single_spacing"
+            android:textAppearance="@style/TextAppearance.AppCompat.Large"
+            app:layout_constraintBottom_toTopOf="@id/creator_layout"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@id/light"
+            app:layout_constraintTop_toBottomOf="@id/spell_effect"
+            tools:text="Red" />
+
+        <LinearLayout
+            android:id="@+id/creator_layout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            app:layout_constraintBottom_toTopOf="@id/spell_can_be_verbal"
+            app:layout_constraintTop_toBottomOf="@id/spell_light">
+
+            <TextView
+                android:id="@+id/creator"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_weight="0.7"
+                android:text="@string/creator"
+                android:textAppearance="@style/TextAppearance.AppCompat.Large" />
+
+            <TextView
+                android:id="@+id/spell_creator"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginStart="@dimen/single_spacing"
+                android:layout_weight="2"
+                android:textAppearance="@style/TextAppearance.AppCompat.Large"
+                tools:text="Albus Dumbledore" />
+
+            <ImageButton
+                android:id="@+id/edit_creator_button"
+                android:layout_width="0dp"
+                android:layout_gravity="center"
+                android:layout_height="wrap_content"
+                android:layout_weight="0.5"
+                android:backgroundTint="@android:color/transparent"
+                android:src="@drawable/edit_icon" />
+
+            <EditText
+                android:id="@+id/spell_creator_input"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/single_spacing"
+                android:layout_weight="1.5"
+                android:textAppearance="@style/TextAppearance.AppCompat.Large"
+                android:visibility="gone"
+                tools:text="Albus Dumbledore" />
+
+            <Button
+                android:id="@+id/save_creator_button"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginStart="@dimen/double_spacing"
+                android:layout_weight="0.8"
+                android:text="@string/save"
+                android:visibility="gone" />
+        </LinearLayout>
+
+        <TextView
+            android:id="@+id/spell_can_be_verbal"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:textAppearance="@style/TextAppearance.AppCompat.Large"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/creator_layout"
+            tools:text="Can be verbal" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</ScrollView>
