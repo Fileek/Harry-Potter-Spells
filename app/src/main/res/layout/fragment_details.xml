@@ -1,218 +1,269 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
+    android:layout_height="wrap_content"
     android:padding="@dimen/double_spacing">
 
-    <androidx.constraintlayout.widget.ConstraintLayout
+    <TextView
+        android:id="@+id/name"
+        style="@style/SpellTitle"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:focusable="true"
+        app:layout_constraintBottom_toTopOf="@id/incantation_top_barrier"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:text="Locking Spell" />
 
-        <TextView
-            android:id="@+id/spell_name"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_margin="@dimen/double_spacing"
-            android:gravity="center"
-            android:textAppearance="@style/TextAppearance.AppCompat.Title"
-            android:textSize="@dimen/title_text_size"
-            app:layout_constraintBottom_toTopOf="@id/incantation_layout"
-            app:layout_constraintTop_toTopOf="parent"
-            tools:text="Locking Spell" />
+    <androidx.constraintlayout.widget.Barrier
+        android:id="@+id/incantation_top_barrier"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        app:barrierDirection="top"
+        app:constraint_referenced_ids="incantation_prefix, incantation,
+        edit_incantation, incantation_input, save_incantation" />
 
-        <LinearLayout
-            android:id="@+id/incantation_layout"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginVertical="@dimen/quadruple_spacing"
-            android:orientation="horizontal"
-            app:layout_constraintBottom_toTopOf="@id/type"
-            app:layout_constraintTop_toBottomOf="@id/spell_name">
+    <TextView
+        android:id="@+id/incantation_prefix"
+        style="@style/SpellFieldName"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/incantation_prefix"
+        app:layout_constraintBottom_toTopOf="@id/type_prefix"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/name" />
 
-            <TextView
-                android:id="@+id/pronunciation"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:layout_weight="1.6"
-                android:text="@string/pronunciation"
-                android:textAppearance="@style/TextAppearance.AppCompat.Large" />
+    <androidx.constraintlayout.widget.Group
+        android:id="@+id/incantation_group"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        app:constraint_referenced_ids="incantation, edit_incantation"
+        tools:visibility="gone" />
 
-            <TextView
-                android:id="@+id/spell_incantation"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:layout_marginStart="@dimen/single_spacing"
-                android:layout_weight="2"
-                android:textAppearance="@style/TextAppearance.AppCompat.Large"
-                android:textStyle="italic|bold"
-                tools:text="Colloportus" />
+    <TextView
+        android:id="@+id/incantation"
+        style="@style/SpellField"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:textStyle="italic"
+        app:layout_constraintBottom_toBottomOf="@+id/incantation_prefix"
+        app:layout_constraintEnd_toStartOf="@id/edit_incantation"
+        app:layout_constraintStart_toEndOf="@+id/incantation_prefix"
+        app:layout_constraintTop_toTopOf="@+id/incantation_prefix"
+        tools:text="Colloportus something" />
 
-            <ImageButton
-                android:id="@+id/edit_incantation_button"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:layout_weight="0.5"
-                android:backgroundTint="@android:color/transparent"
-                android:src="@drawable/edit_icon" />
+    <ImageButton
+        android:id="@+id/edit_incantation"
+        style="@style/EditSpellFieldButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintBottom_toBottomOf="@+id/incantation"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/incantation"
+        app:layout_constraintTop_toTopOf="@+id/incantation" />
 
-            <EditText
-                android:id="@+id/spell_incantation_input"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="@dimen/single_spacing"
-                android:layout_weight="1.5"
-                android:textAppearance="@style/TextAppearance.AppCompat.Large"
-                android:visibility="gone"
-                tools:text="Albus Dumbledore" />
+    <androidx.constraintlayout.widget.Group
+        android:id="@+id/incantation_input_group"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:visibility="gone"
+        app:constraint_referenced_ids="incantation_input, save_incantation"
+        tools:visibility="visible" />
 
-            <Button
-                android:id="@+id/save_incantation_button"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:layout_marginStart="@dimen/double_spacing"
-                android:layout_weight="0.8"
-                android:text="@string/save"
-                android:visibility="gone" />
-        </LinearLayout>
+    <EditText
+        android:id="@+id/incantation_input"
+        style="@style/SpellEditTextField"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        app:layout_constraintBottom_toTopOf="@id/type_prefix"
+        app:layout_constraintEnd_toStartOf="@id/save_incantation"
+        app:layout_constraintStart_toEndOf="@+id/incantation_prefix"
+        app:layout_constraintTop_toBottomOf="@id/name"
+        tools:text="Albus Dumbledore" />
 
-        <TextView
-            android:id="@+id/type"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:text="@string/type"
-            android:textAppearance="@style/TextAppearance.AppCompat.Large"
-            app:layout_constraintBottom_toBottomOf="@id/spell_type"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="@id/spell_type" />
+    <Button
+        android:id="@+id/save_incantation"
+        style="@style/SaveSpellFieldButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintBottom_toBottomOf="@+id/incantation_input"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/incantation_input"
+        app:layout_constraintTop_toTopOf="@+id/incantation_input" />
 
-        <TextView
-            android:id="@+id/spell_type"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="@dimen/single_spacing"
-            android:textAppearance="@style/TextAppearance.AppCompat.Large"
-            app:layout_constraintBottom_toTopOf="@id/spell_effect"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toEndOf="@id/type"
-            app:layout_constraintTop_toBottomOf="@id/incantation_layout"
-            tools:text="Charm" />
+    <androidx.constraintlayout.widget.Barrier
+        android:id="@+id/incantation_bottom_barrier"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        app:barrierDirection="bottom"
+        app:constraint_referenced_ids="incantation_prefix, incantation,
+        edit_incantation, incantation_input, save_incantation" />
 
-        <TextView
-            android:id="@+id/effect"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:text="@string/effect"
-            android:textAppearance="@style/TextAppearance.AppCompat.Large"
-            app:layout_constraintBottom_toBottomOf="@id/spell_effect"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="@id/spell_effect" />
+    <TextView
+        android:id="@+id/type_prefix"
+        style="@style/SpellFieldName"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/type_prefix"
+        app:layout_constraintBottom_toTopOf="@id/effect_prefix"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/incantation_bottom_barrier" />
 
-        <TextView
-            android:id="@+id/spell_effect"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="@dimen/single_spacing"
-            android:textAppearance="@style/TextAppearance.AppCompat.Large"
-            app:layout_constraintBottom_toTopOf="@id/spell_light"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toEndOf="@id/effect"
-            app:layout_constraintTop_toBottomOf="@id/spell_type"
-            tools:text="Locks doors" />
+    <TextView
+        android:id="@+id/type"
+        style="@style/SpellField"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        app:layout_constraintBottom_toBottomOf="@id/type_prefix"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@id/type_prefix"
+        app:layout_constraintTop_toTopOf="@id/type_prefix"
+        tools:text="Charm" />
 
-        <TextView
-            android:id="@+id/light"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:text="@string/light"
-            android:textAppearance="@style/TextAppearance.AppCompat.Large"
-            app:layout_constraintBottom_toBottomOf="@id/spell_light"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="@id/spell_light" />
+    <TextView
+        android:id="@+id/effect_prefix"
+        style="@style/SpellFieldName"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/effect_prefix"
+        app:layout_constraintBottom_toTopOf="@id/light_prefix"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/type_prefix" />
 
-        <TextView
-            android:id="@+id/spell_light"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="@dimen/single_spacing"
-            android:textAppearance="@style/TextAppearance.AppCompat.Large"
-            app:layout_constraintBottom_toTopOf="@id/creator_layout"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toEndOf="@id/light"
-            app:layout_constraintTop_toBottomOf="@id/spell_effect"
-            tools:text="Red" />
+    <TextView
+        android:id="@+id/effect"
+        style="@style/SpellField"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        app:layout_constraintBottom_toBottomOf="@id/effect_prefix"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@id/effect_prefix"
+        app:layout_constraintTop_toTopOf="@id/effect_prefix"
+        tools:text="Locks doors" />
 
-        <LinearLayout
-            android:id="@+id/creator_layout"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            app:layout_constraintBottom_toTopOf="@id/spell_can_be_verbal"
-            app:layout_constraintTop_toBottomOf="@id/spell_light">
+    <TextView
+        android:id="@+id/light_prefix"
+        style="@style/SpellFieldName"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/light_prefix"
+        app:layout_constraintBottom_toTopOf="@id/creator_top_barrier"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/effect_prefix" />
 
-            <TextView
-                android:id="@+id/creator"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:layout_weight="0.7"
-                android:text="@string/creator"
-                android:textAppearance="@style/TextAppearance.AppCompat.Large" />
+    <TextView
+        android:id="@+id/light"
+        style="@style/SpellField"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        app:layout_constraintBottom_toBottomOf="@id/light_prefix"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@id/light_prefix"
+        app:layout_constraintTop_toTopOf="@id/light_prefix"
+        tools:text="Red" />
 
-            <TextView
-                android:id="@+id/spell_creator"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:layout_marginStart="@dimen/single_spacing"
-                android:layout_weight="2"
-                android:textAppearance="@style/TextAppearance.AppCompat.Large"
-                tools:text="Albus Dumbledore" />
+    <androidx.constraintlayout.widget.Barrier
+        android:id="@+id/creator_top_barrier"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        app:barrierDirection="top"
+        app:constraint_referenced_ids="creator_prefix, creator, edit_creator,
+            creator_input, save_creator" />
 
-            <ImageButton
-                android:id="@+id/edit_creator_button"
-                android:layout_width="0dp"
-                android:layout_gravity="center"
-                android:layout_height="wrap_content"
-                android:layout_weight="0.5"
-                android:backgroundTint="@android:color/transparent"
-                android:src="@drawable/edit_icon" />
+    <TextView
+        android:id="@+id/creator_prefix"
+        style="@style/SpellFieldName"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/creator_prefix"
+        app:layout_constraintBottom_toTopOf="@id/can_be_verbal_prefix"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/light_prefix" />
 
-            <EditText
-                android:id="@+id/spell_creator_input"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="@dimen/single_spacing"
-                android:layout_weight="1.5"
-                android:textAppearance="@style/TextAppearance.AppCompat.Large"
-                android:visibility="gone"
-                tools:text="Albus Dumbledore" />
+    <androidx.constraintlayout.widget.Group
+        android:id="@+id/creator_group"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        app:constraint_referenced_ids="creator, edit_creator"
+        tools:visibility="gone" />
 
-            <Button
-                android:id="@+id/save_creator_button"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:layout_marginStart="@dimen/double_spacing"
-                android:layout_weight="0.8"
-                android:text="@string/save"
-                android:visibility="gone" />
-        </LinearLayout>
+    <TextView
+        android:id="@+id/creator"
+        style="@style/SpellField"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        app:layout_constraintBottom_toBottomOf="@id/creator_prefix"
+        app:layout_constraintEnd_toStartOf="@id/edit_creator"
+        app:layout_constraintStart_toEndOf="@id/creator_prefix"
+        app:layout_constraintTop_toTopOf="@id/creator_prefix"
+        tools:text="Albus Dumbledore" />
 
-        <TextView
-            android:id="@+id/spell_can_be_verbal"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:textAppearance="@style/TextAppearance.AppCompat.Large"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/creator_layout"
-            tools:text="Can be verbal" />
-    </androidx.constraintlayout.widget.ConstraintLayout>
-</ScrollView>
+    <ImageButton
+        android:id="@+id/edit_creator"
+        style="@style/EditSpellFieldButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintBottom_toBottomOf="@id/creator"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@id/creator"
+        app:layout_constraintTop_toTopOf="@id/creator" />
+
+    <androidx.constraintlayout.widget.Group
+        android:id="@+id/creator_input_group"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:visibility="gone"
+        app:constraint_referenced_ids="creator_input, save_creator"
+        tools:visibility="visible" />
+
+    <EditText
+        android:id="@+id/creator_input"
+        style="@style/SpellEditTextField"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        app:layout_constraintBottom_toTopOf="@id/can_be_verbal_prefix"
+        app:layout_constraintEnd_toStartOf="@id/save_creator"
+        app:layout_constraintStart_toEndOf="@id/creator"
+        app:layout_constraintTop_toBottomOf="@id/light_prefix"
+        tools:text="Albus Dumbledore" />
+
+    <Button
+        android:id="@+id/save_creator"
+        style="@style/SaveSpellFieldButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintBottom_toBottomOf="@id/creator_input"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@id/creator_input"
+        app:layout_constraintTop_toTopOf="@id/creator_input" />
+
+    <androidx.constraintlayout.widget.Barrier
+        android:id="@+id/creator_bottom_barrier"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        app:barrierDirection="bottom"
+        app:constraint_referenced_ids="creator_prefix, creator, edit_creator,
+        creator_input, save_creator" />
+
+    <TextView
+        android:id="@+id/can_be_verbal_prefix"
+        style="@style/SpellFieldName"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/can_be_verbal_prefix"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/creator_bottom_barrier" />
+
+    <TextView
+        android:id="@+id/can_be_verbal"
+        style="@style/SpellField"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        app:layout_constraintBottom_toBottomOf="@id/can_be_verbal_prefix"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@id/can_be_verbal_prefix"
+        app:layout_constraintTop_toTopOf="@id/can_be_verbal_prefix"
+        tools:text="Yes" />
+</androidx.constraintlayout.widget.ConstraintLayout>

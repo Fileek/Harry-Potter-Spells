@@ -1,4 +1,4 @@
-package com.epam.harrypotterspells.network
+package com.epam.harrypotterspells.entities
 
 import android.os.Parcelable
 import kotlinx.parcelize.Parcelize
@@ -7,10 +7,10 @@ import kotlinx.parcelize.Parcelize
 data class Spell(
     val id: String,
     val name: String,
-    var incantation: String?,
+    val incantation: String?,
     val effect: String,
     val canBeVerbal: Boolean?,
     val type: String,
     val light: String,
-    var creator: String?
+    val creator: String?
 ) : Parcelable

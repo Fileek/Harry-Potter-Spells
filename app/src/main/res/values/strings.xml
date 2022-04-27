@@ -1,14 +1,16 @@
 <resources>
     <string name="app_name">Harry Potter Spells</string>
-    <string name="type">Type: </string>
-    <string name="effect">Effect: </string>
-    <string name="pronunciation">Pronunciation: </string>
-    <string name="light">"Light: "</string>
-    <string name="creator">"Creator: "</string>
+    <string name="type_prefix">Type: </string>
+    <string name="effect_prefix">Effect: </string>
+    <string name="incantation_prefix">Pronunciation: </string>
+    <string name="light_prefix">"Light: "</string>
+    <string name="creator_prefix">"Creator: "</string>
     <string name="save">Save</string>
-    <string name="spell_incantation_placeholder">Unknown</string>
-    <string name="spell_creator_placeholder">Unknown</string>
-    <string name="spell_can_be_verbal">Can be verbal</string>
-    <string name="spell_can_not_be_verbal">Can not be verbal</string>
+    <string name="incantation_placeholder">Unknown</string>
+    <string name="creator_placeholder">Unknown</string>
+    <string name="can_be_verbal_prefix">Can be verbal: </string>
+    <string name="can_be_verbal">Yes</string>
+    <string name="can_be_verbal_placeholder">Unknown</string>
+    <string name="can_not_be_verbal">No</string>
     <string name="error_placeholder">Unknown error occurred</string>
 </resources>

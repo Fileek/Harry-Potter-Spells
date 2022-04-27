@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <style name="SpellTitle" parent="TextAppearance.AppCompat.Title">
+        <item name="android:textSize">32sp</item>
+        <item name="android:gravity">center</item>
+        <item name="android:padding">@dimen/double_spacing</item>
+    </style>
+
+    <style name="SpellFieldName" parent="TextAppearance.AppCompat.Large">
+        <item name="android:textStyle">bold</item>
+        <item name="android:paddingTop">@dimen/double_spacing</item>
+        <item name="android:paddingBottom">@dimen/double_spacing</item>
+    </style>
+    <style name="SpellField" parent="TextAppearance.AppCompat.Large">
+        <item name="android:maxLines">1</item>
+        <item name="android:ellipsize">end</item>
+        <item name="android:layout_marginStart">@dimen/single_spacing</item>
+    </style>
+
+    <style name="SpellEditTextField" parent="TextAppearance.AppCompat.Large">
+        <item name="android:layout_marginStart">@dimen/single_spacing</item>
+    </style>
+
+    <style name="EditSpellFieldButton" parent="Widget.AppCompat.ImageButton">
+        <item name="android:src">@drawable/edit_icon</item>
+        <item name="android:layout_marginStart">@dimen/single_spacing</item>
+        <item name="android:background">?attr/selectableItemBackground</item>
+    </style>
+
+    <style name="SaveSpellFieldButton" parent="TextAppearance.AppCompat.Button">
+        <item name="android:layout_marginStart">@dimen/single_spacing</item>
+        <item name="android:text">@string/save</item>
+    </style>
+</resources>

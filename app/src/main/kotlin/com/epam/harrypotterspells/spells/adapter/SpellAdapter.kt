@@ -1,4 +1,4 @@
-package com.epam.harrypotterspells.list
+package com.epam.harrypotterspells.spells.adapter
 
 import android.content.Context
 import android.view.LayoutInflater
@@ -6,7 +6,8 @@ import android.view.ViewGroup
 import androidx.navigation.findNavController
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
-import com.epam.harrypotterspells.network.Spell
+import com.epam.harrypotterspells.entities.Spell
+import com.epam.harrypotterspells.spells.SpellsFragmentDirections
 import com.example.harrypotterspells.databinding.ItemSpellBinding
 
 class SpellAdapter : ListAdapter<Spell, SpellViewHolder>(itemComparator) {
@@ -35,7 +36,7 @@ class SpellAdapter : ListAdapter<Spell, SpellViewHolder>(itemComparator) {
         holder.itemView.setOnClickListener {
             val position = holder.bindingAdapterPosition
             val spell = getItem(position)
-            val action = ListFragmentDirections.detailsAction(spell)
+            val action = SpellsFragmentDirections.detailsAction(spell.id)
             it.findNavController().navigate(action)
         }
     }

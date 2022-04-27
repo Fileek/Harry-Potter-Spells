@@ -6,17 +6,17 @@
     android:clickable="true"
     android:focusable="true"
     android:orientation="vertical"
-    android:paddingVertical="@dimen/double_spacing">
+    android:padding="@dimen/double_spacing">
 
     <TextView
-        android:id="@+id/spell_name"
+        android:id="@+id/name"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:textAppearance="@style/TextAppearance.AppCompat.Headline"
         tools:text="Locking Spell" />
 
     <TextView
-        android:id="@+id/spell_incantation"
+        android:id="@+id/incantation"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:textAppearance="@style/TextAppearance.AppCompat.Medium"
@@ -31,10 +31,10 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/type" />
+            android:text="@string/type_prefix" />
 
         <TextView
-            android:id="@+id/spell_type"
+            android:id="@+id/type"
             android:layout_marginStart="@dimen/single_spacing"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -50,10 +50,10 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/effect" />
+            android:text="@string/effect_prefix" />
 
         <TextView
-            android:id="@+id/spell_effect"
+            android:id="@+id/effect"
             android:layout_marginStart="@dimen/single_spacing"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"

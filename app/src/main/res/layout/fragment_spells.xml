@@ -3,8 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:layout_marginHorizontal="@dimen/double_spacing">
+    android:layout_height="match_parent">
 
     <ProgressBar
         android:id="@+id/progress_bar"
@@ -18,9 +17,10 @@
         android:id="@+id/error_message"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:gravity="center"
         android:layout_marginVertical="@dimen/double_spacing"
+        android:gravity="center"
         android:textAppearance="@style/TextAppearance.Compat.Notification.Info"
+        android:visibility="gone"
         tools:text="Unknown error occured" />
 
     <androidx.recyclerview.widget.RecyclerView
@@ -28,7 +28,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         app:layoutManager="LinearLayoutManager"
-        tools:context="com.epam.harrypotterspells.list.ListFragment"
-        tools:listitem="@layout/fragment_list"
+        tools:context="com.epam.harrypotterspells.spells.SpellsFragment"
+        tools:listitem="@layout/fragment_spells"
         tools:visibility="gone" />
 </FrameLayout>

@@ -7,9 +7,9 @@
 
     <fragment
         android:id="@+id/home_dest"
-        android:name="com.epam.harrypotterspells.list.ListFragment"
+        android:name="com.epam.harrypotterspells.spells.SpellsFragment"
         android:label="@string/app_name"
-        tools:layout="@layout/fragment_list" >
+        tools:layout="@layout/fragment_spells" >
         <action
             android:id="@+id/details_action"
             app:destination="@id/details_dest"
@@ -20,7 +20,7 @@
         android:name="com.epam.harrypotterspells.details.DetailsFragment"
         android:label="DetailsFragment" >
         <argument
-            android:name="spell"
-            app:argType="com.epam.harrypotterspells.network.Spell" />
+            android:name="spell_id"
+            app:argType="string" />
     </fragment>
 </navigation>
