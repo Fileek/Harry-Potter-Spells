@@ -1,13 +1,13 @@
 package com.epam.harrypotterspells.data
 
-import com.epam.harrypotterspells.entities.Spell
+import com.epam.harrypotterspells.entities.JsonSpell
 import io.reactivex.rxjava3.core.Observable
 
 interface Repository {
 
-    val spells: Observable<List<Spell>>
+    val spells: Observable<List<JsonSpell>>
 
-    fun getSpellById(id: String): Spell
+    fun getSpellById(id: String): JsonSpell
 
-    fun editSpell(newSpell: Spell)
+    fun editSpell(newSpell: JsonSpell)
 }

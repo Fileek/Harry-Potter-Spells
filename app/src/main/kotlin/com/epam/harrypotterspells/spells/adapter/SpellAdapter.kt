@@ -1,6 +1,5 @@
 package com.epam.harrypotterspells.spells.adapter
 
-import android.content.Context
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.navigation.findNavController
@@ -13,23 +12,23 @@ import com.example.harrypotterspells.databinding.ItemSpellBinding
 class SpellAdapter : ListAdapter<Spell, SpellViewHolder>(itemComparator) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): SpellViewHolder {
-        return createViewHolder(parent.context)
+        return createViewHolder(parent)
     }
 
     override fun onBindViewHolder(holder: SpellViewHolder, position: Int) {
         holder.bind(getItem(position))
     }
 
-    private fun createViewHolder(context: Context): SpellViewHolder {
-        val binding = getBinding(context)
+    private fun createViewHolder(viewGroup: ViewGroup): SpellViewHolder {
+        val binding = getBinding(viewGroup)
         val holder = SpellViewHolder(binding)
         setListener(holder)
         return holder
     }
 
-    private fun getBinding(context: Context): ItemSpellBinding {
-        val layoutInflater = LayoutInflater.from(context)
-        return ItemSpellBinding.inflate(layoutInflater)
+    private fun getBinding(viewGroup: ViewGroup): ItemSpellBinding {
+        val layoutInflater = LayoutInflater.from(viewGroup.context)
+        return ItemSpellBinding.inflate(layoutInflater, viewGroup, false)
     }
 
     private fun setListener(holder: SpellViewHolder) {

@@ -4,6 +4,10 @@ import android.content.Context
 import android.view.View
 import android.view.ViewTreeObserver
 import android.view.inputmethod.InputMethodManager
+import com.epam.harrypotterspells.entities.JsonSpell
+import com.epam.harrypotterspells.entities.Spell
+import com.epam.harrypotterspells.entities.SpellColor
+import java.lang.IllegalArgumentException
 
 fun View.focusAndShowKeyboard() {
     /**
@@ -43,4 +47,46 @@ fun View.focusAndShowKeyboard() {
 fun View.hideKeyboard() {
     val imm = context.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
     imm.hideSoftInputFromWindow(windowToken, 0)
+}
+
+fun JsonSpell.toSpell(): Spell {
+    return Spell(
+        id = this.id,
+        name = this.name,
+        incantation = this.incantation ?: "Unknown",
+        effect = this.effect,
+        canBeVerbal = when (this.canBeVerbal) {
+            true -> "Yes"
+            false -> "No"
+            null -> "Unknown"
+        },
+        type = this.type,
+        light = this.light.toSpellColor(),
+        creator = this.creator ?: "Unknown"
+    )
+}
+
+fun Spell.toJsonSpell(): JsonSpell {
+    return JsonSpell(
+        id = this.id,
+        name = this.name,
+        incantation = this.incantation,
+        effect = this.effect,
+        canBeVerbal = when (this.canBeVerbal) {
+            "Yes" -> true
+            "No" -> false
+            else -> null
+        },
+        type = this.type,
+        light = this.light.toString(),
+        creator = this.creator
+    )
+}
+
+fun String.toSpellColor(): SpellColor {
+    return try {
+        SpellColor.valueOf(this)
+    } catch (e: IllegalArgumentException) {
+        SpellColor.Transparent
+    }
 }

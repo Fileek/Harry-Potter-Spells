@@ -18,7 +18,7 @@
     <fragment
         android:id="@+id/details_dest"
         android:name="com.epam.harrypotterspells.details.DetailsFragment"
-        android:label="DetailsFragment" >
+        android:label="@string/details_label">
         <argument
             android:name="spell_id"
             app:argType="string" />

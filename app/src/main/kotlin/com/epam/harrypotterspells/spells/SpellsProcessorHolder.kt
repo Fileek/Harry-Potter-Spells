@@ -1,6 +1,7 @@
 package com.epam.harrypotterspells.spells
 
 import com.epam.harrypotterspells.data.Repository
+import com.epam.harrypotterspells.ext.toSpell
 import com.epam.harrypotterspells.mvibase.MVIProcessorHolder
 import com.epam.harrypotterspells.spells.SpellsAction.LoadSpellsAction
 import com.epam.harrypotterspells.spells.SpellsResult.LoadSpellsResult
@@ -25,8 +26,10 @@ class SpellsProcessorHolder @Inject constructor(
                 repository.spells
                     .subscribeOn(Schedulers.io())
                     .observeOn(AndroidSchedulers.mainThread())
-                    .map { spells ->
-                        LoadSpellsResult.Success(spells)
+                    .map { data ->
+                        LoadSpellsResult.Success(data.map { jsonSpell ->
+                            jsonSpell.toSpell()
+                        })
                     }
                     .cast(LoadSpellsResult::class.java)
                     .onErrorReturn { error ->

@@ -28,7 +28,6 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         app:layoutManager="LinearLayoutManager"
-        tools:context="com.epam.harrypotterspells.spells.SpellsFragment"
-        tools:listitem="@layout/fragment_spells"
-        tools:visibility="gone" />
+        tools:listitem="@layout/item_spell"
+        tools:visibility="visible" />
 </FrameLayout>

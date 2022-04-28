@@ -1,7 +1,7 @@
 package com.epam.harrypotterspells.spells
 
-import com.epam.harrypotterspells.mvibase.MVIViewState
 import com.epam.harrypotterspells.entities.Spell
+import com.epam.harrypotterspells.mvibase.MVIViewState
 
 sealed class SpellsViewState(
     val isLoading: Boolean,

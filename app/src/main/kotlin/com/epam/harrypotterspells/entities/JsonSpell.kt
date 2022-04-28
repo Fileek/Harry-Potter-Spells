@@ -1,12 +1,12 @@
 package com.epam.harrypotterspells.entities
 
-data class Spell(
+data class JsonSpell(
     val id: String,
     val name: String,
-    val incantation: String,
+    val incantation: String?,
     val effect: String,
-    val canBeVerbal: String,
+    val canBeVerbal: Boolean?,
     val type: String,
-    val light: SpellColor,
-    val creator: String
+    val light: String,
+    val creator: String?
 )

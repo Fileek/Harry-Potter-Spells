@@ -1,64 +1,74 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<com.google.android.material.card.MaterialCardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    android:layout_marginHorizontal="@dimen/double_spacing"
+    android:layout_marginVertical="@dimen/single_spacing"
     android:clickable="true"
     android:focusable="true"
-    android:orientation="vertical"
-    android:padding="@dimen/double_spacing">
-
-    <TextView
-        android:id="@+id/name"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:textAppearance="@style/TextAppearance.AppCompat.Headline"
-        tools:text="Locking Spell" />
-
-    <TextView
-        android:id="@+id/incantation"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:textAppearance="@style/TextAppearance.AppCompat.Medium"
-        android:textStyle="italic"
-        tools:text="Colloportus" />
+    app:strokeWidth="5dp"
+    app:cardCornerRadius="8dp"
+    app:cardElevation="@dimen/single_spacing"
+    tools:strokeColor="@color/brown_500">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal">
+        android:orientation="vertical"
+        android:padding="@dimen/double_spacing">
 
         <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/type_prefix" />
-
-        <TextView
-            android:id="@+id/type"
-            android:layout_marginStart="@dimen/single_spacing"
+            android:id="@+id/name"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:textAppearance="@style/TextAppearance.AppCompat.Body1"
-            tools:text="Charm" />
-    </LinearLayout>
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal">
+            android:textAppearance="@style/TextAppearance.AppCompat.Headline"
+            tools:text="Locking Spell" />
 
         <TextView
-            android:layout_width="wrap_content"
+            android:id="@+id/incantation"
+            style="@style/SpellsIncantation"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="@string/effect_prefix" />
+            tools:text="Colloportus" />
 
-        <TextView
-            android:id="@+id/effect"
-            android:layout_marginStart="@dimen/single_spacing"
-            android:layout_width="wrap_content"
+        <LinearLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:maxLines="1"
-            android:textAppearance="@style/TextAppearance.AppCompat.Body1"
-            tools:text="Locks doors" />
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/type_prefix"
+                android:textAppearance="@style/TextAppearance.AppCompat.Body2" />
+
+            <TextView
+                android:id="@+id/type"
+                style="@style/SpellsField"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                tools:text="Charm" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/effect_prefix"
+                android:textAppearance="@style/TextAppearance.AppCompat.Body2" />
+
+            <TextView
+                android:id="@+id/effect"
+                style="@style/SpellsField"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                tools:text="Locks doors" />
+        </LinearLayout>
     </LinearLayout>
-</LinearLayout>
+</com.google.android.material.card.MaterialCardView>

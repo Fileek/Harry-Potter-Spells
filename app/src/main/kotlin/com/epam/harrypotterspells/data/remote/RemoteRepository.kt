@@ -3,7 +3,7 @@ package com.epam.harrypotterspells.data.remote
 import com.epam.harrypotterspells.data.Repository
 import com.epam.harrypotterspells.data.api.SpellApi
 import com.epam.harrypotterspells.data.local.StubList
-import com.epam.harrypotterspells.entities.Spell
+import com.epam.harrypotterspells.entities.JsonSpell
 import io.reactivex.rxjava3.core.Observable
 import io.reactivex.rxjava3.schedulers.Schedulers
 import io.reactivex.rxjava3.subjects.BehaviorSubject
@@ -14,10 +14,10 @@ class RemoteRepository @Inject constructor(
     api: SpellApi
 ) : Repository {
 
-    override val spells: Observable<List<Spell>> get() = spellsSubject.serialize()
+    override val spells: Observable<List<JsonSpell>> get() = spellsSubject.serialize()
 
-    private val spellsSubject = BehaviorSubject.create<List<Spell>>()
-    private var spellsList = emptyList<Spell>()
+    private val spellsSubject = BehaviorSubject.create<List<JsonSpell>>()
+    private var spellsList = emptyList<JsonSpell>()
 
     init {
         api.getSpells()
@@ -29,7 +29,7 @@ class RemoteRepository @Inject constructor(
             })
     }
 
-    private fun processSuccessResponse(data: List<Spell>) {
+    private fun processSuccessResponse(data: List<JsonSpell>) {
         spellsList = data
         spellsSubject.onNext(data)
     }
@@ -39,11 +39,11 @@ class RemoteRepository @Inject constructor(
         spellsSubject.onNext(StubList.spells)
     }
 
-    override fun getSpellById(id: String): Spell {
+    override fun getSpellById(id: String): JsonSpell {
         return spellsList.find { spell -> spell.id == id } ?: StubList.spells.first()
     }
 
-    override fun editSpell(newSpell: Spell) {
+    override fun editSpell(newSpell: JsonSpell) {
         val oldSpell = spellsList.find { spell -> spell.id == newSpell.id }
         Collections.replaceAll(spellsList, oldSpell, newSpell)
         spellsSubject.onNext(spellsList)
