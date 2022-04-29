@@ -40,5 +40,4 @@ object AppModule {
             .addCallAdapterFactory(RxJava3CallAdapterFactory.create())
             .build()
     }
-
 }

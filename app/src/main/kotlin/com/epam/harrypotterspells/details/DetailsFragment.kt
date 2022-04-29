@@ -4,10 +4,8 @@ import android.os.Bundle
 import android.view.View
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
-import androidx.navigation.fragment.navArgs
 import com.epam.harrypotterspells.ext.focusAndShowKeyboard
 import com.epam.harrypotterspells.ext.hideKeyboard
-import com.epam.harrypotterspells.ext.toSpellColor
 import com.example.harrypotterspells.R
 import com.example.harrypotterspells.databinding.FragmentDetailsBinding
 import dagger.hilt.android.AndroidEntryPoint
@@ -17,36 +15,91 @@ class DetailsFragment : Fragment(R.layout.fragment_details) {
 
     private var binding: FragmentDetailsBinding? = null
     private val viewModel: DetailsViewModel by viewModels()
-    private val args: DetailsFragmentArgs by navArgs()
-    private val spell get() = viewModel.getSpellById(args.spellId)
+    private val spell get() = viewModel.spell
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         bindBinding(view)
-        initViews()
+        renderSpell()
+        renderInputState()
         setListeners()
-        render(viewModel.state)
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        binding = null
     }
 
     private fun bindBinding(view: View) {
         binding = FragmentDetailsBinding.bind(view)
     }
 
-    private fun initViews() = binding?.run {
+    private fun renderSpell() = binding?.run {
         name.text = spell.name
         type.text = spell.type
         effect.text = spell.effect
         incantation.text = spell.incantation
-        light.text = spell.light.toString()
+        light.text = spell.light
         creator.text = spell.creator
         canBeVerbal.text = spell.canBeVerbal
     }
 
+    private fun renderInputState() {
+        if (viewModel.state.incantationIsEditing) showIncantationInput()
+        if (viewModel.state.typeIsEditing) showTypeInput()
+        if (viewModel.state.effectIsEditing) showEffectInput()
+        if (viewModel.state.lightIsEditing) showLightInput()
+        if (viewModel.state.creatorIsEditing) showCreatorInput()
+    }
+
     private fun setListeners() = binding?.run {
+        setEditButtonsListeners()
+        setSaveButtonsListeners()
+    }
+
+    private fun showIncantationInput() = binding?.run {
+        incantationGroup.visibility = View.GONE
+        incantationInputGroup.visibility = View.VISIBLE
+        incantationInput.setText(viewModel.spell.incantation)
+        viewModel.state.incantationIsEditing = true
+    }
+
+    private fun showTypeInput() = binding?.run {
+        typeGroup.visibility = View.GONE
+        typeInputGroup.visibility = View.VISIBLE
+        typeInput.setText(spell.type)
+        viewModel.state.typeIsEditing = true
+    }
+
+    private fun showEffectInput() = binding?.run {
+        effectGroup.visibility = View.GONE
+        effectInputGroup.visibility = View.VISIBLE
+        effectInput.setText(spell.effect)
+        viewModel.state.effectIsEditing = true
+    }
+
+    private fun showLightInput() = binding?.run {
+        lightGroup.visibility = View.GONE
+        lightInputGroup.visibility = View.VISIBLE
+        lightInput.setText(spell.light)
+        viewModel.state.lightIsEditing = true
+    }
+
+    private fun showCreatorInput() = binding?.run {
+        creatorGroup.visibility = View.GONE
+        creatorInputGroup.visibility = View.VISIBLE
+        creatorInput.setText(spell.creator)
+        viewModel.state.creatorIsEditing = true
+    }
+
+    private fun setEditButtonsListeners() = binding?.run {
         editIncantation.setOnClickListener(getEditIncantationListener())
         editType.setOnClickListener(getEditTypeListener())
         editEffect.setOnClickListener(getEditEffectListener())
         editLight.setOnClickListener(getEditLightListener())
         editCreator.setOnClickListener(getEditCreatorListener())
+    }
+
+    private fun setSaveButtonsListeners() = binding?.run {
         saveIncantation.setOnClickListener(getSaveIncantationListener())
         saveType.setOnClickListener(getSaveTypeListener())
         saveEffect.setOnClickListener(getSaveEffectListener())
@@ -55,144 +108,142 @@ class DetailsFragment : Fragment(R.layout.fragment_details) {
     }
 
     private fun getEditIncantationListener() = View.OnClickListener {
-        setIncantationGroupInEditMode()
-        binding?.incantationInput?.setSelection(spell.incantation.length)
-        binding?.incantationInput?.focusAndShowKeyboard()
+        showIncantationInput()
+        focusOnIncantationInput()
     }
 
     private fun getEditTypeListener() = View.OnClickListener {
-        val typeInput = binding?.typeInput
-        setTypeGroupInEditMode()
-        typeInput?.setSelection(spell.type.length)
-        typeInput?.focusAndShowKeyboard()
+        showTypeInput()
+        focusOnTypeInput()
     }
 
     private fun getEditEffectListener() = View.OnClickListener {
-        val effectInput = binding?.effectInput
-        setEffectGroupInEditMode()
-        effectInput?.setSelection(spell.effect.length)
-        effectInput?.focusAndShowKeyboard()
+        showEffectInput()
+        focusOnEffectInput()
     }
 
     private fun getEditLightListener() = View.OnClickListener {
-        val lightInput = binding?.lightInput
-        setLightGroupInEditMode()
-        lightInput?.setSelection(spell.light.toString().length)
-        lightInput?.focusAndShowKeyboard()
+        showLightInput()
+        focusOnLightInput()
     }
 
     private fun getEditCreatorListener() = View.OnClickListener {
-        val creatorInput = binding?.creatorInput
-        setCreatorGroupInEditMode()
-        creatorInput?.setSelection(spell.creator.length)
-        creatorInput?.focusAndShowKeyboard()
+        showCreatorInput()
+        focusOnCreatorInput()
     }
 
     private fun getSaveIncantationListener() = View.OnClickListener {
-        binding?.let {
-            val newSpell = spell.copy(incantation = it.incantationInput.text.toString())
-            it.incantationGroup.visibility = View.VISIBLE
-            it.incantationInputGroup.visibility = View.GONE
-            it.incantationInput.hideKeyboard()
-            viewModel.editSpell(newSpell)
-            viewModel.state.incantationIsEditing = false
-            it.incantation.text = newSpell.incantation
-        }
+        hideIncantationInputAndKeyboard()
+        saveAndUpdateIncantation()
     }
 
     private fun getSaveTypeListener() = View.OnClickListener {
-        binding?.let {
-            val newSpell = spell.copy(type = it.typeInput.text.toString())
-            it.typeGroup.visibility = View.VISIBLE
-            it.typeInputGroup.visibility = View.GONE
-            it.typeInput.hideKeyboard()
-            viewModel.editSpell(newSpell)
-            viewModel.state.typeIsEditing = false
-            it.type.text = newSpell.type
-        }
+        hideTypeInputAndKeyboard()
+        saveAndUpdateType()
     }
 
     private fun getSaveEffectListener() = View.OnClickListener {
-        binding?.let {
-            val newSpell = spell.copy(effect = it.effectInput.text.toString())
-            it.effectGroup.visibility = View.VISIBLE
-            it.effectInputGroup.visibility = View.GONE
-            it.effectInput.hideKeyboard()
-            viewModel.editSpell(newSpell)
-            viewModel.state.effectIsEditing = false
-            it.effect.text = newSpell.effect
-        }
+        hideEffectInputAndKeyboard()
+        saveAndUpdateEffect()
     }
 
     private fun getSaveLightListener() = View.OnClickListener {
-        binding?.let {
-            val newSpell = spell.copy(light = it.lightInput.text.toString().toSpellColor())
-            it.lightGroup.visibility = View.VISIBLE
-            it.lightInputGroup.visibility = View.GONE
-            it.lightInput.hideKeyboard()
-            viewModel.editSpell(newSpell)
-            viewModel.state.lightIsEditing = false
-            it.light.text = newSpell.light.toString()
-        }
+        hideLightInputAndKeyboard()
+        saveAndUpdateLight()
     }
 
     private fun getSaveCreatorListener() = View.OnClickListener {
-        binding?.let {
-            val newSpell = spell.copy(creator = it.creatorInput.text.toString())
-            it.creatorGroup.visibility = View.VISIBLE
-            it.creatorInputGroup.visibility = View.GONE
-            it.creatorInput.hideKeyboard()
-            viewModel.editSpell(newSpell)
-            viewModel.state.creatorIsEditing = false
-            it.creator.text = newSpell.creator
-        }
+        hideCreatorInputAndKeyboard()
+        saveAndUpdateCreator()
     }
 
-    private fun render(state: DetailsViewState) {
-        if (state.incantationIsEditing) setIncantationGroupInEditMode()
-        if (state.typeIsEditing) setTypeGroupInEditMode()
-        if (state.effectIsEditing) setEffectGroupInEditMode()
-        if (state.lightIsEditing) setLightGroupInEditMode()
-        if (state.creatorIsEditing) setCreatorGroupInEditMode()
+    private fun focusOnIncantationInput() = binding?.incantationInput?.run {
+        focusAndShowKeyboard()
+        setSelection(spell.incantation.length)
     }
 
-    private fun setIncantationGroupInEditMode() = binding?.run {
-        incantationGroup.visibility = View.GONE
-        incantationInputGroup.visibility = View.VISIBLE
-        incantationInput.setText(spell.incantation)
-        viewModel.state.incantationIsEditing = true
+    private fun focusOnTypeInput() = binding?.typeInput?.run {
+        focusAndShowKeyboard()
+        setSelection(spell.type.length)
     }
 
-    private fun setTypeGroupInEditMode() = binding?.run {
-        typeGroup.visibility = View.GONE
-        typeInputGroup.visibility = View.VISIBLE
-        typeInput.setText(spell.type)
-        viewModel.state.typeIsEditing = true
+    private fun focusOnEffectInput() = binding?.effectInput?.run {
+        focusAndShowKeyboard()
+        setSelection(spell.effect.length)
     }
 
-    private fun setEffectGroupInEditMode() = binding?.run {
-        effectGroup.visibility = View.GONE
-        effectInputGroup.visibility = View.VISIBLE
-        effectInput.setText(spell.effect)
-        viewModel.state.effectIsEditing = true
+    private fun focusOnLightInput() = binding?.lightInput?.run {
+        focusAndShowKeyboard()
+        setSelection(spell.light.length)
     }
 
-    private fun setLightGroupInEditMode() = binding?.run {
-        lightGroup.visibility = View.GONE
-        lightInputGroup.visibility = View.VISIBLE
-        lightInput.setText(spell.light.toString())
-        viewModel.state.lightIsEditing = true
+    private fun focusOnCreatorInput() = binding?.creatorInput?.run {
+        focusAndShowKeyboard()
+        setSelection(spell.creator.length)
     }
 
-    private fun setCreatorGroupInEditMode() = binding?.run {
-        creatorGroup.visibility = View.GONE
-        creatorInputGroup.visibility = View.VISIBLE
-        creatorInput.setText(spell.creator)
-        viewModel.state.creatorIsEditing = true
+    private fun hideIncantationInputAndKeyboard() = binding?.run {
+        incantationGroup.visibility = View.VISIBLE
+        incantationInputGroup.visibility = View.GONE
+        incantationInput.hideKeyboard()
+        viewModel.state.incantationIsEditing = false
     }
 
-    override fun onDestroy() {
-        super.onDestroy()
-        binding = null
+    private fun hideTypeInputAndKeyboard() = binding?.run {
+        typeGroup.visibility = View.VISIBLE
+        typeInputGroup.visibility = View.GONE
+        typeInput.hideKeyboard()
+        viewModel.state.typeIsEditing = false
+    }
+
+    private fun hideEffectInputAndKeyboard() = binding?.run {
+        effectGroup.visibility = View.VISIBLE
+        effectInputGroup.visibility = View.GONE
+        effectInput.hideKeyboard()
+        viewModel.state.effectIsEditing = false
+    }
+
+    private fun hideLightInputAndKeyboard() = binding?.run {
+        lightGroup.visibility = View.VISIBLE
+        lightInputGroup.visibility = View.GONE
+        lightInput.hideKeyboard()
+        viewModel.state.lightIsEditing = false
+    }
+
+    private fun hideCreatorInputAndKeyboard() = binding?.run {
+        creatorGroup.visibility = View.VISIBLE
+        creatorInputGroup.visibility = View.GONE
+        creatorInput.hideKeyboard()
+        viewModel.state.creatorIsEditing = false
+    }
+
+    private fun saveAndUpdateIncantation() = binding?.run {
+        val newIncantation = incantationInput.text.toString()
+        viewModel.updateSpell(spell.copy(incantation = newIncantation))
+        incantation.text = newIncantation
+    }
+
+    private fun saveAndUpdateType() = binding?.run {
+        val newType = typeInput.text.toString()
+        viewModel.updateSpell(spell.copy(type = newType))
+        type.text = newType
+    }
+
+    private fun saveAndUpdateEffect() = binding?.run {
+        val newEffect = effectInput.text.toString()
+        viewModel.updateSpell(spell.copy(effect = newEffect))
+        effect.text = newEffect
+    }
+
+    private fun saveAndUpdateLight() = binding?.run {
+        val newLight = lightInput.text.toString()
+        viewModel.updateSpell(spell.copy(light = newLight))
+        light.text = newLight
+    }
+
+    private fun saveAndUpdateCreator() = binding?.run {
+        val newCreator = creatorInput.text.toString()
+        viewModel.updateSpell(spell.copy(creator = newCreator))
+        creator.text = newCreator
     }
 }

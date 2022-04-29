@@ -8,8 +8,8 @@
     android:layout_marginVertical="@dimen/single_spacing"
     android:clickable="true"
     android:focusable="true"
-    app:strokeWidth="5dp"
-    app:cardCornerRadius="8dp"
+    app:strokeWidth="@dimen/item_stroke_width"
+    app:cardCornerRadius="@dimen/item_corner_radius"
     app:cardElevation="@dimen/single_spacing"
     tools:strokeColor="@color/brown_500">
 

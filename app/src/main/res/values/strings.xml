@@ -7,11 +7,6 @@
     <string name="light_prefix">"Light: "</string>
     <string name="creator_prefix">"Creator: "</string>
     <string name="save">Save</string>
-    <string name="incantation_placeholder">Unknown</string>
-    <string name="creator_placeholder">Unknown</string>
     <string name="can_be_verbal_prefix">Can be verbal: </string>
-    <string name="can_be_verbal">Yes</string>
-    <string name="can_be_verbal_placeholder">Unknown</string>
-    <string name="can_not_be_verbal">No</string>
     <string name="error_placeholder">Unknown error occurred</string>
 </resources>

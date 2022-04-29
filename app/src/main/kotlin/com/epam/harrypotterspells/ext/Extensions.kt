@@ -6,8 +6,12 @@ import android.view.ViewTreeObserver
 import android.view.inputmethod.InputMethodManager
 import com.epam.harrypotterspells.entities.JsonSpell
 import com.epam.harrypotterspells.entities.Spell
-import com.epam.harrypotterspells.entities.SpellColor
-import java.lang.IllegalArgumentException
+
+private const val INCANTATION_STUB = "Unknown"
+private const val CAN_BE_VERBAL = "Yes"
+private const val CAN_NOT_BE_VERBAL = "No"
+private const val CAN_BE_VERBAL_STUB = "Unknown"
+private const val CREATOR_STUB = "Unknown"
 
 fun View.focusAndShowKeyboard() {
     /**
@@ -53,16 +57,16 @@ fun JsonSpell.toSpell(): Spell {
     return Spell(
         id = this.id,
         name = this.name,
-        incantation = this.incantation ?: "Unknown",
+        incantation = this.incantation ?: INCANTATION_STUB,
         effect = this.effect,
         canBeVerbal = when (this.canBeVerbal) {
-            true -> "Yes"
-            false -> "No"
-            null -> "Unknown"
+            true -> CAN_BE_VERBAL
+            false -> CAN_NOT_BE_VERBAL
+            null -> CAN_BE_VERBAL_STUB
         },
         type = this.type,
-        light = this.light.toSpellColor(),
-        creator = this.creator ?: "Unknown"
+        light = this.light,
+        creator = this.creator ?: CREATOR_STUB
     )
 }
 
@@ -73,20 +77,12 @@ fun Spell.toJsonSpell(): JsonSpell {
         incantation = this.incantation,
         effect = this.effect,
         canBeVerbal = when (this.canBeVerbal) {
-            "Yes" -> true
-            "No" -> false
+            CAN_BE_VERBAL -> true
+            CAN_NOT_BE_VERBAL -> false
             else -> null
         },
         type = this.type,
-        light = this.light.toString(),
+        light = this.light,
         creator = this.creator
     )
-}
-
-fun String.toSpellColor(): SpellColor {
-    return try {
-        SpellColor.valueOf(this)
-    } catch (e: IllegalArgumentException) {
-        SpellColor.Transparent
-    }
 }

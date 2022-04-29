@@ -7,7 +7,7 @@ interface Repository {
 
     val spells: Observable<List<JsonSpell>>
 
-    fun getSpellById(id: String): JsonSpell
+    val spellsStub: List<JsonSpell>
 
     fun editSpell(newSpell: JsonSpell)
 }

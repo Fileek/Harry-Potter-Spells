@@ -23,8 +23,8 @@ class SpellsViewModel @Inject constructor(
             .map(this::actionFromIntent)
             .compose(processorHolder.actionProcessor)
             .scan(SpellsViewState.Idle, reducer)
-            .replay(1)
-            .autoConnect(0)
+            .replay()
+            .autoConnect()
     }
 
     private fun actionFromIntent(intent: SpellsIntent): SpellsAction {

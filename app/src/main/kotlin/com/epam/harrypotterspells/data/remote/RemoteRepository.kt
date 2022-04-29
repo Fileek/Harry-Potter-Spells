@@ -15,6 +15,7 @@ class RemoteRepository @Inject constructor(
 ) : Repository {
 
     override val spells: Observable<List<JsonSpell>> get() = spellsSubject.serialize()
+    override val spellsStub = StubList.spells
 
     private val spellsSubject = BehaviorSubject.create<List<JsonSpell>>()
     private var spellsList = emptyList<JsonSpell>()
@@ -35,12 +36,8 @@ class RemoteRepository @Inject constructor(
     }
 
     private fun processErrorResponse(error: Throwable) {
-        spellsList = StubList.spells
+        spellsList = spellsStub
         spellsSubject.onNext(StubList.spells)
-    }
-
-    override fun getSpellById(id: String): JsonSpell {
-        return spellsList.find { spell -> spell.id == id } ?: StubList.spells.first()
     }
 
     override fun editSpell(newSpell: JsonSpell) {
