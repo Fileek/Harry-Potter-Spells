@@ -1,16 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <com.google.android.material.card.MaterialCardView xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    style="@style/Spells.Card"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_marginHorizontal="@dimen/double_spacing"
-    android:layout_marginVertical="@dimen/single_spacing"
-    android:clickable="true"
-    android:focusable="true"
-    app:strokeWidth="@dimen/item_stroke_width"
-    app:cardCornerRadius="@dimen/item_corner_radius"
-    app:cardElevation="@dimen/single_spacing"
     tools:strokeColor="@color/brown_500">
 
     <LinearLayout
@@ -21,14 +14,14 @@
 
         <TextView
             android:id="@+id/name"
+            style="@style/Spells.Name"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:textAppearance="@style/TextAppearance.AppCompat.Headline"
             tools:text="Locking Spell" />
 
         <TextView
             android:id="@+id/incantation"
-            style="@style/SpellsIncantation"
+            style="@style/Spells.Incantation"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             tools:text="Colloportus" />
@@ -46,7 +39,7 @@
 
             <TextView
                 android:id="@+id/type"
-                style="@style/SpellsField"
+                style="@style/Spells.Field"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 tools:text="Charm" />
@@ -65,7 +58,7 @@
 
             <TextView
                 android:id="@+id/effect"
-                style="@style/SpellsField"
+                style="@style/Spells.Field"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 tools:text="Locks doors" />

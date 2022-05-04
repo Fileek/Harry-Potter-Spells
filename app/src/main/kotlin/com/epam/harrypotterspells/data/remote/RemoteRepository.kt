@@ -11,36 +11,30 @@ import java.util.*
 import javax.inject.Inject
 
 class RemoteRepository @Inject constructor(
-    api: SpellApi
+    private val api: SpellApi
 ) : Repository {
 
-    override val spells: Observable<List<JsonSpell>> get() = spellsSubject.serialize()
     override val spellsStub = StubList.spells
 
     private val spellsSubject = BehaviorSubject.create<List<JsonSpell>>()
-    private var spellsList = emptyList<JsonSpell>()
 
-    init {
+    override fun getSpells(): Observable<List<JsonSpell>> {
         api.getSpells()
             .subscribeOn(Schedulers.io())
-            .subscribe({
-                processSuccessResponse(it)
-            }, {
-                processErrorResponse(it)
-            })
+            .subscribe(::processSuccessResponse, ::processErrorResponse)
+        return spellsSubject.serialize()
     }
 
     private fun processSuccessResponse(data: List<JsonSpell>) {
-        spellsList = data
         spellsSubject.onNext(data)
     }
 
     private fun processErrorResponse(error: Throwable) {
-        spellsList = spellsStub
-        spellsSubject.onNext(StubList.spells)
+        spellsSubject.onNext(spellsStub)
     }
 
     override fun editSpell(newSpell: JsonSpell) {
+        val spellsList = spellsSubject.value ?: spellsStub
         val oldSpell = spellsList.find { spell -> spell.id == newSpell.id }
         Collections.replaceAll(spellsList, oldSpell, newSpell)
         spellsSubject.onNext(spellsList)

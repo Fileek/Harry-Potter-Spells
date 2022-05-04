@@ -6,8 +6,7 @@ import androidx.appcompat.widget.Toolbar
 import androidx.navigation.findNavController
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.setupWithNavController
-import com.example.harrypotterspells.R
-import com.example.harrypotterspells.databinding.ActivityMainBinding
+import com.epam.harrypotterspells.databinding.ActivityMainBinding
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint

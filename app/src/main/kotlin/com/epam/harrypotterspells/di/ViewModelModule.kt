@@ -1,10 +1,7 @@
 package com.epam.harrypotterspells.di
 
 import com.epam.harrypotterspells.data.Repository
-import com.epam.harrypotterspells.mvibase.MVIProcessorHolder
-import com.epam.harrypotterspells.spells.SpellsAction
-import com.epam.harrypotterspells.spells.SpellsProcessorHolder
-import com.epam.harrypotterspells.spells.SpellsResult
+import com.epam.harrypotterspells.domain.LoadSpellsUseCase
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -15,9 +12,9 @@ import dagger.hilt.android.scopes.ViewModelScoped
 object ViewModelModule {
 
     @[ViewModelScoped Provides]
-    fun providesProcessorHolder(
+    fun providesLoadSpellsUseCase(
         repository: Repository
-    ) : MVIProcessorHolder<SpellsAction, SpellsResult> {
-        return SpellsProcessorHolder(repository)
+    ) : LoadSpellsUseCase {
+        return LoadSpellsUseCase(repository)
     }
 }

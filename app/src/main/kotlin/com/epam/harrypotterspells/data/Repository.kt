@@ -5,7 +5,7 @@ import io.reactivex.rxjava3.core.Observable
 
 interface Repository {
 
-    val spells: Observable<List<JsonSpell>>
+    fun getSpells(): Observable<List<JsonSpell>>
 
     val spellsStub: List<JsonSpell>
 
