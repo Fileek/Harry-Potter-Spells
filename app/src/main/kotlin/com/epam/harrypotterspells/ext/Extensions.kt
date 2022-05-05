@@ -4,6 +4,7 @@ import android.content.Context
 import android.view.View
 import android.view.ViewTreeObserver
 import android.view.inputmethod.InputMethodManager
+import android.widget.EditText
 import com.epam.harrypotterspells.entities.JsonSpell
 import com.epam.harrypotterspells.entities.Spell
 
@@ -14,7 +15,7 @@ private const val CAN_BE_VERBAL_STUB = "Unknown"
 private const val CREATOR_STUB = "Unknown"
 const val TAG = "WhatIsGoingOn"
 
-fun View.focusAndShowKeyboard() {
+fun EditText.focusAndShowKeyboard() {
 
     requestFocus()
     if (hasWindowFocus() && isFocused) {
@@ -25,6 +26,7 @@ fun View.focusAndShowKeyboard() {
             imm.showSoftInput(this, InputMethodManager.SHOW_IMPLICIT)
         }
     }
+    setSelection(text.length)
 }
 
 fun View.hideKeyboard() {

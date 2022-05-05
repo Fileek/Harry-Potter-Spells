@@ -5,9 +5,15 @@ import io.reactivex.rxjava3.core.Observable
 
 interface Repository {
 
-    fun getSpells(): Observable<List<JsonSpell>>
-
     val spellsStub: List<JsonSpell>
 
-    fun editSpell(newSpell: JsonSpell)
+    fun getSpells(): Observable<List<JsonSpell>>
+
+    fun getSpellById(id: String): Observable<JsonSpell>
+
+    fun updateIncantation(id: String, incantation: String)
+    fun updateType(id: String, type: String)
+    fun updateEffect(id: String, effect: String)
+    fun updateLight(id: String, light: String)
+    fun updateCreator(id: String, creator: String)
 }
