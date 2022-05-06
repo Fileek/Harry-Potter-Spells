@@ -20,7 +20,7 @@ class SpellsFragment : Fragment(), MVIView<SpellsIntent, SpellsViewState> {
 
     private val spellAdapter = SpellAdapter()
     private var _binding: FragmentSpellsBinding? = null
-    private val binding get() = checkNotNull(_binding) { "Binding not initialized" }
+    private val binding get() = checkNotNull(_binding) { "Binding is not initialized" }
     private val viewModel: SpellsViewModel by viewModels()
     private val disposables = CompositeDisposable()
     private val errorStub by lazy { getString(R.string.error_placeholder) }
@@ -44,8 +44,8 @@ class SpellsFragment : Fragment(), MVIView<SpellsIntent, SpellsViewState> {
     }
 
     private fun bindViewModel() {
-        disposables += viewModel.states().subscribe(this::render)
-        viewModel.processIntents(intents())
+        disposables += viewModel.getStates().subscribe(this::render)
+        viewModel.processIntents(getIntents())
     }
 
     override fun render(state: SpellsViewState) {
@@ -56,7 +56,7 @@ class SpellsFragment : Fragment(), MVIView<SpellsIntent, SpellsViewState> {
         else if (state is SpellsViewState.Error) showError(state.error)
     }
 
-    override fun intents(): Observable<SpellsIntent> {
+    override fun getIntents(): Observable<SpellsIntent> {
         return loadIntent()
     }
 

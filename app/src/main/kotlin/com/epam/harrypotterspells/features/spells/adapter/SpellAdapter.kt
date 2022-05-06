@@ -69,7 +69,7 @@ class SpellAdapter : ListAdapter<Spell, SpellAdapter.SpellViewHolder>(itemCompar
 
         private fun setListener(spell: Spell) {
             itemView.setOnClickListener {
-                val action = SpellsFragmentDirections.detailsAction(spell.id)
+                val action = SpellsFragmentDirections.detailsAction(spell)
                 it.findNavController().navigate(action)
             }
         }

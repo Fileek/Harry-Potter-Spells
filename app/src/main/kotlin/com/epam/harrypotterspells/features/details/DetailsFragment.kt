@@ -1,7 +1,6 @@
 package com.epam.harrypotterspells.features.details
 
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -10,18 +9,25 @@ import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.navArgs
 import com.epam.harrypotterspells.databinding.FragmentDetailsBinding
 import com.epam.harrypotterspells.entities.Spell
-import com.epam.harrypotterspells.ext.TAG
 import com.epam.harrypotterspells.ext.focusAndShowKeyboard
 import com.epam.harrypotterspells.ext.hideKeyboard
-import com.epam.harrypotterspells.features.details.DetailsIntent.*
-import com.epam.harrypotterspells.features.details.DetailsIntent.EditSpellIntent.*
-import com.epam.harrypotterspells.features.details.DetailsIntent.UpdateSpellIntent.*
+import com.epam.harrypotterspells.features.details.DetailsIntent.EditSpellIntent
+import com.epam.harrypotterspells.features.details.DetailsIntent.EditSpellIntent.EditCreatorIntent
+import com.epam.harrypotterspells.features.details.DetailsIntent.EditSpellIntent.EditEffectIntent
+import com.epam.harrypotterspells.features.details.DetailsIntent.EditSpellIntent.EditIncantationIntent
+import com.epam.harrypotterspells.features.details.DetailsIntent.EditSpellIntent.EditLightIntent
+import com.epam.harrypotterspells.features.details.DetailsIntent.EditSpellIntent.EditTypeIntent
+import com.epam.harrypotterspells.features.details.DetailsIntent.UpdateSpellIntent
+import com.epam.harrypotterspells.features.details.DetailsIntent.UpdateSpellIntent.UpdateCreatorIntent
+import com.epam.harrypotterspells.features.details.DetailsIntent.UpdateSpellIntent.UpdateEffectIntent
+import com.epam.harrypotterspells.features.details.DetailsIntent.UpdateSpellIntent.UpdateIncantationIntent
+import com.epam.harrypotterspells.features.details.DetailsIntent.UpdateSpellIntent.UpdateLightIntent
+import com.epam.harrypotterspells.features.details.DetailsIntent.UpdateSpellIntent.UpdateTypeIntent
 import com.epam.harrypotterspells.mvibase.MVIView
 import dagger.hilt.android.AndroidEntryPoint
 import io.reactivex.rxjava3.core.Observable
 import io.reactivex.rxjava3.disposables.CompositeDisposable
 import io.reactivex.rxjava3.kotlin.plusAssign
-import io.reactivex.rxjava3.subjects.BehaviorSubject
 import io.reactivex.rxjava3.subjects.PublishSubject
 
 @AndroidEntryPoint
@@ -30,10 +36,10 @@ class DetailsFragment : Fragment(), MVIView<DetailsIntent, DetailsViewState> {
     private val editIntentsSubject = PublishSubject.create<EditSpellIntent>()
     private val updateIntentsSubject = PublishSubject.create<UpdateSpellIntent>()
     private val args: DetailsFragmentArgs by navArgs()
-    private val spellId by lazy { args.spellId }
+    private val spellId by lazy { args.spell.id }
     private val disposables = CompositeDisposable()
     private var _binding: FragmentDetailsBinding? = null
-    private val binding get() = checkNotNull(_binding) { "Binding not initialized" }
+    private val binding get() = checkNotNull(_binding) { "Binding is not initialized" }
     private val viewModel: DetailsViewModel by viewModels()
 
     override fun onCreateView(
@@ -51,28 +57,25 @@ class DetailsFragment : Fragment(), MVIView<DetailsIntent, DetailsViewState> {
     }
 
     private fun bindViewModel() {
-        viewModel.processIntents(intents())
-        disposables += viewModel.states().subscribe(this::render)
+        viewModel.processIntents(getIntents())
+        disposables += viewModel.getStates().subscribe(this::render)
     }
 
-    override fun intents(): Observable<DetailsIntent> {
+    override fun getIntents(): Observable<DetailsIntent> {
         return Observable.merge(
-            getSpellIntent(),
             editSpellIntent(),
             updateSpellIntent(),
         )
     }
-
-    private fun getSpellIntent() = Observable.just(GetSpellIntent(spellId))
 
     private fun editSpellIntent() = editIntentsSubject.serialize()
 
     private fun updateSpellIntent() = updateIntentsSubject.serialize()
 
     override fun render(state: DetailsViewState) {
-        renderSpell(state.spell)
+        state.spell?.let { renderSpell(it) }
         renderInputState(state)
-        renderFocus(state.fieldFocus)
+        renderFocus(state.focus)
     }
 
     private fun renderSpell(spell: Spell) = binding.run {
@@ -86,7 +89,7 @@ class DetailsFragment : Fragment(), MVIView<DetailsIntent, DetailsViewState> {
     }
 
     private fun renderInputState(state: DetailsViewState) {
-        if (state.inputsNotInitialized) initializeInputs(state.spell)
+        if (state.inputsNotInitialized) state.spell?.let { initializeInputs(it) }
 
         if (state.incantationIsEditing) showIncantationInput()
         else hideIncantationInput()
@@ -105,7 +108,6 @@ class DetailsFragment : Fragment(), MVIView<DetailsIntent, DetailsViewState> {
     }
 
     private fun initializeInputs(spell: Spell) = binding.run {
-        Log.v(TAG, "initializeInputs")
         incantationInput.setText(spell.incantation)
         typeInput.setText(spell.type)
         effectInput.setText(spell.effect)
@@ -163,14 +165,14 @@ class DetailsFragment : Fragment(), MVIView<DetailsIntent, DetailsViewState> {
         creatorInputGroup.visibility = View.GONE
     }
 
-    private fun renderFocus(focus: FieldFocus) = binding.run {
+    private fun renderFocus(focus: SpellInputFieldFocus) = binding.run {
         when (focus) {
-            FieldFocus.NONE -> root.hideKeyboard()
-            FieldFocus.INCANTATION -> incantationInput.focusAndShowKeyboard()
-            FieldFocus.TYPE -> typeInput.focusAndShowKeyboard()
-            FieldFocus.EFFECT -> effectInput.focusAndShowKeyboard()
-            FieldFocus.LIGHT -> lightInput.focusAndShowKeyboard()
-            FieldFocus.CREATOR -> creatorInput.focusAndShowKeyboard()
+            SpellInputFieldFocus.NONE -> root.hideKeyboard()
+            SpellInputFieldFocus.INCANTATION -> incantationInput.focusAndShowKeyboard()
+            SpellInputFieldFocus.TYPE -> typeInput.focusAndShowKeyboard()
+            SpellInputFieldFocus.EFFECT -> effectInput.focusAndShowKeyboard()
+            SpellInputFieldFocus.LIGHT -> lightInput.focusAndShowKeyboard()
+            SpellInputFieldFocus.CREATOR -> creatorInput.focusAndShowKeyboard()
         }
     }
 

@@ -20,7 +20,7 @@
         android:name="com.epam.harrypotterspells.features.details.DetailsFragment"
         android:label="@string/details_label">
         <argument
-            android:name="spell_id"
-            app:argType="string" />
+            android:name="spell"
+            app:argType="com.epam.harrypotterspells.entities.Spell" />
     </fragment>
 </navigation>

@@ -3,7 +3,6 @@ package com.epam.harrypotterspells.features.details
 import com.epam.harrypotterspells.mvibase.MVIAction
 
 sealed class DetailsAction : MVIAction {
-    data class GetSpellAction(val id: String) : DetailsAction()
 
     sealed class EditSpellAction : DetailsAction() {
         object EditIncantationAction : EditSpellAction()

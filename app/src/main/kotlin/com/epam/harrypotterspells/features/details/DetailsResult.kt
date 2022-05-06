@@ -1,12 +1,8 @@
 package com.epam.harrypotterspells.features.details
 
-import com.epam.harrypotterspells.entities.Spell
 import com.epam.harrypotterspells.mvibase.MVIResult
 
 sealed class DetailsResult : MVIResult {
-    sealed class GetSpellResult : DetailsResult() {
-        data class Success(val spell: Spell) : GetSpellResult()
-    }
 
     sealed class EditSpellResult : DetailsResult() {
         object EditIncantationResult : EditSpellResult()
@@ -17,10 +13,10 @@ sealed class DetailsResult : MVIResult {
     }
 
     sealed class UpdateSpellResult : DetailsResult() {
-        object UpdateIncantationResult : UpdateSpellResult()
-        object UpdateTypeResult : UpdateSpellResult()
-        object UpdateEffectResult : UpdateSpellResult()
-        object UpdateLightResult : UpdateSpellResult()
-        object UpdateCreatorResult : UpdateSpellResult()
+        data class UpdateIncantationResult(val incantation: String) : UpdateSpellResult()
+        data class UpdateTypeResult(val type: String) : UpdateSpellResult()
+        data class UpdateEffectResult(val effect: String) : UpdateSpellResult()
+        data class UpdateLightResult(val light: String) : UpdateSpellResult()
+        data class UpdateCreatorResult(val creator: String) : UpdateSpellResult()
     }
 }

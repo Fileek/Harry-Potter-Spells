@@ -6,5 +6,5 @@ interface MVIView<I : MVIIntent, S: MVIViewState> {
 
     fun render(state: S)
 
-    fun intents(): Observable<I>
+    fun getIntents(): Observable<I>
 }

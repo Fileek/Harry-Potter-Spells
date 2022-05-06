@@ -3,7 +3,6 @@ package com.epam.harrypotterspells.features.details
 import com.epam.harrypotterspells.mvibase.MVIIntent
 
 sealed class DetailsIntent : MVIIntent {
-    data class GetSpellIntent(val id: String) : DetailsIntent()
 
     sealed class EditSpellIntent : DetailsIntent() {
         object EditIncantationIntent : EditSpellIntent()

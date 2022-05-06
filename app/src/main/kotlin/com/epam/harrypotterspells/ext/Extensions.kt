@@ -2,7 +2,6 @@ package com.epam.harrypotterspells.ext
 
 import android.content.Context
 import android.view.View
-import android.view.ViewTreeObserver
 import android.view.inputmethod.InputMethodManager
 import android.widget.EditText
 import com.epam.harrypotterspells.entities.JsonSpell

@@ -42,7 +42,7 @@ class SpellsViewModel @Inject constructor(
         observable.subscribe(intentsSubject)
     }
 
-    override fun states(): Observable<SpellsViewState> = statesObservable
+    override fun getStates(): Observable<SpellsViewState> = statesObservable
 
     private companion object {
 

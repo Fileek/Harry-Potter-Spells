@@ -2,9 +2,9 @@ package com.epam.harrypotterspells.di
 
 import com.epam.harrypotterspells.data.Repository
 import com.epam.harrypotterspells.domain.EditSpellUseCase
-import com.epam.harrypotterspells.domain.GetSpellUseCase
 import com.epam.harrypotterspells.domain.LoadSpellsUseCase
 import com.epam.harrypotterspells.domain.UpdateSpellUseCase
+import com.epam.harrypotterspells.features.details.DetailsReducer
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -15,28 +15,14 @@ import dagger.hilt.android.scopes.ViewModelScoped
 object ViewModelModule {
 
     @[ViewModelScoped Provides]
-    fun providesLoadSpellsUseCase(
-        repository: Repository
-    ): LoadSpellsUseCase {
-        return LoadSpellsUseCase(repository)
-    }
+    fun providesLoadSpellsUseCase(repo: Repository) = LoadSpellsUseCase(repo)
 
     @[ViewModelScoped Provides]
-    fun providesGetSpellUseCase(
-        repository: Repository
-    ): GetSpellUseCase {
-        return GetSpellUseCase(repository)
-    }
+    fun providesEditSpellUseCase() = EditSpellUseCase()
 
     @[ViewModelScoped Provides]
-    fun providesEditSpellUseCase(): EditSpellUseCase {
-        return EditSpellUseCase()
-    }
+    fun providesUpdateSpellUseCase(repo: Repository) = UpdateSpellUseCase(repo)
 
     @[ViewModelScoped Provides]
-    fun providesUpdateSpellUseCase(
-        repository: Repository
-    ): UpdateSpellUseCase {
-        return UpdateSpellUseCase(repository)
-    }
+    fun providesDetailsReducer() = DetailsReducer()
 }
