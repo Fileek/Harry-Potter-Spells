@@ -9,6 +9,9 @@ interface Repository {
 
     fun getSpells(): Observable<List<JsonSpell>>
 
+    fun switchToLocal()
+    fun switchToRemote()
+
     fun updateIncantation(id: String, incantation: String)
     fun updateType(id: String, type: String)
     fun updateEffect(id: String, effect: String)

@@ -23,7 +23,7 @@ class SpellsViewModel @Inject constructor(
     private fun compose(): Observable<SpellsViewState> {
         return intentsSubject
             .observeOn(Schedulers.computation())
-            .map(this::actionFromIntent)
+            .map(this::getActionFromIntent)
             .compose(loadSpellsUseCase.performAction())
             .scan(SpellsViewState.Idle, reducer)
             .distinctUntilChanged()
@@ -32,10 +32,8 @@ class SpellsViewModel @Inject constructor(
             .autoConnect()
     }
 
-    private fun actionFromIntent(intent: SpellsIntent): SpellsAction {
-        return when (intent) {
-            is SpellsIntent.LoadSpellsIntent -> SpellsAction.LoadSpellsAction
-        }
+    private fun getActionFromIntent(intent: SpellsIntent) = when (intent) {
+        is SpellsIntent.LoadSpellsIntent -> SpellsAction.LoadSpellsAction
     }
 
     override fun processIntents(observable: Observable<SpellsIntent>) {

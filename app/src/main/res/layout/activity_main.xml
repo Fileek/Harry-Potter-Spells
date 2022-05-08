@@ -10,7 +10,18 @@
         android:id="@+id/toolbar"
         android:layout_width="match_parent"
         android:layout_height="?attr/actionBarSize"
-        android:background="?colorPrimary" />
+        android:background="?colorPrimary"
+        app:titleTextColor="@color/black">
+
+        <androidx.appcompat.widget.SwitchCompat
+            android:id="@+id/repository_switch"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="end"
+            android:layout_marginEnd="@dimen/double_spacing"
+            android:checked="true"
+            android:textColor="@color/black" />
+    </androidx.appcompat.widget.Toolbar>
 
     <ScrollView
         android:layout_width="match_parent"

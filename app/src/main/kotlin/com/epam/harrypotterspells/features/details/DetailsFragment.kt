@@ -63,14 +63,14 @@ class DetailsFragment : Fragment(), MVIView<DetailsIntent, DetailsViewState> {
 
     override fun getIntents(): Observable<DetailsIntent> {
         return Observable.merge(
-            editSpellIntent(),
-            updateSpellIntent(),
+            getEditSpellIntents(),
+            getUpdateSpellIntents(),
         )
     }
 
-    private fun editSpellIntent() = editIntentsSubject.serialize()
+    private fun getEditSpellIntents() = editIntentsSubject.serialize()
 
-    private fun updateSpellIntent() = updateIntentsSubject.serialize()
+    private fun getUpdateSpellIntents() = updateIntentsSubject.serialize()
 
     override fun render(state: DetailsViewState) {
         state.spell?.let { renderSpell(it) }

@@ -18,7 +18,7 @@ class RemoteRepository @Inject constructor(
 
     private val spellsSubject = BehaviorSubject.create<List<JsonSpell>>()
 
-    private val spellsList get() = spellsSubject.value ?: spellsStub
+    private var spellsList = emptyList<JsonSpell>()
 
     override fun getSpells(): Observable<List<JsonSpell>> {
         api.getSpells()
@@ -28,10 +28,20 @@ class RemoteRepository @Inject constructor(
     }
 
     private fun processSuccessResponse(data: List<JsonSpell>) {
+        spellsList = data
         spellsSubject.onNext(data)
     }
 
     private fun processErrorResponse(error: Throwable) {
+        spellsList = spellsStub
+        spellsSubject.onNext(spellsStub)
+    }
+
+    override fun switchToRemote() {
+        spellsSubject.onNext(spellsList)
+    }
+
+    override fun switchToLocal() {
         spellsSubject.onNext(spellsStub)
     }
 

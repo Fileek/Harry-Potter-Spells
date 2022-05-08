@@ -9,4 +9,6 @@
     <string name="save">Save</string>
     <string name="can_be_verbal_prefix">Can be verbal: </string>
     <string name="error_placeholder">Unknown error occurred</string>
+    <string name="remote">Remote</string>
+    <string name="local">Local</string>
 </resources>

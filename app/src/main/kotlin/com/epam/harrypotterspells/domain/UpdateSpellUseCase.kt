@@ -21,19 +21,20 @@ class UpdateSpellUseCase @Inject constructor(
     private val repository: Repository
 ) {
 
-    fun performAction() = ObservableTransformer<UpdateSpellAction, UpdateSpellResult> {
-        it.flatMap { action ->
-            Observable.just(
-                when (action) {
-                    is UpdateIncantationAction -> performUpdateIncantationAction(action)
-                    is UpdateTypeAction -> performUpdateTypeAction(action)
-                    is UpdateEffectAction -> performUpdateEffectAction(action)
-                    is UpdateLightAction -> performUpdateLightAction(action)
-                    is UpdateCreatorAction -> performUpdateCreatorAction(action)
-                }
-            )
+    fun performAction() =
+        ObservableTransformer<UpdateSpellAction, UpdateSpellResult> {
+            it.flatMap { action ->
+                Observable.just(
+                    when (action) {
+                        is UpdateIncantationAction -> performUpdateIncantationAction(action)
+                        is UpdateTypeAction -> performUpdateTypeAction(action)
+                        is UpdateEffectAction -> performUpdateEffectAction(action)
+                        is UpdateLightAction -> performUpdateLightAction(action)
+                        is UpdateCreatorAction -> performUpdateCreatorAction(action)
+                    }
+                )
+            }
         }
-    }
 
     private fun performUpdateIncantationAction(action: UpdateIncantationAction): UpdateIncantationResult {
         repository.updateIncantation(action.id, action.incantation)

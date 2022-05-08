@@ -2,8 +2,7 @@ package com.epam.harrypotterspells.domain
 
 import com.epam.harrypotterspells.data.Repository
 import com.epam.harrypotterspells.ext.toSpell
-import com.epam.harrypotterspells.features.spells.SpellsAction
-import com.epam.harrypotterspells.features.spells.SpellsResult
+import com.epam.harrypotterspells.features.spells.SpellsAction.LoadSpellsAction
 import com.epam.harrypotterspells.features.spells.SpellsResult.LoadSpellsResult
 import io.reactivex.rxjava3.core.ObservableTransformer
 import io.reactivex.rxjava3.schedulers.Schedulers
@@ -13,8 +12,8 @@ class LoadSpellsUseCase @Inject constructor(
     private val repository: Repository
 ) {
 
-    fun performAction(): ObservableTransformer<SpellsAction, SpellsResult> {
-        return ObservableTransformer {
+    fun performAction() =
+        ObservableTransformer<LoadSpellsAction, LoadSpellsResult> {
             it.flatMap {
                 repository.getSpells()
                     .observeOn(Schedulers.computation())
@@ -30,5 +29,4 @@ class LoadSpellsUseCase @Inject constructor(
                     .startWithItem(LoadSpellsResult.Loading)
             }
         }
-    }
 }
