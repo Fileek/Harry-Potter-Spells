@@ -1,5 +1,6 @@
 package com.epam.harrypotterspells.di
 
+import com.epam.harrypotterspells.DefaultSchedulerProvider
 import com.epam.harrypotterspells.data.Repository
 import com.epam.harrypotterspells.domain.EditSpellUseCase
 import com.epam.harrypotterspells.domain.LoadSpellsUseCase
@@ -7,6 +8,7 @@ import com.epam.harrypotterspells.domain.SwitchToLocalUseCase
 import com.epam.harrypotterspells.domain.SwitchToRemoteUseCase
 import com.epam.harrypotterspells.domain.UpdateSpellUseCase
 import com.epam.harrypotterspells.features.details.DetailsReducer
+import com.epam.harrypotterspells.mvibase.SchedulerProvider
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn

@@ -1,11 +1,14 @@
 package com.epam.harrypotterspells.di
 
+import com.epam.harrypotterspells.DefaultSchedulerProvider
 import com.epam.harrypotterspells.data.remote.RemoteRepository
 import com.epam.harrypotterspells.data.Repository
 import com.epam.harrypotterspells.data.api.SpellApi
+import com.epam.harrypotterspells.mvibase.SchedulerProvider
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
+import dagger.hilt.android.scopes.ViewModelScoped
 import dagger.hilt.components.SingletonComponent
 import hu.akarnokd.rxjava3.retrofit.RxJava3CallAdapterFactory
 import retrofit2.Retrofit
@@ -29,8 +32,12 @@ object AppModule {
 
     @[Singleton Provides]
     fun providesRepository(
-        api: SpellApi
+        api: SpellApi,
+        schedulerProvider: SchedulerProvider
     ): Repository {
-        return RemoteRepository(api)
+        return RemoteRepository(api, schedulerProvider)
     }
+
+    @[Singleton Provides]
+    fun providesSchedulerProvider(): SchedulerProvider = DefaultSchedulerProvider()
 }

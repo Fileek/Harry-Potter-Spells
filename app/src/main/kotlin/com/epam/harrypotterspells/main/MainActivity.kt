@@ -9,7 +9,7 @@ import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.setupWithNavController
 import com.epam.harrypotterspells.R
 import com.epam.harrypotterspells.databinding.ActivityMainBinding
-import com.epam.harrypotterspells.ext.TAG
+import com.epam.harrypotterspells.utils.TAG
 import com.epam.harrypotterspells.mvibase.MVIView
 import dagger.hilt.android.AndroidEntryPoint
 import io.reactivex.rxjava3.core.Observable

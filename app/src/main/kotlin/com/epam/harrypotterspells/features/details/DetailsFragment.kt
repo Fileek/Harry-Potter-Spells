@@ -9,8 +9,8 @@ import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.navArgs
 import com.epam.harrypotterspells.databinding.FragmentDetailsBinding
 import com.epam.harrypotterspells.entities.Spell
-import com.epam.harrypotterspells.ext.focusAndShowKeyboard
-import com.epam.harrypotterspells.ext.hideKeyboard
+import com.epam.harrypotterspells.utils.focusAndShowKeyboard
+import com.epam.harrypotterspells.utils.hideKeyboard
 import com.epam.harrypotterspells.features.details.DetailsIntent.EditSpellIntent
 import com.epam.harrypotterspells.features.details.DetailsIntent.EditSpellIntent.EditCreatorIntent
 import com.epam.harrypotterspells.features.details.DetailsIntent.EditSpellIntent.EditEffectIntent

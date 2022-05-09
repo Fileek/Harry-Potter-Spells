@@ -1,8 +1,6 @@
 package com.epam.harrypotterspells.domain
 
-import android.util.Log
 import com.epam.harrypotterspells.data.Repository
-import com.epam.harrypotterspells.ext.TAG
 import com.epam.harrypotterspells.main.MainAction.SwitchToLocalAction
 import com.epam.harrypotterspells.main.MainResult.SwitchToLocalResult
 import io.reactivex.rxjava3.core.Observable

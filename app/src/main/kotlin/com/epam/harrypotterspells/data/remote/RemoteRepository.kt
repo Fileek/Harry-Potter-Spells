@@ -4,6 +4,7 @@ import com.epam.harrypotterspells.data.Repository
 import com.epam.harrypotterspells.data.api.SpellApi
 import com.epam.harrypotterspells.data.local.StubList
 import com.epam.harrypotterspells.entities.JsonSpell
+import com.epam.harrypotterspells.mvibase.SchedulerProvider
 import io.reactivex.rxjava3.core.Observable
 import io.reactivex.rxjava3.schedulers.Schedulers
 import io.reactivex.rxjava3.subjects.BehaviorSubject
@@ -11,10 +12,11 @@ import java.util.Collections
 import javax.inject.Inject
 
 class RemoteRepository @Inject constructor(
-    private val api: SpellApi
+    private val api: SpellApi,
+    private val schedulerProvider: SchedulerProvider
 ) : Repository {
 
-    override val spellsStub = StubList.spells
+    private val spellsStub = StubList.spells
 
     private val spellsSubject = BehaviorSubject.create<List<JsonSpell>>()
 
@@ -22,7 +24,7 @@ class RemoteRepository @Inject constructor(
 
     override fun getSpells(): Observable<List<JsonSpell>> {
         api.getSpells()
-            .subscribeOn(Schedulers.io())
+            .subscribeOn(schedulerProvider.io())
             .subscribe(::processSuccessResponse, ::processErrorResponse)
         return spellsSubject.serialize()
     }

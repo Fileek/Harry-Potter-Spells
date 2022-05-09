@@ -3,24 +3,24 @@ package com.epam.harrypotterspells.main
 import androidx.lifecycle.ViewModel
 import com.epam.harrypotterspells.domain.SwitchToLocalUseCase
 import com.epam.harrypotterspells.domain.SwitchToRemoteUseCase
-import com.epam.harrypotterspells.features.details.DetailsAction
-import com.epam.harrypotterspells.features.details.DetailsResult
 import com.epam.harrypotterspells.main.MainAction.SwitchToLocalAction
 import com.epam.harrypotterspells.main.MainAction.SwitchToRemoteAction
 import com.epam.harrypotterspells.main.MainIntent.SwitchToLocalIntent
 import com.epam.harrypotterspells.main.MainIntent.SwitchToRemoteIntent
+import com.epam.harrypotterspells.main.MainResult.SwitchToLocalResult
+import com.epam.harrypotterspells.main.MainResult.SwitchToRemoteResult
 import com.epam.harrypotterspells.mvibase.MVIViewModel
+import com.epam.harrypotterspells.mvibase.SchedulerProvider
 import dagger.hilt.android.lifecycle.HiltViewModel
-import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
 import io.reactivex.rxjava3.core.Observable
 import io.reactivex.rxjava3.core.ObservableTransformer
 import io.reactivex.rxjava3.functions.BiFunction
-import io.reactivex.rxjava3.schedulers.Schedulers
 import io.reactivex.rxjava3.subjects.BehaviorSubject
 import javax.inject.Inject
 
 @HiltViewModel
 class MainViewModel @Inject constructor(
+    private val schedulerProvider: SchedulerProvider,
     private val switchToRemoteUseCase: SwitchToRemoteUseCase,
     private val switchToLocalUseCase: SwitchToLocalUseCase,
 ) : ViewModel(), MVIViewModel<MainIntent, MainViewState> {
@@ -31,15 +31,14 @@ class MainViewModel @Inject constructor(
 
     private fun compose(): Observable<MainViewState> {
         return intentsSubject
-            .observeOn(Schedulers.computation())
+            .observeOn(schedulerProvider.computation())
             .map(this::getActionFromIntent)
             .compose(processActions())
             .scan(initialState, reducer)
-            .distinctUntilChanged()
-            .observeOn(AndroidSchedulers.mainThread())
+            .observeOn(schedulerProvider.ui())
             .replay()
             .autoConnect()
-            .startWithItem(initialState)
+            .distinctUntilChanged()
     }
 
     private fun processActions() =
@@ -65,12 +64,11 @@ class MainViewModel @Inject constructor(
         is SwitchToLocalIntent -> SwitchToLocalAction
     }
 
-
     private companion object {
         private val reducer = BiFunction { _:MainViewState, result: MainResult ->
             when (result) {
-                is MainResult.SwitchToRemoteResult -> MainViewState(isRemote = true)
-                is MainResult.SwitchToLocalResult -> MainViewState(isRemote = false)
+                is SwitchToRemoteResult -> MainViewState(isRemote = true)
+                is SwitchToLocalResult -> MainViewState(isRemote = false)
             }
         }
     }

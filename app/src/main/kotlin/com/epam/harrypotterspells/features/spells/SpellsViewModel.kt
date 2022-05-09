@@ -4,6 +4,7 @@ import androidx.lifecycle.ViewModel
 import com.epam.harrypotterspells.domain.LoadSpellsUseCase
 import com.epam.harrypotterspells.features.spells.SpellsResult.LoadSpellsResult
 import com.epam.harrypotterspells.mvibase.MVIViewModel
+import com.epam.harrypotterspells.mvibase.SchedulerProvider
 import dagger.hilt.android.lifecycle.HiltViewModel
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
 import io.reactivex.rxjava3.core.Observable
@@ -14,6 +15,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 class SpellsViewModel @Inject constructor(
+    private val schedulerProvider: SchedulerProvider,
     private val loadSpellsUseCase: LoadSpellsUseCase
 ) : ViewModel(), MVIViewModel<SpellsIntent, SpellsViewState> {
 
@@ -22,12 +24,12 @@ class SpellsViewModel @Inject constructor(
 
     private fun compose(): Observable<SpellsViewState> {
         return intentsSubject
-            .observeOn(Schedulers.computation())
+            .observeOn(schedulerProvider.computation())
             .map(this::getActionFromIntent)
             .compose(loadSpellsUseCase.performAction())
             .scan(SpellsViewState.Idle, reducer)
             .distinctUntilChanged()
-            .observeOn(AndroidSchedulers.mainThread())
+            .observeOn(schedulerProvider.ui())
             .replay()
             .autoConnect()
     }

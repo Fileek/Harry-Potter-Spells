@@ -30,6 +30,7 @@ import com.epam.harrypotterspells.features.details.DetailsIntent.UpdateSpellInte
 import com.epam.harrypotterspells.features.details.DetailsIntent.UpdateSpellIntent.UpdateLightIntent
 import com.epam.harrypotterspells.features.details.DetailsIntent.UpdateSpellIntent.UpdateTypeIntent
 import com.epam.harrypotterspells.mvibase.MVIViewModel
+import com.epam.harrypotterspells.mvibase.SchedulerProvider
 import dagger.hilt.android.lifecycle.HiltViewModel
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
 import io.reactivex.rxjava3.core.Observable
@@ -40,6 +41,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 class DetailsViewModel @Inject constructor(
+    private val schedulerProvider: SchedulerProvider,
     state: SavedStateHandle,
     private val editSpellUseCase: EditSpellUseCase,
     private val updateSpellUseCase: UpdateSpellUseCase,
@@ -62,15 +64,15 @@ class DetailsViewModel @Inject constructor(
 
     private fun compose(): Observable<DetailsViewState> {
         return intentsSubject
-            .observeOn(Schedulers.computation())
+            .observeOn(schedulerProvider.computation())
             .map(this::getActionFromIntent)
             .compose(processActions())
             .scan(initialState, reducer.reduce())
-            .distinctUntilChanged()
-            .observeOn(AndroidSchedulers.mainThread())
-            .replay(1)
-            .autoConnect(0)
+            .observeOn(schedulerProvider.ui())
+            .replay()
+            .autoConnect()
             .startWithItem(initialState)
+            .distinctUntilChanged()
     }
 
     private fun processActions() =

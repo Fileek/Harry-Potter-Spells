@@ -1,7 +1,7 @@
 package com.epam.harrypotterspells.domain
 
 import com.epam.harrypotterspells.data.Repository
-import com.epam.harrypotterspells.ext.toSpell
+import com.epam.harrypotterspells.utils.toSpell
 import com.epam.harrypotterspells.features.spells.SpellsAction.LoadSpellsAction
 import com.epam.harrypotterspells.features.spells.SpellsResult.LoadSpellsResult
 import io.reactivex.rxjava3.core.ObservableTransformer

@@ -5,8 +5,6 @@ import io.reactivex.rxjava3.core.Observable
 
 interface Repository {
 
-    val spellsStub: List<JsonSpell>
-
     fun getSpells(): Observable<List<JsonSpell>>
 
     fun switchToLocal()
