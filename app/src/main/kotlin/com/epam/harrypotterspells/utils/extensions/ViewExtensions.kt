@@ -1,4 +1,4 @@
-package com.epam.harrypotterspells.utils
+package com.epam.harrypotterspells.utils.extensions
 
 import android.content.Context
 import android.view.View

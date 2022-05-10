@@ -1,11 +1,10 @@
 package com.epam.harrypotterspells.features.spells
 
-import com.epam.harrypotterspells.utils.TestSchedulerProvider
-import com.epam.harrypotterspells.main.MainViewModelTest.Companion.INITIAL_STATE_INDEX
 import com.epam.harrypotterspells.data.Repository
 import com.epam.harrypotterspells.data.local.StubList
 import com.epam.harrypotterspells.domain.LoadSpellsUseCase
-import com.epam.harrypotterspells.utils.toSpell
+import com.epam.harrypotterspells.utils.TestSchedulerProvider
+import com.epam.harrypotterspells.utils.extensions.toSpell
 import io.mockk.MockKAnnotations
 import io.mockk.every
 import io.mockk.impl.annotations.MockK
@@ -22,6 +21,7 @@ class SpellsViewModelTest {
     private lateinit var viewModel: SpellsViewModel
     private lateinit var testObserver: TestObserver<SpellsViewState>
 
+    private val schedulerProvider = TestSchedulerProvider()
     private val loadSpellsIntent = SpellsIntent.LoadSpellsIntent
     private val spells = StubList.spells.map { it.toSpell() }
     private val jsonSpells = StubList.spells
@@ -30,8 +30,8 @@ class SpellsViewModelTest {
     fun setup() {
         MockKAnnotations.init(this)
         viewModel = SpellsViewModel(
-            TestSchedulerProvider(),
-            LoadSpellsUseCase(repository)
+            schedulerProvider,
+            LoadSpellsUseCase(repository, schedulerProvider)
         )
         testObserver = viewModel.getStates().test()
     }
@@ -43,7 +43,7 @@ class SpellsViewModelTest {
 
     @Test
     fun `check that initialState returns correct state`() {
-        testObserver.assertValueAt(INITIAL_STATE_INDEX, SpellsViewState.Idle)
+        testObserver.assertValue(SpellsViewState.Idle)
     }
 
     @Test

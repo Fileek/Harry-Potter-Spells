@@ -9,8 +9,9 @@ import javax.inject.Inject
 
 class SwitchToLocalUseCase @Inject constructor(
     private val repository: Repository
-) {
-    fun performAction() =
+) : UseCase<SwitchToLocalAction, SwitchToLocalResult> {
+
+    override fun performAction() =
         ObservableTransformer<SwitchToLocalAction, SwitchToLocalResult> {
             it.flatMap {
                 repository.switchToLocal()

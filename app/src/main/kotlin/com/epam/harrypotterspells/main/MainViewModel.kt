@@ -1,8 +1,7 @@
 package com.epam.harrypotterspells.main
 
 import androidx.lifecycle.ViewModel
-import com.epam.harrypotterspells.domain.SwitchToLocalUseCase
-import com.epam.harrypotterspells.domain.SwitchToRemoteUseCase
+import com.epam.harrypotterspells.domain.UseCase
 import com.epam.harrypotterspells.main.MainAction.SwitchToLocalAction
 import com.epam.harrypotterspells.main.MainAction.SwitchToRemoteAction
 import com.epam.harrypotterspells.main.MainIntent.SwitchToLocalIntent
@@ -10,7 +9,7 @@ import com.epam.harrypotterspells.main.MainIntent.SwitchToRemoteIntent
 import com.epam.harrypotterspells.main.MainResult.SwitchToLocalResult
 import com.epam.harrypotterspells.main.MainResult.SwitchToRemoteResult
 import com.epam.harrypotterspells.mvibase.MVIViewModel
-import com.epam.harrypotterspells.mvibase.SchedulerProvider
+import com.epam.harrypotterspells.utils.schedulers.SchedulerProvider
 import dagger.hilt.android.lifecycle.HiltViewModel
 import io.reactivex.rxjava3.core.Observable
 import io.reactivex.rxjava3.core.ObservableTransformer
@@ -21,8 +20,8 @@ import javax.inject.Inject
 @HiltViewModel
 class MainViewModel @Inject constructor(
     private val schedulerProvider: SchedulerProvider,
-    private val switchToRemoteUseCase: SwitchToRemoteUseCase,
-    private val switchToLocalUseCase: SwitchToLocalUseCase,
+    private val switchToRemoteUseCase: UseCase<SwitchToRemoteAction, SwitchToRemoteResult>,
+    private val switchToLocalUseCase: UseCase<SwitchToLocalAction, SwitchToLocalResult>,
 ) : ViewModel(), MVIViewModel<MainIntent, MainViewState> {
 
     private val intentsSubject = BehaviorSubject.create<MainIntent>()

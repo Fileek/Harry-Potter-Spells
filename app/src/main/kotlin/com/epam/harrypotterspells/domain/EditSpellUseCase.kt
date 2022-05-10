@@ -15,9 +15,9 @@ import com.epam.harrypotterspells.features.details.DetailsResult.EditSpellResult
 import io.reactivex.rxjava3.core.Observable
 import io.reactivex.rxjava3.core.ObservableTransformer
 
-class EditSpellUseCase {
+class EditSpellUseCase : UseCase<EditSpellAction, EditSpellResult> {
 
-    fun performAction() =
+    override fun performAction() =
         ObservableTransformer<EditSpellAction, EditSpellResult> {
             it.flatMap { action ->
                 Observable.just(

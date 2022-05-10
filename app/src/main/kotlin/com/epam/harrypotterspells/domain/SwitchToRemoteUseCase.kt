@@ -9,8 +9,9 @@ import javax.inject.Inject
 
 class SwitchToRemoteUseCase @Inject constructor(
     private val repository: Repository
-) {
-    fun performAction() =
+) : UseCase<SwitchToRemoteAction, SwitchToRemoteResult> {
+
+    override fun performAction() =
         ObservableTransformer<SwitchToRemoteAction, SwitchToRemoteResult> {
             it.flatMap {
                 repository.switchToRemote()

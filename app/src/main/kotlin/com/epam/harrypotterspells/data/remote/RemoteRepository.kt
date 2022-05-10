@@ -4,9 +4,8 @@ import com.epam.harrypotterspells.data.Repository
 import com.epam.harrypotterspells.data.api.SpellApi
 import com.epam.harrypotterspells.data.local.StubList
 import com.epam.harrypotterspells.entities.JsonSpell
-import com.epam.harrypotterspells.mvibase.SchedulerProvider
+import com.epam.harrypotterspells.utils.schedulers.SchedulerProvider
 import io.reactivex.rxjava3.core.Observable
-import io.reactivex.rxjava3.schedulers.Schedulers
 import io.reactivex.rxjava3.subjects.BehaviorSubject
 import java.util.Collections
 import javax.inject.Inject

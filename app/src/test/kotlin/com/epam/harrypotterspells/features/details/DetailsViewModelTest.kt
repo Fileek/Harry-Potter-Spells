@@ -1,13 +1,12 @@
 package com.epam.harrypotterspells.features.details
 
 import androidx.lifecycle.SavedStateHandle
-import com.epam.harrypotterspells.utils.TestSchedulerProvider
-import com.epam.harrypotterspells.main.MainViewModelTest.Companion.INITIAL_STATE_INDEX
 import com.epam.harrypotterspells.data.Repository
 import com.epam.harrypotterspells.data.local.StubList
 import com.epam.harrypotterspells.domain.EditSpellUseCase
 import com.epam.harrypotterspells.domain.UpdateSpellUseCase
-import com.epam.harrypotterspells.utils.toSpell
+import com.epam.harrypotterspells.utils.TestSchedulerProvider
+import com.epam.harrypotterspells.utils.extensions.toSpell
 import io.mockk.MockKAnnotations
 import io.mockk.impl.annotations.MockK
 import io.reactivex.rxjava3.core.Observable
@@ -36,11 +35,11 @@ class DetailsViewModelTest {
     fun setup() {
         MockKAnnotations.init(this, relaxUnitFun = true)
         viewModel = DetailsViewModel(
-            TestSchedulerProvider(),
-            SavedStateHandle(mapOf("spell" to spell)),
-            EditSpellUseCase(),
-            UpdateSpellUseCase(repository),
-            DetailsReducer()
+            state = SavedStateHandle(mapOf("spell" to spell)),
+            reducer = DetailsReducer(),
+            schedulerProvider = TestSchedulerProvider(),
+            editSpellUseCase = EditSpellUseCase(),
+            updateSpellUseCase = UpdateSpellUseCase(repository),
         )
         testObserver = viewModel.getStates().test()
     }
@@ -52,7 +51,7 @@ class DetailsViewModelTest {
 
     @Test
     fun `check that initial state returns correct state`() {
-        testObserver.assertValueAt(INITIAL_STATE_INDEX, initialState)
+        testObserver.assertValue(initialState)
     }
 
     @Test

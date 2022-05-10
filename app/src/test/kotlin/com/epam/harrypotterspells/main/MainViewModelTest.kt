@@ -1,9 +1,9 @@
 package com.epam.harrypotterspells.main
 
-import com.epam.harrypotterspells.utils.TestSchedulerProvider
 import com.epam.harrypotterspells.data.Repository
 import com.epam.harrypotterspells.domain.SwitchToLocalUseCase
 import com.epam.harrypotterspells.domain.SwitchToRemoteUseCase
+import com.epam.harrypotterspells.utils.TestSchedulerProvider
 import io.mockk.MockKAnnotations
 import io.mockk.impl.annotations.MockK
 import io.reactivex.rxjava3.core.Observable
@@ -42,7 +42,7 @@ class MainViewModelTest {
 
     @Test
     fun `check that initialState returns correct state`() {
-        testObserver.assertValueAt(INITIAL_STATE_INDEX, MainViewState(isRemote = true))
+        testObserver.assertValue(MainViewState(isRemote = true))
     }
 
     @Test
@@ -82,8 +82,7 @@ class MainViewModelTest {
         testObserver.assertValueCount(3)
     }
 
-    companion object {
-        const val INITIAL_STATE_INDEX = 0
+    private companion object {
         private const val AFTER_SWITCH_TO_LOCAL_STATE_INDEX = 1
         private const val AFTER_SWITCH_TO_REMOTE_STATE_INDEX = 0
     }

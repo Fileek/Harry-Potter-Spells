@@ -1,10 +1,10 @@
 package com.epam.harrypotterspells.di
 
-import com.epam.harrypotterspells.utils.DefaultSchedulerProvider
+import com.epam.harrypotterspells.utils.schedulers.DefaultSchedulerProvider
 import com.epam.harrypotterspells.data.remote.RemoteRepository
 import com.epam.harrypotterspells.data.Repository
 import com.epam.harrypotterspells.data.api.SpellApi
-import com.epam.harrypotterspells.mvibase.SchedulerProvider
+import com.epam.harrypotterspells.utils.schedulers.SchedulerProvider
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn

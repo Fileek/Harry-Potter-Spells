@@ -19,9 +19,9 @@ import javax.inject.Inject
 
 class UpdateSpellUseCase @Inject constructor(
     private val repository: Repository
-) {
+) : UseCase<UpdateSpellAction, UpdateSpellResult> {
 
-    fun performAction() =
+    override fun performAction() =
         ObservableTransformer<UpdateSpellAction, UpdateSpellResult> {
             it.flatMap { action ->
                 Observable.just(

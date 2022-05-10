@@ -1,22 +1,21 @@
 package com.epam.harrypotterspells.features.spells
 
 import androidx.lifecycle.ViewModel
-import com.epam.harrypotterspells.domain.LoadSpellsUseCase
+import com.epam.harrypotterspells.domain.UseCase
+import com.epam.harrypotterspells.features.spells.SpellsAction.LoadSpellsAction
 import com.epam.harrypotterspells.features.spells.SpellsResult.LoadSpellsResult
 import com.epam.harrypotterspells.mvibase.MVIViewModel
-import com.epam.harrypotterspells.mvibase.SchedulerProvider
+import com.epam.harrypotterspells.utils.schedulers.SchedulerProvider
 import dagger.hilt.android.lifecycle.HiltViewModel
-import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
 import io.reactivex.rxjava3.core.Observable
 import io.reactivex.rxjava3.functions.BiFunction
-import io.reactivex.rxjava3.schedulers.Schedulers
 import io.reactivex.rxjava3.subjects.BehaviorSubject
 import javax.inject.Inject
 
 @HiltViewModel
 class SpellsViewModel @Inject constructor(
     private val schedulerProvider: SchedulerProvider,
-    private val loadSpellsUseCase: LoadSpellsUseCase
+    private val loadSpellsUseCase: UseCase<LoadSpellsAction, LoadSpellsResult>
 ) : ViewModel(), MVIViewModel<SpellsIntent, SpellsViewState> {
 
     private val intentsSubject = BehaviorSubject.create<SpellsIntent>()
@@ -35,7 +34,7 @@ class SpellsViewModel @Inject constructor(
     }
 
     private fun getActionFromIntent(intent: SpellsIntent) = when (intent) {
-        is SpellsIntent.LoadSpellsIntent -> SpellsAction.LoadSpellsAction
+        is SpellsIntent.LoadSpellsIntent -> LoadSpellsAction
     }
 
     override fun processIntents(observable: Observable<SpellsIntent>) {

@@ -1,6 +1,8 @@
 package com.epam.harrypotterspells.main
 
-sealed class MainAction {
+import com.epam.harrypotterspells.mvibase.MVIAction
+
+sealed class MainAction : MVIAction {
     object SwitchToRemoteAction : MainAction()
     object SwitchToLocalAction : MainAction()
 }

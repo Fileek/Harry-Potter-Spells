@@ -8,9 +8,9 @@ data class Spell(
     val id: String,
     val name: String,
     val incantation: String,
-    val effect: String,
-    val canBeVerbal: String,
     val type: String,
+    val effect: String,
     val light: String,
-    val creator: String
+    val creator: String,
+    val canBeVerbal: String,
 ): Parcelable

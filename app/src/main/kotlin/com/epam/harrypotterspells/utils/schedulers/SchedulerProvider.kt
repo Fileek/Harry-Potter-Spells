@@ -1,4 +1,4 @@
-package com.epam.harrypotterspells.mvibase
+package com.epam.harrypotterspells.utils.schedulers
 
 import io.reactivex.rxjava3.core.Scheduler
 

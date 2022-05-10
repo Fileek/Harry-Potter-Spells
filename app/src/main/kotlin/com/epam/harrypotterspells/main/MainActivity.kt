@@ -4,12 +4,12 @@ import android.os.Bundle
 import android.util.Log
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
-import androidx.navigation.findNavController
+import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.setupWithNavController
 import com.epam.harrypotterspells.R
 import com.epam.harrypotterspells.databinding.ActivityMainBinding
-import com.epam.harrypotterspells.utils.TAG
+import com.epam.harrypotterspells.utils.extensions.TAG
 import com.epam.harrypotterspells.mvibase.MVIView
 import dagger.hilt.android.AndroidEntryPoint
 import io.reactivex.rxjava3.core.Observable
@@ -42,7 +42,9 @@ class MainActivity : AppCompatActivity(), MVIView<MainIntent, MainViewState> {
     }
 
     private fun setToolbar() {
-        val navController = findNavController(R.id.nav_host_fragment)
+        val navHostFragment =
+            supportFragmentManager.findFragmentById(R.id.nav_host_fragment) as NavHostFragment
+        val navController = navHostFragment.navController
         val appBarConfiguration = AppBarConfiguration(navController.graph)
         binding.toolbar.setupWithNavController(navController, appBarConfiguration)
     }

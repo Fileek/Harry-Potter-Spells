@@ -2,8 +2,7 @@ package com.epam.harrypotterspells.features.details
 
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
-import com.epam.harrypotterspells.domain.EditSpellUseCase
-import com.epam.harrypotterspells.domain.UpdateSpellUseCase
+import com.epam.harrypotterspells.domain.UseCase
 import com.epam.harrypotterspells.entities.Spell
 import com.epam.harrypotterspells.features.details.DetailsAction.EditSpellAction
 import com.epam.harrypotterspells.features.details.DetailsAction.EditSpellAction.EditCreatorAction
@@ -29,23 +28,23 @@ import com.epam.harrypotterspells.features.details.DetailsIntent.UpdateSpellInte
 import com.epam.harrypotterspells.features.details.DetailsIntent.UpdateSpellIntent.UpdateIncantationIntent
 import com.epam.harrypotterspells.features.details.DetailsIntent.UpdateSpellIntent.UpdateLightIntent
 import com.epam.harrypotterspells.features.details.DetailsIntent.UpdateSpellIntent.UpdateTypeIntent
+import com.epam.harrypotterspells.features.details.DetailsResult.EditSpellResult
+import com.epam.harrypotterspells.features.details.DetailsResult.UpdateSpellResult
 import com.epam.harrypotterspells.mvibase.MVIViewModel
-import com.epam.harrypotterspells.mvibase.SchedulerProvider
+import com.epam.harrypotterspells.utils.schedulers.SchedulerProvider
 import dagger.hilt.android.lifecycle.HiltViewModel
-import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
 import io.reactivex.rxjava3.core.Observable
 import io.reactivex.rxjava3.core.ObservableTransformer
-import io.reactivex.rxjava3.schedulers.Schedulers
 import io.reactivex.rxjava3.subjects.BehaviorSubject
 import javax.inject.Inject
 
 @HiltViewModel
 class DetailsViewModel @Inject constructor(
-    private val schedulerProvider: SchedulerProvider,
     state: SavedStateHandle,
-    private val editSpellUseCase: EditSpellUseCase,
-    private val updateSpellUseCase: UpdateSpellUseCase,
-    private val reducer: DetailsReducer
+    private val reducer: DetailsReducer,
+    private val schedulerProvider: SchedulerProvider,
+    private val editSpellUseCase: UseCase<EditSpellAction, EditSpellResult>,
+    private val updateSpellUseCase: UseCase<UpdateSpellAction, UpdateSpellResult>,
 ) : ViewModel(), MVIViewModel<DetailsIntent, DetailsViewState> {
 
     private val spell: Spell = checkNotNull(state[SPELL_KEY]) { "Spell is not initialized" }
