@@ -71,6 +71,4 @@
     <style name="Details.Button.Save">
         <item name="android:text">@string/save</item>
     </style>
-
-    <string name="edit">Edit</string>
 </resources>
