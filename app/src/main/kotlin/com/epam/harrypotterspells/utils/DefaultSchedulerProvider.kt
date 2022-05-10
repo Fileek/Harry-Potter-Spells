@@ -1,4 +1,4 @@
-package com.epam.harrypotterspells
+package com.epam.harrypotterspells.utils
 
 import com.epam.harrypotterspells.mvibase.SchedulerProvider
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers

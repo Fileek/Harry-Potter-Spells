@@ -1,13 +1,11 @@
-package com.epam.harrypotterspells
+package com.epam.harrypotterspells.features.spells
 
-import com.epam.harrypotterspells.MainViewModelTest.Companion.INITIAL_STATE_INDEX
+import com.epam.harrypotterspells.utils.TestSchedulerProvider
+import com.epam.harrypotterspells.main.MainViewModelTest.Companion.INITIAL_STATE_INDEX
 import com.epam.harrypotterspells.data.Repository
 import com.epam.harrypotterspells.data.local.StubList
 import com.epam.harrypotterspells.domain.LoadSpellsUseCase
 import com.epam.harrypotterspells.utils.toSpell
-import com.epam.harrypotterspells.features.spells.SpellsIntent
-import com.epam.harrypotterspells.features.spells.SpellsViewModel
-import com.epam.harrypotterspells.features.spells.SpellsViewState
 import io.mockk.MockKAnnotations
 import io.mockk.every
 import io.mockk.impl.annotations.MockK

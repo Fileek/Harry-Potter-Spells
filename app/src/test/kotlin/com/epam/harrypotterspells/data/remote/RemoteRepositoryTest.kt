@@ -1,9 +1,9 @@
-package com.epam.harrypotterspells
+package com.epam.harrypotterspells.data.remote
 
+import com.epam.harrypotterspells.utils.TestSchedulerProvider
 import com.epam.harrypotterspells.data.Repository
 import com.epam.harrypotterspells.data.api.SpellApi
 import com.epam.harrypotterspells.data.local.StubList
-import com.epam.harrypotterspells.data.remote.RemoteRepository
 import com.epam.harrypotterspells.entities.JsonSpell
 import io.mockk.MockKAnnotations
 import io.mockk.every

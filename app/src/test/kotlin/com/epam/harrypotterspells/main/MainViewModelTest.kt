@@ -1,22 +1,15 @@
-package com.epam.harrypotterspells
+package com.epam.harrypotterspells.main
 
+import com.epam.harrypotterspells.utils.TestSchedulerProvider
 import com.epam.harrypotterspells.data.Repository
 import com.epam.harrypotterspells.domain.SwitchToLocalUseCase
 import com.epam.harrypotterspells.domain.SwitchToRemoteUseCase
-import com.epam.harrypotterspells.main.MainIntent
-import com.epam.harrypotterspells.main.MainViewModel
-import com.epam.harrypotterspells.main.MainViewState
 import io.mockk.MockKAnnotations
 import io.mockk.impl.annotations.MockK
-import io.mockk.mockk
-import io.mockk.verify
 import io.reactivex.rxjava3.core.Observable
 import io.reactivex.rxjava3.observers.TestObserver
 import io.reactivex.rxjava3.subjects.BehaviorSubject
-import java.util.concurrent.TimeUnit
-import org.junit.Assert.assertEquals
 import org.junit.Before
-import org.junit.Rule
 import org.junit.Test
 
 class MainViewModelTest {

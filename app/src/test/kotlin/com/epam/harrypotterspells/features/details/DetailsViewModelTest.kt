@@ -1,17 +1,13 @@
-package com.epam.harrypotterspells
+package com.epam.harrypotterspells.features.details
 
 import androidx.lifecycle.SavedStateHandle
-import com.epam.harrypotterspells.MainViewModelTest.Companion.INITIAL_STATE_INDEX
+import com.epam.harrypotterspells.utils.TestSchedulerProvider
+import com.epam.harrypotterspells.main.MainViewModelTest.Companion.INITIAL_STATE_INDEX
 import com.epam.harrypotterspells.data.Repository
 import com.epam.harrypotterspells.data.local.StubList
 import com.epam.harrypotterspells.domain.EditSpellUseCase
 import com.epam.harrypotterspells.domain.UpdateSpellUseCase
 import com.epam.harrypotterspells.utils.toSpell
-import com.epam.harrypotterspells.features.details.DetailsIntent
-import com.epam.harrypotterspells.features.details.DetailsReducer
-import com.epam.harrypotterspells.features.details.DetailsViewModel
-import com.epam.harrypotterspells.features.details.DetailsViewState
-import com.epam.harrypotterspells.features.details.SpellInputFieldFocus
 import io.mockk.MockKAnnotations
 import io.mockk.impl.annotations.MockK
 import io.reactivex.rxjava3.core.Observable
