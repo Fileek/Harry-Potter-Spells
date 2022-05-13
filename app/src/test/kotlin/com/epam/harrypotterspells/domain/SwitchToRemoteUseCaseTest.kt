@@ -1,8 +1,8 @@
 package com.epam.harrypotterspells.domain
 
-import com.epam.harrypotterspells.data.Repository
-import com.epam.harrypotterspells.main.MainAction.SwitchToRemoteAction
-import com.epam.harrypotterspells.main.MainResult.SwitchToRemoteResult
+import com.epam.harrypotterspells.data.repository.Repository
+import com.epam.harrypotterspells.feature.main.MainAction.SwitchSourceAction.ToRemoteAction
+import com.epam.harrypotterspells.feature.main.MainResult.SwitchSourceResult.ToRemoteResult
 import io.mockk.MockKAnnotations
 import io.mockk.impl.annotations.MockK
 import io.mockk.verify
@@ -15,7 +15,7 @@ class SwitchToRemoteUseCaseTest {
     lateinit var repository: Repository
 
     private lateinit var useCase: SwitchToRemoteUseCase
-    private lateinit var actionComposer: ActionComposer<SwitchToRemoteAction, SwitchToRemoteResult>
+    private lateinit var actionComposer: ActionComposer<ToRemoteAction, ToRemoteResult>
 
     @Before
     fun setup() {
@@ -26,13 +26,13 @@ class SwitchToRemoteUseCaseTest {
 
     @Test
     fun `check that SwitchToRemoteAction calls switchToRemote on the repository`() {
-        actionComposer(SwitchToRemoteAction)
+        actionComposer(ToRemoteAction)
         verify { repository.switchToRemote() }
     }
 
     @Test
     fun `check that SwitchToRemoteAction returns SwitchToRemoteResult`() {
-        val testObserver = actionComposer(SwitchToRemoteAction)
-        testObserver.assertValue(SwitchToRemoteResult)
+        val testObserver = actionComposer(ToRemoteAction)
+        testObserver.assertValue(ToRemoteResult)
     }
 }

@@ -1,18 +1,18 @@
 package com.epam.harrypotterspells.di
 
-import com.epam.harrypotterspells.utils.schedulers.DefaultSchedulerProvider
-import com.epam.harrypotterspells.data.remote.RemoteRepository
-import com.epam.harrypotterspells.data.Repository
+import com.epam.harrypotterspells.data.repository.Repository
 import com.epam.harrypotterspells.data.api.SpellApi
-import com.epam.harrypotterspells.utils.schedulers.SchedulerProvider
+import com.epam.harrypotterspells.data.repository.DefaultRepository
+import com.epam.harrypotterspells.util.scheduler.DefaultSchedulerProvider
+import com.epam.harrypotterspells.util.scheduler.SchedulerProvider
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
 import hu.akarnokd.rxjava3.retrofit.RxJava3CallAdapterFactory
+import javax.inject.Singleton
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
-import javax.inject.Singleton
 
 @[Module InstallIn(SingletonComponent::class)]
 object AppModule {
@@ -34,7 +34,7 @@ object AppModule {
         api: SpellApi,
         schedulerProvider: SchedulerProvider
     ): Repository {
-        return RemoteRepository(api, schedulerProvider)
+        return DefaultRepository(api, schedulerProvider)
     }
 
     @[Singleton Provides]

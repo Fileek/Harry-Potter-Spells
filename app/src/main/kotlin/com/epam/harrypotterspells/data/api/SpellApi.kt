@@ -1,6 +1,6 @@
 package com.epam.harrypotterspells.data.api
 
-import com.epam.harrypotterspells.entities.JsonSpell
+import com.epam.harrypotterspells.entity.JsonSpell
 import io.reactivex.rxjava3.core.Single
 import retrofit2.http.GET
 

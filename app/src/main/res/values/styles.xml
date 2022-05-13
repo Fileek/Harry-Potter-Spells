@@ -1,6 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
+    <style name="TextAppearance.AppCompat.Widget.Switch.Main">
+        <item name="android:textColor">@color/black</item>
+    </style>
+
     <style name="Spells">
         <item name="android:maxLines">1</item>
         <item name="android:ellipsize">end</item>
@@ -70,5 +74,9 @@
 
     <style name="Details.Button.Save">
         <item name="android:text">@string/save</item>
+    </style>
+
+    <style name="Widget.AppCompat.SearchView.Spells">
+        <item name="searchHintIcon">@null</item>
     </style>
 </resources>

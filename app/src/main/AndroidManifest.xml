@@ -13,7 +13,7 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.HarryPotterSpells">
         <activity
-            android:name="com.epam.harrypotterspells.main.MainActivity"
+            android:name="com.epam.harrypotterspells.feature.main.MainActivity"
             android:exported="true"
             android:screenOrientation="fullSensor">
             <intent-filter>

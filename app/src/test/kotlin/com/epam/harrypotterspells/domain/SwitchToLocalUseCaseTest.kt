@@ -1,8 +1,8 @@
 package com.epam.harrypotterspells.domain
 
-import com.epam.harrypotterspells.data.Repository
-import com.epam.harrypotterspells.main.MainAction.SwitchToLocalAction
-import com.epam.harrypotterspells.main.MainResult.SwitchToLocalResult
+import com.epam.harrypotterspells.data.repository.Repository
+import com.epam.harrypotterspells.feature.main.MainAction.SwitchSourceAction.ToLocalAction
+import com.epam.harrypotterspells.feature.main.MainResult.SwitchSourceResult.ToLocalResult
 import io.mockk.MockKAnnotations
 import io.mockk.impl.annotations.MockK
 import io.mockk.verify
@@ -14,25 +14,25 @@ class SwitchToLocalUseCaseTest {
     @MockK
     lateinit var repository: Repository
 
-    private lateinit var useCase: SwitchToLocalUseCase
-    private lateinit var actionComposer: ActionComposer<SwitchToLocalAction, SwitchToLocalResult>
+    private lateinit var useCase: SwitchSourceUseCase
+    private lateinit var actionComposer: ActionComposer<ToLocalAction, ToLocalResult>
 
     @Before
     fun setup() {
         MockKAnnotations.init(this, relaxUnitFun = true)
-        useCase = SwitchToLocalUseCase(repository)
+        useCase = SwitchSourceUseCase(repository)
         actionComposer = ActionComposer(useCase)
     }
 
     @Test
     fun `check that SwitchToLocalAction calls switchToLocal on the repository`() {
-        actionComposer(SwitchToLocalAction)
+        actionComposer(ToLocalAction)
         verify { repository.switchToLocal() }
     }
 
     @Test
     fun `check that SwitchToLocalAction returns SwitchToLocalResult`() {
-        val testObserver = actionComposer(SwitchToLocalAction)
-        testObserver.assertValue(SwitchToLocalResult)
+        val testObserver = actionComposer(ToLocalAction)
+        testObserver.assertValue(ToLocalResult)
     }
 }

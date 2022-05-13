@@ -1,11 +1,11 @@
 package com.epam.harrypotterspells.domain
 
-import com.epam.harrypotterspells.data.Repository
+import com.epam.harrypotterspells.data.repository.Repository
 import com.epam.harrypotterspells.data.local.StubList
-import com.epam.harrypotterspells.features.spells.SpellsAction.LoadSpellsAction
-import com.epam.harrypotterspells.features.spells.SpellsResult.LoadSpellsResult
-import com.epam.harrypotterspells.utils.TestSchedulerProvider
-import com.epam.harrypotterspells.utils.extensions.toSpell
+import com.epam.harrypotterspells.feature.spells.SpellsAction.LoadAction
+import com.epam.harrypotterspells.feature.spells.SpellsResult.LoadResult
+import com.epam.harrypotterspells.util.TestSchedulerProvider
+import com.epam.harrypotterspells.util.extension.toSpell
 import io.mockk.MockKAnnotations
 import io.mockk.every
 import io.mockk.impl.annotations.MockK
@@ -20,7 +20,7 @@ class LoadSpellsUseCaseTest {
     lateinit var repository: Repository
 
     private lateinit var useCase: LoadSpellsUseCase
-    private lateinit var actionComposer: ActionComposer<LoadSpellsAction, LoadSpellsResult>
+    private lateinit var actionComposer: ActionComposer<LoadAction, LoadResult>
 
     @Before
     fun setup() {
@@ -34,18 +34,18 @@ class LoadSpellsUseCaseTest {
         val jsonSpells = StubList.spells
         val spells = jsonSpells.map { it.toSpell() }
         every { repository.getSpells() } returns Observable.just(jsonSpells)
-        val testObserver = actionComposer(LoadSpellsAction)
+        val testObserver = actionComposer(LoadAction)
         testObserver.await()
-        testObserver.assertValueAt(RESULT_INDEX, LoadSpellsResult.Success(spells))
+        testObserver.assertValueAt(RESULT_INDEX, LoadResult.Success(spells))
     }
 
     @Test
     fun `check that LoadSpellsAction returns error result onError`() {
         val throwable = ConnectException()
         every { repository.getSpells() } returns Observable.error(throwable)
-        val testObserver = actionComposer(LoadSpellsAction)
+        val testObserver = actionComposer(LoadAction)
         testObserver.await()
-        testObserver.assertValueAt(RESULT_INDEX, LoadSpellsResult.Error(throwable))
+        testObserver.assertValueAt(RESULT_INDEX, LoadResult.Error(throwable))
     }
 
     private companion object {

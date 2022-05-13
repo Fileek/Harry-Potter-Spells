@@ -1,24 +1,21 @@
 package com.epam.harrypotterspells.di
 
-import com.epam.harrypotterspells.data.Repository
-import com.epam.harrypotterspells.domain.EditSpellUseCase
+import com.epam.harrypotterspells.data.repository.Repository
+import com.epam.harrypotterspells.domain.EditUseCase
 import com.epam.harrypotterspells.domain.LoadSpellsUseCase
-import com.epam.harrypotterspells.domain.SwitchToLocalUseCase
-import com.epam.harrypotterspells.domain.SwitchToRemoteUseCase
+import com.epam.harrypotterspells.domain.SearchUseCase
+import com.epam.harrypotterspells.domain.SwitchSourceUseCase
 import com.epam.harrypotterspells.domain.UpdateSpellUseCase
 import com.epam.harrypotterspells.domain.UseCase
-import com.epam.harrypotterspells.features.details.DetailsAction.EditSpellAction
-import com.epam.harrypotterspells.features.details.DetailsAction.UpdateSpellAction
-import com.epam.harrypotterspells.features.details.DetailsReducer
-import com.epam.harrypotterspells.features.details.DetailsResult.EditSpellResult
-import com.epam.harrypotterspells.features.details.DetailsResult.UpdateSpellResult
-import com.epam.harrypotterspells.features.spells.SpellsAction.LoadSpellsAction
-import com.epam.harrypotterspells.features.spells.SpellsResult.LoadSpellsResult
-import com.epam.harrypotterspells.main.MainAction.SwitchToLocalAction
-import com.epam.harrypotterspells.main.MainAction.SwitchToRemoteAction
-import com.epam.harrypotterspells.main.MainResult.SwitchToLocalResult
-import com.epam.harrypotterspells.main.MainResult.SwitchToRemoteResult
-import com.epam.harrypotterspells.utils.schedulers.SchedulerProvider
+import com.epam.harrypotterspells.feature.details.DetailsAction.EditAction
+import com.epam.harrypotterspells.feature.details.DetailsAction.UpdateAction
+import com.epam.harrypotterspells.feature.details.DetailsResult.EditResult
+import com.epam.harrypotterspells.feature.details.DetailsResult.UpdateResult
+import com.epam.harrypotterspells.feature.spells.SpellsAction.LoadAction
+import com.epam.harrypotterspells.feature.spells.SpellsResult.LoadResult
+import com.epam.harrypotterspells.feature.main.MainAction
+import com.epam.harrypotterspells.feature.main.MainResult
+import com.epam.harrypotterspells.util.scheduler.SchedulerProvider
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -32,36 +29,33 @@ object ViewModelModule {
     fun providesLoadSpellsUseCase(
         repo: Repository,
         schedulerProvider: SchedulerProvider
-    ): UseCase<LoadSpellsAction, LoadSpellsResult> {
+    ): UseCase<LoadAction, LoadResult> {
         return LoadSpellsUseCase(repo, schedulerProvider)
     }
 
     @[ViewModelScoped Provides]
-    fun providesEditSpellUseCase(): UseCase<EditSpellAction, EditSpellResult> {
-        return EditSpellUseCase()
+    fun providesSearchUseCase(
+        repo: Repository
+    ): UseCase<MainAction.SearchAction, MainResult.SearchResult> {
+        return SearchUseCase(repo)
+    }
+
+    @[ViewModelScoped Provides]
+    fun providesEditSpellUseCase(): UseCase<EditAction, EditResult> {
+        return EditUseCase()
     }
 
     @[ViewModelScoped Provides]
     fun providesUpdateSpellUseCase(
         repo: Repository
-    ): UseCase<UpdateSpellAction, UpdateSpellResult> {
+    ): UseCase<UpdateAction, UpdateResult> {
         return UpdateSpellUseCase(repo)
     }
 
     @[ViewModelScoped Provides]
-    fun providesSwitchToLocalUseCase(
+    fun providesSwitchSourceUseCase(
         repo: Repository
-    ): UseCase<SwitchToLocalAction, SwitchToLocalResult> {
-        return SwitchToLocalUseCase(repo)
+    ): UseCase<MainAction.SwitchSourceAction, MainResult.SwitchSourceResult> {
+        return SwitchSourceUseCase(repo)
     }
-
-    @[ViewModelScoped Provides]
-    fun providesSwitchToRemoteUseCase(
-        repo: Repository
-    ): UseCase<SwitchToRemoteAction, SwitchToRemoteResult> {
-        return SwitchToRemoteUseCase(repo)
-    }
-
-    @[ViewModelScoped Provides]
-    fun providesDetailsReducer() = DetailsReducer()
 }

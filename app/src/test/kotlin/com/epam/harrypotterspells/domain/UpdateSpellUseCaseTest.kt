@@ -1,13 +1,13 @@
 package com.epam.harrypotterspells.domain
 
-import com.epam.harrypotterspells.data.Repository
-import com.epam.harrypotterspells.features.details.DetailsAction.UpdateSpellAction
-import com.epam.harrypotterspells.features.details.DetailsAction.UpdateSpellAction.UpdateCreatorAction
-import com.epam.harrypotterspells.features.details.DetailsAction.UpdateSpellAction.UpdateEffectAction
-import com.epam.harrypotterspells.features.details.DetailsAction.UpdateSpellAction.UpdateIncantationAction
-import com.epam.harrypotterspells.features.details.DetailsAction.UpdateSpellAction.UpdateLightAction
-import com.epam.harrypotterspells.features.details.DetailsAction.UpdateSpellAction.UpdateTypeAction
-import com.epam.harrypotterspells.features.details.DetailsResult.UpdateSpellResult
+import com.epam.harrypotterspells.data.repository.Repository
+import com.epam.harrypotterspells.feature.details.DetailsAction.UpdateAction
+import com.epam.harrypotterspells.feature.details.DetailsAction.UpdateAction.CreatorAction
+import com.epam.harrypotterspells.feature.details.DetailsAction.UpdateAction.EffectAction
+import com.epam.harrypotterspells.feature.details.DetailsAction.UpdateAction.IncantationAction
+import com.epam.harrypotterspells.feature.details.DetailsAction.UpdateAction.LightAction
+import com.epam.harrypotterspells.feature.details.DetailsAction.UpdateAction.TypeAction
+import com.epam.harrypotterspells.feature.details.DetailsResult.UpdateResult
 import io.mockk.MockKAnnotations
 import io.mockk.impl.annotations.MockK
 import io.mockk.verify
@@ -20,15 +20,15 @@ class UpdateSpellUseCaseTest {
     lateinit var repository: Repository
 
     private lateinit var useCase: UpdateSpellUseCase
-    private lateinit var actionComposer: ActionComposer<UpdateSpellAction, UpdateSpellResult>
+    private lateinit var actionComposer: ActionComposer<UpdateAction, UpdateResult>
 
     private val testString = "test"
 
-    private val updateIncantationAction = UpdateIncantationAction(testString, testString)
-    private val updateTypeAction = UpdateTypeAction(testString, testString)
-    private val updateEffectAction = UpdateEffectAction(testString, testString)
-    private val updateLightAction = UpdateLightAction(testString, testString)
-    private val updateCreatorAction = UpdateCreatorAction(testString, testString)
+    private val updateIncantationAction = IncantationAction(testString, testString)
+    private val updateTypeAction = TypeAction(testString, testString)
+    private val updateEffectAction = EffectAction(testString, testString)
+    private val updateLightAction = LightAction(testString, testString)
+    private val updateCreatorAction = CreatorAction(testString, testString)
 
     @Before
     fun setup() {
@@ -70,30 +70,30 @@ class UpdateSpellUseCaseTest {
     @Test
     fun `check that UpdateIncantationAction returns UpdateIncantationResult`() {
         val testObserver = actionComposer(updateIncantationAction)
-        testObserver.assertValue(UpdateSpellResult.UpdateIncantationResult(testString))
+        testObserver.assertValue(UpdateResult.IncantationResult(testString))
     }
 
     @Test
     fun `check that UpdateTypeAction returns UpdateTypeResult`() {
         val testObserver = actionComposer(updateTypeAction)
-        testObserver.assertValue(UpdateSpellResult.UpdateTypeResult(testString))
+        testObserver.assertValue(UpdateResult.TypeResult(testString))
     }
 
     @Test
     fun `check that UpdateEffectAction returns UpdateEffectResult`() {
         val testObserver = actionComposer(updateEffectAction)
-        testObserver.assertValue(UpdateSpellResult.UpdateEffectResult(testString))
+        testObserver.assertValue(UpdateResult.EffectResult(testString))
     }
 
     @Test
     fun `check that UpdateLightAction returns UpdateLightResult`() {
         val testObserver = actionComposer(updateLightAction)
-        testObserver.assertValue(UpdateSpellResult.UpdateLightResult(testString))
+        testObserver.assertValue(UpdateResult.LightResult(testString))
     }
 
     @Test
     fun `check that UpdateCreatorAction returns UpdateCreatorResult`() {
         val testObserver = actionComposer(updateCreatorAction)
-        testObserver.assertValue(UpdateSpellResult.UpdateCreatorResult(testString))
+        testObserver.assertValue(UpdateResult.CreatorResult(testString))
     }
 }

@@ -1,6 +1,6 @@
 package com.epam.harrypotterspells.data.local
 
-import com.epam.harrypotterspells.entities.JsonSpell
+import com.epam.harrypotterspells.entity.JsonSpell
 
 object StubList {
     val spells = listOf(

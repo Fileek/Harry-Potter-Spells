@@ -5,6 +5,7 @@
         <item name="colorPrimary">@color/brown_200</item>
         <item name="colorPrimaryVariant">@color/brown_700</item>
         <item name="colorOnPrimary">@color/black</item>
+        <item name="searchViewStyle">@style/Widget.AppCompat.SearchView.Spells</item>
         <!-- Secondary brand color. -->
         <item name="colorSecondary">@color/light_green_500</item>
         <item name="colorSecondaryVariant">@color/light_green_700</item>
