@@ -5,7 +5,7 @@ import com.epam.harrypotterspells.domain.EditUseCase
 import com.epam.harrypotterspells.domain.LoadSpellsUseCase
 import com.epam.harrypotterspells.domain.SearchUseCase
 import com.epam.harrypotterspells.domain.SwitchSourceUseCase
-import com.epam.harrypotterspells.domain.UpdateSpellUseCase
+import com.epam.harrypotterspells.domain.UpdateUseCase
 import com.epam.harrypotterspells.domain.UseCase
 import com.epam.harrypotterspells.feature.details.DetailsAction.EditAction
 import com.epam.harrypotterspells.feature.details.DetailsAction.UpdateAction
@@ -49,7 +49,7 @@ object ViewModelModule {
     fun providesUpdateSpellUseCase(
         repo: Repository
     ): UseCase<UpdateAction, UpdateResult> {
-        return UpdateSpellUseCase(repo)
+        return UpdateUseCase(repo)
     }
 
     @[ViewModelScoped Provides]

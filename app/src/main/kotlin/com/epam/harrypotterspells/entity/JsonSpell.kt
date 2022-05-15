@@ -12,9 +12,24 @@ data class JsonSpell(
     val light: String,
     val creator: String?
 ) {
+    fun toSpell() =
+        Spell(
+            id = this.id,
+            name = this.name,
+            incantation = this.incantation ?: INCANTATION_STUB,
+            type = this.type,
+            effect = this.effect,
+            light = this.light,
+            creator = this.creator ?: CREATOR_STUB,
+            canBeVerbal = when (this.canBeVerbal) {
+                true -> CAN_BE_VERBAL
+                false -> CAN_NOT_BE_VERBAL
+                null -> CAN_BE_VERBAL_STUB
+            },
+        )
 
-    fun toSpannedSpell(): SpannedSpell {
-        return SpannedSpell(
+    fun toSpannedSpell() =
+        SpannedSpell(
             id = this.id,
             name = SpannedString(this.name),
             incantation = SpannedString(this.incantation ?: INCANTATION_STUB),
@@ -28,7 +43,6 @@ data class JsonSpell(
                 null -> CAN_BE_VERBAL_STUB
             },
         )
-    }
 
     private companion object {
         private const val INCANTATION_STUB = "Unknown"

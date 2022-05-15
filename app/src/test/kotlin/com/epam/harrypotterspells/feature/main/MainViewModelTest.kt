@@ -1,6 +1,9 @@
 package com.epam.harrypotterspells.feature.main
 
+import com.epam.harrypotterspells.feature.main.MainIntent.SearchIntent
+import com.epam.harrypotterspells.feature.main.MainIntent.SwitchSourceIntent
 import com.epam.harrypotterspells.data.repository.Repository
+import com.epam.harrypotterspells.domain.SearchUseCase
 import com.epam.harrypotterspells.domain.SwitchSourceUseCase
 import com.epam.harrypotterspells.util.TestSchedulerProvider
 import io.mockk.MockKAnnotations
@@ -20,15 +23,18 @@ class MainViewModelTest {
 
     private lateinit var testObserver: TestObserver<MainViewState>
 
-    private val switchToLocalIntent = MainIntent.SwitchSourceIntent.SwitchToLocalIntent
-    private val switchToRemoteIntent = MainIntent.SwitchSourceIntent.SwitchToRemoteIntent
+    private val initialState = MainViewState(isRemote = true, isNotSearching = true)
+
+    private val testString = "test"
+    private val switchToLocalIntent = SwitchSourceIntent.ToLocalIntent
+    private val switchToRemoteIntent = SwitchSourceIntent.ToRemoteIntent
 
     @Before
     fun setup() {
         MockKAnnotations.init(this, relaxUnitFun = true)
         viewModel = MainViewModel(
             TestSchedulerProvider(),
-            SwitchToRemoteUseCase(repository),
+            SearchUseCase(repository),
             SwitchSourceUseCase(repository)
         )
         testObserver = viewModel.getStates().test()
@@ -41,7 +47,34 @@ class MainViewModelTest {
 
     @Test
     fun `check that initialState returns correct state`() {
-        testObserver.assertValue(MainViewState(isRemote = true))
+        testObserver.assertValue(initialState)
+    }
+
+    @Test
+    fun `check that SearchOpenIntent returns correct state`() {
+        viewModel.processIntents(
+            Observable.just(SearchIntent.OpenIntent)
+        )
+        testObserver.await()
+        testObserver.assertValueAt(SECOND_VIEW_STATE_INDEX, initialState.copy(isNotSearching = false))
+    }
+
+    @Test
+    fun `check that SearchQueryIntent returns correct state`() {
+        viewModel.processIntents(
+            Observable.just(SearchIntent.QueryIntent(testString))
+        )
+        testObserver.await()
+        testObserver.assertValueAt(FIRST_VIEW_STATE_INDEX, initialState)
+    }
+
+    @Test
+    fun `check that SearchCloseIntent returns correct state`() {
+        viewModel.processIntents(
+            Observable.just(SearchIntent.CloseIntent)
+        )
+        testObserver.await()
+        testObserver.assertValueAt(FIRST_VIEW_STATE_INDEX, initialState.copy(isNotSearching = true))
     }
 
     @Test
@@ -50,7 +83,7 @@ class MainViewModelTest {
             Observable.just(switchToLocalIntent)
         )
         testObserver.await()
-        testObserver.assertValueAt(AFTER_SWITCH_TO_LOCAL_STATE_INDEX, MainViewState(isRemote = false))
+        testObserver.assertValueAt(SECOND_VIEW_STATE_INDEX, initialState.copy(isRemote = false))
     }
 
     @Test
@@ -59,7 +92,7 @@ class MainViewModelTest {
             Observable.just(switchToRemoteIntent)
         )
         testObserver.await()
-        testObserver.assertValueAt(AFTER_SWITCH_TO_REMOTE_STATE_INDEX, MainViewState(isRemote = true))
+        testObserver.assertValueAt(FIRST_VIEW_STATE_INDEX, initialState.copy(isRemote = true))
     }
 
     @Test
@@ -82,7 +115,7 @@ class MainViewModelTest {
     }
 
     private companion object {
-        private const val AFTER_SWITCH_TO_LOCAL_STATE_INDEX = 1
-        private const val AFTER_SWITCH_TO_REMOTE_STATE_INDEX = 0
+        private const val FIRST_VIEW_STATE_INDEX = 0
+        private const val SECOND_VIEW_STATE_INDEX = 1
     }
 }

@@ -5,7 +5,6 @@ import com.epam.harrypotterspells.data.local.StubList
 import com.epam.harrypotterspells.feature.spells.SpellsAction.LoadAction
 import com.epam.harrypotterspells.feature.spells.SpellsResult.LoadResult
 import com.epam.harrypotterspells.util.TestSchedulerProvider
-import com.epam.harrypotterspells.util.extension.toSpell
 import io.mockk.MockKAnnotations
 import io.mockk.every
 import io.mockk.impl.annotations.MockK
@@ -32,8 +31,8 @@ class LoadSpellsUseCaseTest {
     @Test
     fun `check that LoadSpellsAction returns correct data onSuccess`() {
         val jsonSpells = StubList.spells
-        val spells = jsonSpells.map { it.toSpell() }
-        every { repository.getSpells() } returns Observable.just(jsonSpells)
+        val spells = jsonSpells.map { it.toSpannedSpell() }
+        every { repository.getSpells() } returns Observable.just(spells)
         val testObserver = actionComposer(LoadAction)
         testObserver.await()
         testObserver.assertValueAt(RESULT_INDEX, LoadResult.Success(spells))

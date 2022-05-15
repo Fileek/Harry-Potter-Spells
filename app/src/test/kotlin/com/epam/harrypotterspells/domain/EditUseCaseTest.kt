@@ -1,15 +1,7 @@
 package com.epam.harrypotterspells.domain
 
-import com.epam.harrypotterspells.feature.details.DetailsAction.EditAction.EditCreatorAction
-import com.epam.harrypotterspells.feature.details.DetailsAction.EditAction.EditEffectAction
-import com.epam.harrypotterspells.feature.details.DetailsAction.EditAction.EditIncantationAction
-import com.epam.harrypotterspells.feature.details.DetailsAction.EditAction.EditLightAction
-import com.epam.harrypotterspells.feature.details.DetailsAction.EditAction.EditTypeAction
-import com.epam.harrypotterspells.feature.details.DetailsResult.EditResult.CreatorResult
-import com.epam.harrypotterspells.feature.details.DetailsResult.EditResult.EffectResult
-import com.epam.harrypotterspells.feature.details.DetailsResult.EditResult.IncantationResult
-import com.epam.harrypotterspells.feature.details.DetailsResult.EditResult.LightResult
-import com.epam.harrypotterspells.feature.details.DetailsResult.EditResult.TypeResult
+import com.epam.harrypotterspells.feature.details.DetailsAction
+import com.epam.harrypotterspells.feature.details.DetailsResult
 import org.junit.Test
 
 class EditUseCaseTest {
@@ -18,32 +10,32 @@ class EditUseCaseTest {
     private val actionComposer = ActionComposer(useCase)
 
     @Test
-    fun `check that EditIncantationAction returns EditIncantationResult`() {
-        val testObserver = actionComposer(EditIncantationAction)
-        testObserver.assertValue(IncantationResult)
+    fun `check that IncantationAction returns IncantationResult`() {
+        val testObserver = actionComposer(DetailsAction.EditAction.IncantationAction)
+        testObserver.assertValue(DetailsResult.EditResult.IncantationResult)
     }
 
     @Test
-    fun `check that EditTypeAction returns EditTypeResult`() {
-        val testObserver = actionComposer(EditTypeAction)
-        testObserver.assertValue(TypeResult)
+    fun `check that TypeAction returns TypeResult`() {
+        val testObserver = actionComposer(DetailsAction.EditAction.TypeAction)
+        testObserver.assertValue(DetailsResult.EditResult.TypeResult)
     }
 
     @Test
-    fun `check that EditEffectAction returns EditEffectResult`() {
-        val testObserver = actionComposer(EditEffectAction)
-        testObserver.assertValue(EffectResult)
+    fun `check that EffectAction returns EffectResult`() {
+        val testObserver = actionComposer(DetailsAction.EditAction.EffectAction)
+        testObserver.assertValue(DetailsResult.EditResult.EffectResult)
     }
 
     @Test
-    fun `check that EditLightAction returns EditLightResult`() {
-        val testObserver = actionComposer(EditLightAction)
-        testObserver.assertValue(LightResult)
+    fun `check that LightAction returns LightResult`() {
+        val testObserver = actionComposer(DetailsAction.EditAction.LightAction)
+        testObserver.assertValue(DetailsResult.EditResult.LightResult)
     }
 
     @Test
-    fun `check that EditCreatorAction returns EditCreatorResult`() {
-        val testObserver = actionComposer(EditCreatorAction)
-        testObserver.assertValue(CreatorResult)
+    fun `check that CreatorAction returns CreatorResult`() {
+        val testObserver = actionComposer(DetailsAction.EditAction.CreatorAction)
+        testObserver.assertValue(DetailsResult.EditResult.CreatorResult)
     }
 }

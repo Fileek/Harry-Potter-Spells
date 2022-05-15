@@ -7,7 +7,7 @@ import com.epam.harrypotterspells.util.`typealias`.UpdateActionTransformer
 import io.reactivex.rxjava3.core.Observable
 import javax.inject.Inject
 
-class UpdateSpellUseCase @Inject constructor(
+class UpdateUseCase @Inject constructor(
     private val repository: Repository
 ) : UseCase<UpdateAction, UpdateResult> {
 

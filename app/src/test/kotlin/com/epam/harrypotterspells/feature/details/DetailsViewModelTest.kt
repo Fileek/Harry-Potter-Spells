@@ -4,9 +4,8 @@ import androidx.lifecycle.SavedStateHandle
 import com.epam.harrypotterspells.data.repository.Repository
 import com.epam.harrypotterspells.data.local.StubList
 import com.epam.harrypotterspells.domain.EditUseCase
-import com.epam.harrypotterspells.domain.UpdateSpellUseCase
+import com.epam.harrypotterspells.domain.UpdateUseCase
 import com.epam.harrypotterspells.util.TestSchedulerProvider
-import com.epam.harrypotterspells.util.extension.toSpell
 import io.mockk.MockKAnnotations
 import io.mockk.impl.annotations.MockK
 import io.reactivex.rxjava3.core.Observable
@@ -25,21 +24,20 @@ class DetailsViewModelTest {
     private val spell = StubList.spells.first().toSpell()
     private val initialState = DetailsViewState(spell)
 
-    private val editIncantationIntent = DetailsIntent.EditIntent.EditIncantationIntent
-    private val editTypeIntent = DetailsIntent.EditIntent.EditTypeIntent
-    private val editEffectIntent = DetailsIntent.EditIntent.EditEffectIntent
-    private val editLightIntent = DetailsIntent.EditIntent.EditLightIntent
-    private val editCreatorIntent = DetailsIntent.EditIntent.EditCreatorIntent
+    private val editIncantationIntent = DetailsIntent.EditIntent.IncantationIntent
+    private val editTypeIntent = DetailsIntent.EditIntent.TypeIntent
+    private val editEffectIntent = DetailsIntent.EditIntent.EffectIntent
+    private val editLightIntent = DetailsIntent.EditIntent.LightIntent
+    private val editCreatorIntent = DetailsIntent.EditIntent.CreatorIntent
 
     @Before
     fun setup() {
         MockKAnnotations.init(this, relaxUnitFun = true)
         viewModel = DetailsViewModel(
             state = SavedStateHandle(mapOf("spell" to spell)),
-            reducer = DetailsReducer(),
             schedulerProvider = TestSchedulerProvider(),
-            editSpellUseCase = EditUseCase(),
-            updateSpellUseCase = UpdateSpellUseCase(repository),
+            editUseCase = EditUseCase(),
+            updateUseCase = UpdateUseCase(repository),
         )
         testObserver = viewModel.getStates().test()
     }
@@ -133,7 +131,7 @@ class DetailsViewModelTest {
     fun `check that UpdateIncantationIntent returns correct state`() {
         val incantation = "Expecto Patronum"
         val updateIntent =
-            DetailsIntent.UpdateIntent.UpdateIncantationIntent(spell.id, incantation)
+            DetailsIntent.UpdateIntent.IncantationIntent(spell.id, incantation)
         val expectedState =
             initialState.copy(
                 spell = spell.copy(incantation = incantation),
@@ -149,7 +147,7 @@ class DetailsViewModelTest {
     @Test
     fun `check that UpdateTypeIntent returns correct state`() {
         val type = "Charm"
-        val updateIntent = DetailsIntent.UpdateIntent.UpdateTypeIntent(spell.id, type)
+        val updateIntent = DetailsIntent.UpdateIntent.TypeIntent(spell.id, type)
         val expectedState =
             initialState.copy(
                 spell = spell.copy(type = type),
@@ -165,7 +163,7 @@ class DetailsViewModelTest {
     @Test
     fun `check that UpdateEffectIntent returns correct state`() {
         val effect = "Conjures a spirit guardian"
-        val updateIntent = DetailsIntent.UpdateIntent.UpdateEffectIntent(spell.id, effect)
+        val updateIntent = DetailsIntent.UpdateIntent.EffectIntent(spell.id, effect)
         val expectedState =
             initialState.copy(
                 spell = spell.copy(effect = effect),
@@ -181,7 +179,7 @@ class DetailsViewModelTest {
     @Test
     fun `check that UpdateLightIntent returns correct state`() {
         val light = "Silver"
-        val updateIntent = DetailsIntent.UpdateIntent.UpdateLightIntent(spell.id, light)
+        val updateIntent = DetailsIntent.UpdateIntent.LightIntent(spell.id, light)
         val expectedState =
             initialState.copy(
                 spell = spell.copy(light = light),
@@ -197,7 +195,7 @@ class DetailsViewModelTest {
     @Test
     fun `check that UpdateCreatorIntent returns correct state`() {
         val creator = "Unknown"
-        val updateIntent = DetailsIntent.UpdateIntent.UpdateCreatorIntent(spell.id, creator)
+        val updateIntent = DetailsIntent.UpdateIntent.CreatorIntent(spell.id, creator)
         val expectedState =
             initialState.copy(
                 spell = spell.copy(creator = creator),
@@ -213,7 +211,7 @@ class DetailsViewModelTest {
     @Test
     fun `check that same intent update state only once`() {
         val intentsSubject = BehaviorSubject.create<DetailsIntent>()
-        val updateIntent = DetailsIntent.UpdateIntent.UpdateIncantationIntent(spell.id, "")
+        val updateIntent = DetailsIntent.UpdateIntent.IncantationIntent(spell.id, "")
         viewModel.processIntents(
             intentsSubject.serialize()
         )

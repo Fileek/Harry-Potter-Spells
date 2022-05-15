@@ -4,7 +4,6 @@ import com.epam.harrypotterspells.data.repository.Repository
 import com.epam.harrypotterspells.data.local.StubList
 import com.epam.harrypotterspells.domain.LoadSpellsUseCase
 import com.epam.harrypotterspells.util.TestSchedulerProvider
-import com.epam.harrypotterspells.util.extension.toSpell
 import io.mockk.MockKAnnotations
 import io.mockk.every
 import io.mockk.impl.annotations.MockK
@@ -23,8 +22,7 @@ class SpellsViewModelTest {
 
     private val schedulerProvider = TestSchedulerProvider()
     private val loadSpellsIntent = SpellsIntent.LoadIntent
-    private val spells = StubList.spells.map { it.toSpell() }
-    private val jsonSpells = StubList.spells
+    private val spells = StubList.spells.map { it.toSpannedSpell() }
 
     @Before
     fun setup() {
@@ -48,7 +46,7 @@ class SpellsViewModelTest {
 
     @Test
     fun `check that LoadSpellsIntent starts with correct state`() {
-        every { repository.getSpells() } returns Observable.just(jsonSpells)
+        every { repository.getSpells() } returns Observable.just(spells)
         viewModel.processIntents(
             Observable.just(loadSpellsIntent)
         )
@@ -58,7 +56,7 @@ class SpellsViewModelTest {
 
     @Test
     fun `check that LoadSpellsIntent returns correct state`() {
-        every { repository.getSpells() } returns Observable.just(jsonSpells)
+        every { repository.getSpells() } returns Observable.just(spells)
         viewModel.processIntents(
             Observable.just(loadSpellsIntent)
         )
