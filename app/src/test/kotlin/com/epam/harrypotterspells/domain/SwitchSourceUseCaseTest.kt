@@ -27,7 +27,7 @@ class SwitchSourceUseCaseTest {
     @Test
     fun `check that ToRemoteAction calls switchToRemote on the repository`() {
         actionComposer(SwitchSourceAction.ToRemoteAction)
-        verify { repository.switchToRemote() }
+        verify { repository.switchSourceToRemote() }
     }
 
     @Test
@@ -39,7 +39,7 @@ class SwitchSourceUseCaseTest {
     @Test
     fun `check that ToLocalAction calls switchToLocal on the repository`() {
         actionComposer(SwitchSourceAction.ToLocalAction)
-        verify { repository.switchToLocal() }
+        verify { repository.switchSourceToLocal() }
     }
 
     @Test

@@ -33,10 +33,16 @@ data class SpannedSpell(
             light, creator, canBeVerbal
         )
 
-    fun containsString(string: String): Boolean {
-        return name.contains(string, ignoreCase = true) ||
-                incantation.contains(string, ignoreCase = true) ||
-                type.contains(string, ignoreCase = true) ||
-                effect.contains(string, ignoreCase = true)
+    /**
+     * Returns `true` if this [SpannedSpell] contains the specified [string] as a substring
+     * in [SpannedSpell.name], [SpannedSpell.incantation], [SpannedSpell.type] or [SpannedSpell.effect].
+     *
+     * @param ignoreCase `true` to ignore character case when comparing strings.
+     */
+    fun containsString(string: String, ignoreCase: Boolean): Boolean {
+        return name.contains(string, ignoreCase) ||
+                incantation.contains(string, ignoreCase) ||
+                type.contains(string, ignoreCase) ||
+                effect.contains(string, ignoreCase)
     }
 }

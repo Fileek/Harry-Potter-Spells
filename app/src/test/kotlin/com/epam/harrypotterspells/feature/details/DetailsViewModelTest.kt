@@ -57,7 +57,7 @@ class DetailsViewModelTest {
         val expectedState =
             initialState.copy(
                 incantationIsEditing = true,
-                inputsNotInitialized = false,
+                inputsTextsNotSet = false,
                 focus = SpellFieldFocus.INCANTATION
             )
         viewModel.processIntents(
@@ -72,7 +72,7 @@ class DetailsViewModelTest {
         val expectedState =
             initialState.copy(
                 typeIsEditing = true,
-                inputsNotInitialized = false,
+                inputsTextsNotSet = false,
                 focus = SpellFieldFocus.TYPE
             )
         viewModel.processIntents(
@@ -87,7 +87,7 @@ class DetailsViewModelTest {
         val expectedState =
             initialState.copy(
                 effectIsEditing = true,
-                inputsNotInitialized = false,
+                inputsTextsNotSet = false,
                 focus = SpellFieldFocus.EFFECT
             )
         viewModel.processIntents(
@@ -102,7 +102,7 @@ class DetailsViewModelTest {
         val expectedState =
             initialState.copy(
                 lightIsEditing = true,
-                inputsNotInitialized = false,
+                inputsTextsNotSet = false,
                 focus = SpellFieldFocus.LIGHT
             )
         viewModel.processIntents(
@@ -117,7 +117,7 @@ class DetailsViewModelTest {
         val expectedState =
             initialState.copy(
                 creatorIsEditing = true,
-                inputsNotInitialized = false,
+                inputsTextsNotSet = false,
                 focus = SpellFieldFocus.CREATOR
             )
         viewModel.processIntents(
@@ -135,7 +135,7 @@ class DetailsViewModelTest {
         val expectedState =
             initialState.copy(
                 spell = spell.copy(incantation = incantation),
-                inputsNotInitialized = false,
+                inputsTextsNotSet = false,
             )
         viewModel.processIntents(
             Observable.just(editIncantationIntent, updateIntent)
@@ -151,7 +151,7 @@ class DetailsViewModelTest {
         val expectedState =
             initialState.copy(
                 spell = spell.copy(type = type),
-                inputsNotInitialized = false,
+                inputsTextsNotSet = false,
             )
         viewModel.processIntents(
             Observable.just(editTypeIntent, updateIntent)
@@ -167,7 +167,7 @@ class DetailsViewModelTest {
         val expectedState =
             initialState.copy(
                 spell = spell.copy(effect = effect),
-                inputsNotInitialized = false,
+                inputsTextsNotSet = false,
             )
         viewModel.processIntents(
             Observable.just(editEffectIntent, updateIntent)
@@ -183,7 +183,7 @@ class DetailsViewModelTest {
         val expectedState =
             initialState.copy(
                 spell = spell.copy(light = light),
-                inputsNotInitialized = false,
+                inputsTextsNotSet = false,
             )
         viewModel.processIntents(
             Observable.just(editLightIntent, updateIntent)
@@ -199,7 +199,7 @@ class DetailsViewModelTest {
         val expectedState =
             initialState.copy(
                 spell = spell.copy(creator = creator),
-                inputsNotInitialized = false,
+                inputsTextsNotSet = false,
             )
         viewModel.processIntents(
             Observable.just(editCreatorIntent, updateIntent)

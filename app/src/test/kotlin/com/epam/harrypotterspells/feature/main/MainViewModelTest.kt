@@ -23,7 +23,7 @@ class MainViewModelTest {
 
     private lateinit var testObserver: TestObserver<MainViewState>
 
-    private val initialState = MainViewState(isRemote = true, isNotSearching = true)
+    private val initialState = MainViewState(isRemote = true, isSearchClosed = true)
 
     private val testString = "test"
     private val switchToLocalIntent = SwitchSourceIntent.ToLocalIntent
@@ -56,7 +56,7 @@ class MainViewModelTest {
             Observable.just(SearchIntent.OpenIntent)
         )
         testObserver.await()
-        testObserver.assertValueAt(SECOND_VIEW_STATE_INDEX, initialState.copy(isNotSearching = false))
+        testObserver.assertValueAt(SECOND_VIEW_STATE_INDEX, initialState.copy(isSearchClosed = false))
     }
 
     @Test
@@ -74,7 +74,7 @@ class MainViewModelTest {
             Observable.just(SearchIntent.CloseIntent)
         )
         testObserver.await()
-        testObserver.assertValueAt(FIRST_VIEW_STATE_INDEX, initialState.copy(isNotSearching = true))
+        testObserver.assertValueAt(FIRST_VIEW_STATE_INDEX, initialState.copy(isSearchClosed = true))
     }
 
     @Test

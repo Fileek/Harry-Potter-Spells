@@ -121,7 +121,7 @@ class MainActivity : AppCompatActivity(), MVIView<MainIntent, MainViewState> {
 
     override fun render(state: MainViewState) {
         renderSwitch(state.isRemote)
-        renderSearchView(state.isNotSearching)
+        renderSearchView(state.isSearchClosed)
     }
 
     private fun renderSwitch(isRemote: Boolean) {
@@ -130,9 +130,9 @@ class MainActivity : AppCompatActivity(), MVIView<MainIntent, MainViewState> {
         switch?.text = if (isRemote) remote else local
     }
 
-    private fun renderSearchView(isNotSearching: Boolean) {
+    private fun renderSearchView(isSearchClosed: Boolean) {
         val searchView = binding.toolbar.menu[SEARCH_VIEW_INDEX].actionView as? SearchView
-        searchView?.isIconified = isNotSearching
+        searchView?.isIconified = isSearchClosed
     }
 
     override fun onDestroy() {

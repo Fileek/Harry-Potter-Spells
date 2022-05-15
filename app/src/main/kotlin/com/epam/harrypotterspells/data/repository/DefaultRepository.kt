@@ -21,8 +21,10 @@ class DefaultRepository @Inject constructor(
     private var searchQuery = ""
     private val localSpells = StubList.spells.map { it.toSpannedSpell() }
     private var remoteSpells = emptyList<SpannedSpell>()
-    private val spells get() = if (isRemote) remoteSpells else localSpells
-    private val filteredSpells get() = spells.filterByStringAndHighlightIt(searchQuery)
+    private val spells
+        get() = if (isRemote) remoteSpells else localSpells
+    private val filteredSpells
+        get() = spells.filterByStringAndHighlightIt(searchQuery, ignoreCase = true)
 
     private val spellsSubject = BehaviorSubject.create<List<SpannedSpell>>()
 
@@ -53,12 +55,12 @@ class DefaultRepository @Inject constructor(
         emitSpells()
     }
 
-    override fun switchToRemote() {
+    override fun switchSourceToRemote() {
         isRemote = true
         if (spells.isNotEmpty()) emitSpells()
     }
 
-    override fun switchToLocal() {
+    override fun switchSourceToLocal() {
         isRemote = false
         emitSpells()
     }

@@ -27,12 +27,18 @@ class DetailsViewModel @Inject constructor(
     private val updateUseCase: UseCase<UpdateAction, UpdateResult>,
 ) : ViewModel(), MVIViewModel<DetailsIntent, DetailsViewState> {
 
+    /**
+     * Currently displayed spell received by [DetailsFragmentArgs]
+     */
     private val spell: Spell = checkNotNull(state[SPELL_KEY]) { "Spell is not initialized" }
 
     private val intentsSubject = BehaviorSubject.create<DetailsIntent>()
     private val initialState = DetailsViewState(spell)
     private val statesObservable = compose()
 
+    /**
+     * Composes [DetailsViewState] based on received intents in [intentsSubject]
+     */
     private fun compose(): Observable<DetailsViewState> {
         return intentsSubject
             .observeOn(schedulerProvider.computation())
@@ -98,10 +104,13 @@ class DetailsViewModel @Inject constructor(
         private const val SPELL_KEY = "spell"
         private const val VIEW_STATE_BUFFER_SIZE = 1
 
+        /**
+         * Returns new [DetailsViewState] by applying given [DetailsResult] on given [DetailsViewState].
+         */
         private val reducer = DetailsReducer { state, result ->
             when (result) {
                 is EditResult -> {
-                    val newState = state.copy(inputsNotInitialized = false)
+                    val newState = state.copy(inputsTextsNotSet = false)
                     when (result) {
                         is EditResult.IncantationResult -> newState.copy(
                             incantationIsEditing = true,

@@ -22,6 +22,9 @@ class SpellsViewModel @Inject constructor(
     private val initialState = SpellsViewState.Idle
     private val statesObservable: Observable<SpellsViewState> = compose()
 
+    /**
+     * Composes [SpellsViewState] based on received intents in [intentsSubject]
+     */
     private fun compose(): Observable<SpellsViewState> {
         return intentsSubject
             .observeOn(schedulerProvider.computation())
@@ -48,6 +51,9 @@ class SpellsViewModel @Inject constructor(
         private const val VIEW_STATE_BUFFER_SIZE = 1
         private const val NUMBER_OF_OBSERVERS = 0
 
+        /**
+         * Returns new [SpellsViewState] by applying given [SpellsResult] on given [SpellsViewState].
+         */
         private val reducer = SpellsReducer { _, result ->
             when (result) {
                 is LoadResult.Success -> SpellsViewState.Success(result.data)

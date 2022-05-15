@@ -12,5 +12,5 @@ data class DetailsViewState(
     var lightIsEditing: Boolean = false,
     var creatorIsEditing: Boolean = false,
     var focus: SpellFieldFocus = SpellFieldFocus.NONE,
-    var inputsNotInitialized: Boolean = true
+    var inputsTextsNotSet: Boolean = true
 ) : MVIViewState

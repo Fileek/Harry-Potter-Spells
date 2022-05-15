@@ -29,12 +29,19 @@ data class SpannableSpell(
             canBeVerbal
         )
 
-    fun highlightStrings(string: String) {
+    /**
+     * Highlights the given [string] in [SpannableSpell.name], [SpannableSpell.incantation],
+     * [SpannableSpell.type] and [SpannableSpell.effect] if they contain it as a substring
+     * by setting blue [BackgroundColorSpan].
+     *
+     * @param ignoreCase `true` to ignore character case when comparing strings.
+     */
+    fun highlightStrings(string: String, ignoreCase: Boolean) {
         clearSpans()
-        if (name.contains(string, ignoreCase = true)) highlightStringInName(string)
-        if (incantation.contains(string, ignoreCase = true)) highlightStringInIncantation(string)
-        if (type.contains(string, ignoreCase = true)) highlightStringInType(string)
-        if (effect.contains(string, ignoreCase = true)) highlightStringInEffect(string)
+        if (name.contains(string, ignoreCase)) highlightStringInName(string)
+        if (incantation.contains(string, ignoreCase)) highlightStringInIncantation(string)
+        if (type.contains(string, ignoreCase)) highlightStringInType(string)
+        if (effect.contains(string, ignoreCase)) highlightStringInEffect(string)
     }
 
     private fun clearSpans() {

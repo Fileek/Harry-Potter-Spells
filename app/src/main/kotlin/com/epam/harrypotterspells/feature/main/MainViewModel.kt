@@ -14,8 +14,6 @@ import com.epam.harrypotterspells.util.`typealias`.MainReducer
 import com.epam.harrypotterspells.util.scheduler.SchedulerProvider
 import dagger.hilt.android.lifecycle.HiltViewModel
 import io.reactivex.rxjava3.core.Observable
-import io.reactivex.rxjava3.core.ObservableTransformer
-import io.reactivex.rxjava3.functions.BiFunction
 import io.reactivex.rxjava3.subjects.BehaviorSubject
 import javax.inject.Inject
 
@@ -27,14 +25,17 @@ class MainViewModel @Inject constructor(
 ) : ViewModel(), MVIViewModel<MainIntent, MainViewState> {
 
     private val intentsSubject = BehaviorSubject.create<MainIntent>()
-    private val initialState = MainViewState(isRemote = true, isNotSearching = true)
+    private val initialState = MainViewState(isRemote = true, isSearchClosed = true)
     private val statesObservable = compose()
 
+    /**
+     * Composes [MainViewState] based on received intents in [intentsSubject]
+     */
     private fun compose(): Observable<MainViewState> {
         return intentsSubject
             .observeOn(schedulerProvider.computation())
             .map(this::getActionFromIntent)
-            .compose(processActions())
+            .compose(performActions())
             .scan(initialState, reducer)
             .observeOn(schedulerProvider.ui())
             .distinctUntilChanged()
@@ -58,7 +59,7 @@ class MainViewModel @Inject constructor(
         is SearchIntent.CloseIntent -> SearchAction.CloseAction
     }
 
-    private fun processActions() = MainActionTransformer { actions ->
+    private fun performActions() = MainActionTransformer { actions ->
         Observable.merge(
             actions.ofType(SearchAction::class.java).compose(
                 searchUseCase.performAction()
@@ -78,13 +79,16 @@ class MainViewModel @Inject constructor(
     private companion object {
         private const val VIEW_STATE_BUFFER_SIZE = 1
 
+        /**
+         * Returns new [MainViewState] by applying given [MainResult] on given [MainViewState].
+         */
         private val reducer = MainReducer { state, result ->
             when (result) {
                 is SearchResult -> {
                     when (result) {
-                        is SearchResult.OpenResult -> state.copy(isNotSearching = false)
+                        is SearchResult.OpenResult -> state.copy(isSearchClosed = false)
                         is SearchResult.QueryResult -> state.copy()
-                        is SearchResult.CloseResult -> state.copy(isNotSearching = true)
+                        is SearchResult.CloseResult -> state.copy(isSearchClosed = true)
                     }
                 }
                 is SwitchSourceResult -> {

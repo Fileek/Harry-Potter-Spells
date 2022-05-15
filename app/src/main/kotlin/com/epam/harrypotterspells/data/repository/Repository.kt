@@ -9,8 +9,8 @@ interface Repository {
 
     fun searchByQuery(query: String)
 
-    fun switchToRemote()
-    fun switchToLocal()
+    fun switchSourceToRemote()
+    fun switchSourceToLocal()
 
     fun updateIncantation(spellId: String, incantation: String)
     fun updateType(spellId: String, type: String)

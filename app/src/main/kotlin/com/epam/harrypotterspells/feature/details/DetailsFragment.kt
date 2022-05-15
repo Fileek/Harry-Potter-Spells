@@ -142,7 +142,7 @@ class DetailsFragment : Fragment(), MVIView<DetailsIntent, DetailsViewState> {
     }
 
     private fun renderInputState(state: DetailsViewState) {
-        if (state.inputsNotInitialized) state.spell?.let { initializeInputs(it) }
+        if (state.inputsTextsNotSet) state.spell?.let { setTextInInputs(it) }
 
         if (state.incantationIsEditing) showIncantationInput()
         else hideIncantationInput()
@@ -160,7 +160,7 @@ class DetailsFragment : Fragment(), MVIView<DetailsIntent, DetailsViewState> {
         else hideCreatorInput()
     }
 
-    private fun initializeInputs(spell: Spell) = binding.run {
+    private fun setTextInInputs(spell: Spell) = binding.run {
         incantationInput.setText(spell.incantation)
         typeInput.setText(spell.type)
         effectInput.setText(spell.effect)

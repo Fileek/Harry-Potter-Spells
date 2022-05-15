@@ -7,12 +7,10 @@ import com.epam.harrypotterspells.domain.SearchUseCase
 import com.epam.harrypotterspells.domain.SwitchSourceUseCase
 import com.epam.harrypotterspells.domain.UpdateUseCase
 import com.epam.harrypotterspells.domain.UseCase
-import com.epam.harrypotterspells.feature.details.DetailsAction.EditAction
-import com.epam.harrypotterspells.feature.details.DetailsAction.UpdateAction
-import com.epam.harrypotterspells.feature.details.DetailsResult.EditResult
-import com.epam.harrypotterspells.feature.details.DetailsResult.UpdateResult
-import com.epam.harrypotterspells.feature.spells.SpellsAction.LoadAction
-import com.epam.harrypotterspells.feature.spells.SpellsResult.LoadResult
+import com.epam.harrypotterspells.feature.details.DetailsAction
+import com.epam.harrypotterspells.feature.details.DetailsResult
+import com.epam.harrypotterspells.feature.spells.SpellsAction
+import com.epam.harrypotterspells.feature.spells.SpellsResult
 import com.epam.harrypotterspells.feature.main.MainAction
 import com.epam.harrypotterspells.feature.main.MainResult
 import com.epam.harrypotterspells.util.scheduler.SchedulerProvider
@@ -29,7 +27,7 @@ object ViewModelModule {
     fun providesLoadSpellsUseCase(
         repo: Repository,
         schedulerProvider: SchedulerProvider
-    ): UseCase<LoadAction, LoadResult> {
+    ): UseCase<SpellsAction.LoadAction, SpellsResult.LoadResult> {
         return LoadSpellsUseCase(repo, schedulerProvider)
     }
 
@@ -41,14 +39,14 @@ object ViewModelModule {
     }
 
     @[ViewModelScoped Provides]
-    fun providesEditSpellUseCase(): UseCase<EditAction, EditResult> {
+    fun providesEditUseCase(): UseCase<DetailsAction.EditAction, DetailsResult.EditResult> {
         return EditUseCase()
     }
 
     @[ViewModelScoped Provides]
-    fun providesUpdateSpellUseCase(
+    fun providesUpdateUseCase(
         repo: Repository
-    ): UseCase<UpdateAction, UpdateResult> {
+    ): UseCase<DetailsAction.UpdateAction, DetailsResult.UpdateResult> {
         return UpdateUseCase(repo)
     }
 

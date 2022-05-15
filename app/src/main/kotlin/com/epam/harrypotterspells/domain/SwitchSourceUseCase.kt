@@ -16,11 +16,11 @@ class SwitchSourceUseCase @Inject constructor(
             Observable.just(
                 when (action) {
                     is SwitchSourceAction.ToRemoteAction -> {
-                        repository.switchToRemote()
+                        repository.switchSourceToRemote()
                         SwitchSourceResult.ToRemoteResult
                     }
                     is SwitchSourceAction.ToLocalAction -> {
-                        repository.switchToLocal()
+                        repository.switchSourceToLocal()
                         SwitchSourceResult.ToLocalResult
                     }
                 }

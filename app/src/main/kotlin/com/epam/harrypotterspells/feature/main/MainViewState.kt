@@ -4,5 +4,5 @@ import com.epam.harrypotterspells.mvibase.MVIViewState
 
 data class MainViewState(
     val isRemote: Boolean,
-    val isNotSearching: Boolean
+    val isSearchClosed: Boolean
 ) : MVIViewState
