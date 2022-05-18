@@ -17,7 +17,7 @@ class SpellsViewModel @Inject constructor(
 ) : ViewModel(), MVIViewModel<SpellsIntent, SpellsViewState> {
 
     private val intentsSubject = BehaviorSubject.create<SpellsIntent>()
-    private val initialState = SpellsViewState.Idle
+    private val initialState = SpellsViewState()
     private val statesObservable: Observable<SpellsViewState> = compose()
 
     /**
@@ -35,7 +35,6 @@ class SpellsViewModel @Inject constructor(
 
     private fun getActionFromIntent(intent: SpellsIntent) = when (intent) {
         is SpellsIntent.LoadIntent -> LoadAction
-
     }
 
     override fun processIntents(observable: Observable<SpellsIntent>) {
@@ -51,12 +50,13 @@ class SpellsViewModel @Inject constructor(
         /**
          * Returns new [SpellsViewState] by applying given [SpellsResult] on given [SpellsViewState].
          */
-        private val reducer = BiFunction<SpellsViewState, SpellsResult, SpellsViewState> { _, result ->
-            when (result) {
-                is LoadResult.Success -> SpellsViewState.Success(result.data)
-                is LoadResult.Error -> SpellsViewState.Error(result.error)
-                is LoadResult.Loading -> SpellsViewState.Loading
+        private val reducer =
+            BiFunction<SpellsViewState, SpellsResult, SpellsViewState> { state, result ->
+                when (result) {
+                    is LoadResult.Success -> state.copy(isLoading = false, data = result.data)
+                    is LoadResult.Error -> state.copy(isLoading = false, error = result.error)
+                    is LoadResult.Loading -> state.copy(isLoading = true)
+                }
             }
-        }
     }
 }
