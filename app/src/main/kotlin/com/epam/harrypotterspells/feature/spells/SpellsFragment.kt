@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import com.epam.harrypotterspells.R
@@ -59,16 +60,14 @@ class SpellsFragment : Fragment(), MVIView<SpellsIntent, SpellsViewState> {
     }
 
     override fun render(state: SpellsViewState) {
-        binding.progressBar.visibility =
-            if (state.isLoading) View.VISIBLE
-            else View.GONE
-        if (state is SpellsViewState.Success) spellAdapter.submitList(state.spells)
-        else if (state is SpellsViewState.Error) showError(state.error)
+        binding.progressBar.isVisible = state.isLoading
+        spellAdapter.submitList(state.data)
+        if (state.error != null) showError(state.error)
     }
 
-    private fun showError(error: Throwable?) = binding.errorMessage.run {
-        visibility = View.VISIBLE
-        text = error?.message ?: errorStub
+    private fun showError(error: Throwable) = binding.errorMessage.run {
+        isVisible = true
+        text = error.message ?: errorStub
     }
 
     override fun onDestroy() {

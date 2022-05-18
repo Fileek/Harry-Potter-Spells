@@ -44,7 +44,6 @@ class DetailsViewModel @Inject constructor(
             .scan(initialState, reducer)
             .replay(VIEW_STATE_BUFFER_SIZE)
             .autoConnect()
-            .startWithItem(initialState)
             .distinctUntilChanged()
     }
 
@@ -103,69 +102,70 @@ class DetailsViewModel @Inject constructor(
         /**
          * Returns new [DetailsViewState] by applying given [DetailsResult] on given [DetailsViewState].
          */
-        private val reducer = BiFunction<DetailsViewState, DetailsResult, DetailsViewState> { state, result ->
-            when (result) {
-                is EditResult -> {
-                    val newState = state.copy(inputsTextsNotSet = false)
-                    when (result) {
-                        is EditResult.IncantationResult -> newState.copy(
-                            incantationIsEditing = true,
-                            focus = SpellFieldFocus.INCANTATION,
-                        )
-                        is EditResult.TypeResult -> newState.copy(
-                            typeIsEditing = true,
-                            focus = SpellFieldFocus.TYPE,
-                        )
-                        is EditResult.EffectResult -> newState.copy(
-                            effectIsEditing = true,
-                            focus = SpellFieldFocus.EFFECT,
-                        )
-                        is EditResult.LightResult -> newState.copy(
-                            lightIsEditing = true,
-                            focus = SpellFieldFocus.LIGHT,
-                        )
-                        is EditResult.CreatorResult -> newState.copy(
-                            creatorIsEditing = true,
-                            focus = SpellFieldFocus.CREATOR,
-                        )
+        private val reducer =
+            BiFunction<DetailsViewState, DetailsResult, DetailsViewState> { state, result ->
+                when (result) {
+                    is EditResult -> {
+                        val newState = state.copy(inputsTextsNotSet = false)
+                        when (result) {
+                            is EditResult.IncantationResult -> newState.copy(
+                                incantationIsEditing = true,
+                                focus = SpellFieldFocus.INCANTATION,
+                            )
+                            is EditResult.TypeResult -> newState.copy(
+                                typeIsEditing = true,
+                                focus = SpellFieldFocus.TYPE,
+                            )
+                            is EditResult.EffectResult -> newState.copy(
+                                effectIsEditing = true,
+                                focus = SpellFieldFocus.EFFECT,
+                            )
+                            is EditResult.LightResult -> newState.copy(
+                                lightIsEditing = true,
+                                focus = SpellFieldFocus.LIGHT,
+                            )
+                            is EditResult.CreatorResult -> newState.copy(
+                                creatorIsEditing = true,
+                                focus = SpellFieldFocus.CREATOR,
+                            )
+                        }
                     }
-                }
-                is UpdateResult -> {
-                    val newState = state.copy(focus = SpellFieldFocus.NONE)
-                    when (result) {
-                        is UpdateResult.IncantationResult -> {
-                            newState.copy(
-                                spell = newState.spell?.copy(incantation = result.incantation),
-                                incantationIsEditing = false,
-                            )
-                        }
-                        is UpdateResult.TypeResult -> {
-                            newState.copy(
-                                spell = newState.spell?.copy(type = result.type),
-                                typeIsEditing = false,
-                            )
-                        }
-                        is UpdateResult.EffectResult -> {
-                            newState.copy(
-                                spell = newState.spell?.copy(effect = result.effect),
-                                effectIsEditing = false,
-                            )
-                        }
-                        is UpdateResult.LightResult -> {
-                            newState.copy(
-                                spell = newState.spell?.copy(light = result.light),
-                                lightIsEditing = false
-                            )
-                        }
-                        is UpdateResult.CreatorResult -> {
-                            newState.copy(
-                                spell = newState.spell?.copy(creator = result.creator),
-                                creatorIsEditing = false,
-                            )
+                    is UpdateResult -> {
+                        val newState = state.copy(focus = SpellFieldFocus.NONE)
+                        when (result) {
+                            is UpdateResult.IncantationResult -> {
+                                newState.copy(
+                                    spell = newState.spell?.copy(incantation = result.incantation),
+                                    incantationIsEditing = false,
+                                )
+                            }
+                            is UpdateResult.TypeResult -> {
+                                newState.copy(
+                                    spell = newState.spell?.copy(type = result.type),
+                                    typeIsEditing = false,
+                                )
+                            }
+                            is UpdateResult.EffectResult -> {
+                                newState.copy(
+                                    spell = newState.spell?.copy(effect = result.effect),
+                                    effectIsEditing = false,
+                                )
+                            }
+                            is UpdateResult.LightResult -> {
+                                newState.copy(
+                                    spell = newState.spell?.copy(light = result.light),
+                                    lightIsEditing = false
+                                )
+                            }
+                            is UpdateResult.CreatorResult -> {
+                                newState.copy(
+                                    spell = newState.spell?.copy(creator = result.creator),
+                                    creatorIsEditing = false,
+                                )
+                            }
                         }
                     }
                 }
             }
-        }
     }
 }

@@ -4,6 +4,8 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.view.isGone
+import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.navArgs
@@ -15,7 +17,6 @@ import com.epam.harrypotterspells.mvibase.MVIView
 import com.epam.harrypotterspells.util.extension.focusAndShowKeyboard
 import com.epam.harrypotterspells.util.extension.hideKeyboard
 import dagger.hilt.android.AndroidEntryPoint
-import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
 import io.reactivex.rxjava3.core.Observable
 import io.reactivex.rxjava3.disposables.CompositeDisposable
 import io.reactivex.rxjava3.kotlin.plusAssign
@@ -122,7 +123,6 @@ class DetailsFragment : Fragment(), MVIView<DetailsIntent, DetailsViewState> {
     private fun bindViewModel() {
         viewModel.processIntents(getIntents())
         disposables += viewModel.getStates()
-            .observeOn(AndroidSchedulers.mainThread())
             .subscribe(this::render)
     }
 
@@ -147,20 +147,11 @@ class DetailsFragment : Fragment(), MVIView<DetailsIntent, DetailsViewState> {
     private fun renderInputState(state: DetailsViewState) {
         if (state.inputsTextsNotSet) state.spell?.let { setTextInInputs(it) }
 
-        if (state.incantationIsEditing) showIncantationInput()
-        else hideIncantationInput()
-
-        if (state.typeIsEditing) showTypeInput()
-        else hideTypeInput()
-
-        if (state.effectIsEditing) showEffectInput()
-        else hideEffectInput()
-
-        if (state.lightIsEditing) showLightInput()
-        else hideLightInput()
-
-        if (state.creatorIsEditing) showCreatorInput()
-        else hideCreatorInput()
+        renderIncantationGroups(state.incantationIsEditing)
+        renderTypeGroups(state.typeIsEditing)
+        renderEffectGroups(state.effectIsEditing)
+        renderLightGroups(state.lightIsEditing)
+        renderCreatorGroups(state.creatorIsEditing)
     }
 
     private fun setTextInInputs(spell: Spell) = binding.run {
@@ -171,54 +162,29 @@ class DetailsFragment : Fragment(), MVIView<DetailsIntent, DetailsViewState> {
         creatorInput.setText(spell.creator)
     }
 
-    private fun showIncantationInput() = binding.run {
-        incantationGroup.visibility = View.GONE
-        incantationInputGroup.visibility = View.VISIBLE
+    private fun renderIncantationGroups(isEditing: Boolean) = binding.run {
+        incantationGroup.isGone = isEditing
+        incantationInputGroup.isVisible = isEditing
     }
 
-    private fun showTypeInput() = binding.run {
-        typeGroup.visibility = View.GONE
-        typeInputGroup.visibility = View.VISIBLE
+    private fun renderTypeGroups(isEditing: Boolean) = binding.run {
+        typeGroup.isGone = isEditing
+        typeInputGroup.isVisible = isEditing
     }
 
-    private fun showEffectInput() = binding.run {
-        effectGroup.visibility = View.GONE
-        effectInputGroup.visibility = View.VISIBLE
+    private fun renderEffectGroups(isEditing: Boolean) = binding.run {
+        effectGroup.isGone = isEditing
+        effectInputGroup.isVisible = isEditing
     }
 
-    private fun showLightInput() = binding.run {
-        lightGroup.visibility = View.GONE
-        lightInputGroup.visibility = View.VISIBLE
+    private fun renderLightGroups(isEditing: Boolean) = binding.run {
+        lightGroup.isGone = isEditing
+        lightInputGroup.isVisible = isEditing
     }
 
-    private fun showCreatorInput() = binding.run {
-        creatorGroup.visibility = View.GONE
-        creatorInputGroup.visibility = View.VISIBLE
-    }
-
-    private fun hideIncantationInput() = binding.run {
-        incantationGroup.visibility = View.VISIBLE
-        incantationInputGroup.visibility = View.GONE
-    }
-
-    private fun hideTypeInput() = binding.run {
-        typeGroup.visibility = View.VISIBLE
-        typeInputGroup.visibility = View.GONE
-    }
-
-    private fun hideEffectInput() = binding.run {
-        effectGroup.visibility = View.VISIBLE
-        effectInputGroup.visibility = View.GONE
-    }
-
-    private fun hideLightInput() = binding.run {
-        lightGroup.visibility = View.VISIBLE
-        lightInputGroup.visibility = View.GONE
-    }
-
-    private fun hideCreatorInput() = binding.run {
-        creatorGroup.visibility = View.VISIBLE
-        creatorInputGroup.visibility = View.GONE
+    private fun renderCreatorGroups(isEditing: Boolean) = binding.run {
+        creatorGroup.isGone = isEditing
+        creatorInputGroup.isVisible = isEditing
     }
 
     private fun renderFocus(focus: SpellFieldFocus) = binding.run {
