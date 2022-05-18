@@ -8,7 +8,6 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.SearchView
 import androidx.appcompat.widget.SwitchCompat
 import androidx.core.view.forEach
-import androidx.core.view.get
 import androidx.navigation.NavController
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.AppBarConfiguration
@@ -74,7 +73,7 @@ class MainActivity : AppCompatActivity(), MVIView<MainIntent, MainViewState> {
     }
 
     private fun setSwitch() {
-        val switch = binding.toolbar.menu[SWITCH_INDEX].actionView as? SwitchCompat
+        val switch = binding.toolbar.menu.findItem(R.id.switch_view).actionView as? SwitchCompat
         switch?.setTextColor(Color.BLACK)
         switch?.setOnCheckedChangeListener { _, checked ->
             intentsSubject.onNext(
@@ -85,7 +84,7 @@ class MainActivity : AppCompatActivity(), MVIView<MainIntent, MainViewState> {
     }
 
     private fun setSearchView() {
-        val searchView = binding.toolbar.menu[SEARCH_VIEW_INDEX].actionView as? SearchView
+        val searchView = binding.toolbar.menu.findItem(R.id.search_view).actionView as? SearchView
         searchView?.run {
             setOnSearchClickListener(getOnSearchClickListener())
             setOnQueryTextListener(getOnQueryTextListener())
@@ -128,13 +127,13 @@ class MainActivity : AppCompatActivity(), MVIView<MainIntent, MainViewState> {
     }
 
     private fun renderSwitch(isRemote: Boolean) {
-        val switch = binding.toolbar.menu[SWITCH_INDEX].actionView as? SwitchCompat
+        val switch = binding.toolbar.menu.findItem(R.id.switch_view).actionView as? SwitchCompat
         switch?.isChecked = isRemote
         switch?.text = if (isRemote) remote else local
     }
 
     private fun renderSearchView(isSearchClosed: Boolean) {
-        val searchView = binding.toolbar.menu[SEARCH_VIEW_INDEX].actionView as? SearchView
+        val searchView = binding.toolbar.menu.findItem(R.id.search_view).actionView as? SearchView
         searchView?.isIconified = isSearchClosed
     }
 
@@ -142,10 +141,5 @@ class MainActivity : AppCompatActivity(), MVIView<MainIntent, MainViewState> {
         super.onDestroy()
         _binding = null
         disposables.dispose()
-    }
-
-    private companion object {
-        private const val SWITCH_INDEX = 0
-        private const val SEARCH_VIEW_INDEX = 1
     }
 }
