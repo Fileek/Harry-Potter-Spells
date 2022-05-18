@@ -28,8 +28,7 @@ class SpellsViewModelTest {
     fun setup() {
         MockKAnnotations.init(this)
         viewModel = SpellsViewModel(
-            schedulerProvider,
-            LoadSpellsUseCase(repository, schedulerProvider)
+            LoadSpellsUseCase(repository)
         )
         testObserver = viewModel.getStates().test()
     }

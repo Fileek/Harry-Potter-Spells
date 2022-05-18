@@ -11,7 +11,6 @@ import com.epam.harrypotterspells.feature.details.DetailsIntent.UpdateIntent
 import com.epam.harrypotterspells.feature.details.DetailsResult.EditResult
 import com.epam.harrypotterspells.feature.details.DetailsResult.UpdateResult
 import com.epam.harrypotterspells.mvibase.MVIViewModel
-import com.epam.harrypotterspells.util.scheduler.SchedulerProvider
 import dagger.hilt.android.lifecycle.HiltViewModel
 import io.reactivex.rxjava3.core.Observable
 import io.reactivex.rxjava3.core.ObservableTransformer
@@ -22,7 +21,6 @@ import javax.inject.Inject
 @HiltViewModel
 class DetailsViewModel @Inject constructor(
     state: SavedStateHandle,
-    private val schedulerProvider: SchedulerProvider,
     private val editUseCase: UseCase<EditAction, EditResult>,
     private val updateUseCase: UseCase<UpdateAction, UpdateResult>,
 ) : ViewModel(), MVIViewModel<DetailsIntent, DetailsViewState> {
@@ -41,11 +39,9 @@ class DetailsViewModel @Inject constructor(
      */
     private fun compose(): Observable<DetailsViewState> {
         return intentsSubject
-            .observeOn(schedulerProvider.computation())
             .map(this::getActionFromIntent)
             .compose(processActions())
             .scan(initialState, reducer)
-            .observeOn(schedulerProvider.ui())
             .replay(VIEW_STATE_BUFFER_SIZE)
             .autoConnect()
             .startWithItem(initialState)

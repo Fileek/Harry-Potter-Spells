@@ -33,7 +33,6 @@ class MainViewModelTest {
     fun setup() {
         MockKAnnotations.init(this, relaxUnitFun = true)
         viewModel = MainViewModel(
-            TestSchedulerProvider(),
             SearchUseCase(repository),
             SwitchSourceUseCase(repository)
         )

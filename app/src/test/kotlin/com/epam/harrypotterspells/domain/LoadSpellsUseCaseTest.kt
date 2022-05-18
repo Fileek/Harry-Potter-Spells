@@ -24,7 +24,7 @@ class LoadSpellsUseCaseTest {
     @Before
     fun setup() {
         MockKAnnotations.init(this)
-        useCase = LoadSpellsUseCase(repository, TestSchedulerProvider())
+        useCase = LoadSpellsUseCase(repository)
         actionComposer = ActionComposer(useCase)
     }
 

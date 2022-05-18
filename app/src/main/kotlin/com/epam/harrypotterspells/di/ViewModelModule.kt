@@ -9,11 +9,10 @@ import com.epam.harrypotterspells.domain.UpdateUseCase
 import com.epam.harrypotterspells.domain.UseCase
 import com.epam.harrypotterspells.feature.details.DetailsAction
 import com.epam.harrypotterspells.feature.details.DetailsResult
-import com.epam.harrypotterspells.feature.spells.SpellsAction
-import com.epam.harrypotterspells.feature.spells.SpellsResult
 import com.epam.harrypotterspells.feature.main.MainAction
 import com.epam.harrypotterspells.feature.main.MainResult
-import com.epam.harrypotterspells.util.scheduler.SchedulerProvider
+import com.epam.harrypotterspells.feature.spells.SpellsAction
+import com.epam.harrypotterspells.feature.spells.SpellsResult
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -25,10 +24,9 @@ object ViewModelModule {
 
     @[ViewModelScoped Provides]
     fun providesLoadSpellsUseCase(
-        repo: Repository,
-        schedulerProvider: SchedulerProvider
+        repo: Repository
     ): UseCase<SpellsAction.LoadAction, SpellsResult.LoadResult> {
-        return LoadSpellsUseCase(repo, schedulerProvider)
+        return LoadSpellsUseCase(repo)
     }
 
     @[ViewModelScoped Provides]

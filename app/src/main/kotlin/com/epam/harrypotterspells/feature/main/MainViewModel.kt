@@ -9,7 +9,6 @@ import com.epam.harrypotterspells.feature.main.MainIntent.SwitchSourceIntent
 import com.epam.harrypotterspells.feature.main.MainResult.SearchResult
 import com.epam.harrypotterspells.feature.main.MainResult.SwitchSourceResult
 import com.epam.harrypotterspells.mvibase.MVIViewModel
-import com.epam.harrypotterspells.util.scheduler.SchedulerProvider
 import dagger.hilt.android.lifecycle.HiltViewModel
 import io.reactivex.rxjava3.core.Observable
 import io.reactivex.rxjava3.core.ObservableTransformer
@@ -19,7 +18,6 @@ import javax.inject.Inject
 
 @HiltViewModel
 class MainViewModel @Inject constructor(
-    private val schedulerProvider: SchedulerProvider,
     private val searchUseCase: UseCase<SearchAction, SearchResult>,
     private val switchSourceUseCase: UseCase<SwitchSourceAction, SwitchSourceResult>,
 ) : ViewModel(), MVIViewModel<MainIntent, MainViewState> {
@@ -33,14 +31,12 @@ class MainViewModel @Inject constructor(
      */
     private fun compose(): Observable<MainViewState> {
         return intentsSubject
-            .observeOn(schedulerProvider.computation())
             .map(this::getActionFromIntent)
             .compose(performActions())
             .scan(initialState, reducer)
-            .observeOn(schedulerProvider.ui())
-            .distinctUntilChanged()
             .replay(VIEW_STATE_BUFFER_SIZE)
             .autoConnect()
+            .distinctUntilChanged()
     }
 
     private fun getActionFromIntent(intent: MainIntent) = when (intent) {

@@ -15,6 +15,7 @@ import com.epam.harrypotterspells.mvibase.MVIView
 import com.epam.harrypotterspells.util.extension.focusAndShowKeyboard
 import com.epam.harrypotterspells.util.extension.hideKeyboard
 import dagger.hilt.android.AndroidEntryPoint
+import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
 import io.reactivex.rxjava3.core.Observable
 import io.reactivex.rxjava3.disposables.CompositeDisposable
 import io.reactivex.rxjava3.kotlin.plusAssign
@@ -120,7 +121,9 @@ class DetailsFragment : Fragment(), MVIView<DetailsIntent, DetailsViewState> {
 
     private fun bindViewModel() {
         viewModel.processIntents(getIntents())
-        disposables += viewModel.getStates().subscribe(this::render)
+        disposables += viewModel.getStates()
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribe(this::render)
     }
 
     override fun getIntents(): Observable<DetailsIntent> = intentsSubject.serialize()

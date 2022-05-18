@@ -17,6 +17,7 @@ import com.epam.harrypotterspells.R
 import com.epam.harrypotterspells.databinding.ActivityMainBinding
 import com.epam.harrypotterspells.mvibase.MVIView
 import dagger.hilt.android.AndroidEntryPoint
+import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
 import io.reactivex.rxjava3.core.Observable
 import io.reactivex.rxjava3.disposables.CompositeDisposable
 import io.reactivex.rxjava3.kotlin.plusAssign
@@ -114,7 +115,9 @@ class MainActivity : AppCompatActivity(), MVIView<MainIntent, MainViewState> {
 
     private fun bindViewModel() {
         viewModel.processIntents(getIntents())
-        disposables += viewModel.getStates().subscribe(::render)
+        disposables += viewModel.getStates()
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribe(::render)
     }
 
     override fun getIntents(): Observable<MainIntent> = intentsSubject.serialize()

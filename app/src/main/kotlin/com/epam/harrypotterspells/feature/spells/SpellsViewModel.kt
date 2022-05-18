@@ -5,7 +5,6 @@ import com.epam.harrypotterspells.domain.UseCase
 import com.epam.harrypotterspells.feature.spells.SpellsAction.LoadAction
 import com.epam.harrypotterspells.feature.spells.SpellsResult.LoadResult
 import com.epam.harrypotterspells.mvibase.MVIViewModel
-import com.epam.harrypotterspells.util.scheduler.SchedulerProvider
 import dagger.hilt.android.lifecycle.HiltViewModel
 import io.reactivex.rxjava3.core.Observable
 import io.reactivex.rxjava3.functions.BiFunction
@@ -14,7 +13,6 @@ import javax.inject.Inject
 
 @HiltViewModel
 class SpellsViewModel @Inject constructor(
-    private val schedulerProvider: SchedulerProvider,
     private val loadUseCase: UseCase<LoadAction, LoadResult>
 ) : ViewModel(), MVIViewModel<SpellsIntent, SpellsViewState> {
 
@@ -27,18 +25,17 @@ class SpellsViewModel @Inject constructor(
      */
     private fun compose(): Observable<SpellsViewState> {
         return intentsSubject
-            .observeOn(schedulerProvider.computation())
             .map(this::getActionFromIntent)
             .compose(loadUseCase.performAction())
             .scan(initialState, reducer)
-            .observeOn(schedulerProvider.ui())
-            .distinctUntilChanged()
             .replay(VIEW_STATE_BUFFER_SIZE)
             .autoConnect(NUMBER_OF_OBSERVERS)
+            .distinctUntilChanged()
     }
 
     private fun getActionFromIntent(intent: SpellsIntent) = when (intent) {
         is SpellsIntent.LoadIntent -> LoadAction
+
     }
 
     override fun processIntents(observable: Observable<SpellsIntent>) {
@@ -48,8 +45,8 @@ class SpellsViewModel @Inject constructor(
     override fun getStates(): Observable<SpellsViewState> = statesObservable
 
     private companion object {
-        private const val VIEW_STATE_BUFFER_SIZE = 1
         private const val NUMBER_OF_OBSERVERS = 0
+        private const val VIEW_STATE_BUFFER_SIZE = 1
 
         /**
          * Returns new [SpellsViewState] by applying given [SpellsResult] on given [SpellsViewState].

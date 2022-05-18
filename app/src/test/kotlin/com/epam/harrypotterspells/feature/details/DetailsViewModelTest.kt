@@ -35,7 +35,6 @@ class DetailsViewModelTest {
         MockKAnnotations.init(this, relaxUnitFun = true)
         viewModel = DetailsViewModel(
             state = SavedStateHandle(mapOf("spell" to spell)),
-            schedulerProvider = TestSchedulerProvider(),
             editUseCase = EditUseCase(),
             updateUseCase = UpdateUseCase(repository),
         )
