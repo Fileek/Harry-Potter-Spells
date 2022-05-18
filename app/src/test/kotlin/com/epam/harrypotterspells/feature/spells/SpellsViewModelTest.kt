@@ -1,9 +1,8 @@
 package com.epam.harrypotterspells.feature.spells
 
-import com.epam.harrypotterspells.data.repository.Repository
 import com.epam.harrypotterspells.data.local.StubList
+import com.epam.harrypotterspells.data.repository.Repository
 import com.epam.harrypotterspells.domain.LoadSpellsUseCase
-import com.epam.harrypotterspells.util.TestSchedulerProvider
 import io.mockk.MockKAnnotations
 import io.mockk.every
 import io.mockk.impl.annotations.MockK
@@ -20,7 +19,6 @@ class SpellsViewModelTest {
     private lateinit var viewModel: SpellsViewModel
     private lateinit var testObserver: TestObserver<SpellsViewState>
 
-    private val schedulerProvider = TestSchedulerProvider()
     private val loadSpellsIntent = SpellsIntent.LoadIntent
     private val spells = StubList.spells.map { it.toSpannedSpell() }
 

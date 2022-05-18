@@ -8,9 +8,5 @@ sealed class MainIntent : MVIIntent {
         object ToLocalIntent : SwitchSourceIntent()
     }
 
-    sealed class SearchIntent : MainIntent() {
-        object OpenIntent : SearchIntent()
-        data class QueryIntent(val query: String) : SearchIntent()
-        object CloseIntent : SearchIntent()
-    }
+    data class SearchByQueryIntent(val query: String) : MainIntent()
 }

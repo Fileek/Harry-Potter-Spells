@@ -8,9 +8,5 @@ sealed class MainAction : MVIAction {
         object ToLocalAction : SwitchSourceAction()
     }
 
-    sealed class SearchAction : MainAction() {
-        object OpenAction : SearchAction()
-        data class QueryAction(val query: String) : SearchAction()
-        object CloseAction : SearchAction()
-    }
+    data class SearchByQueryAction(val query: String) : MainAction()
 }

@@ -2,11 +2,11 @@ package com.epam.harrypotterspells.feature.main
 
 import androidx.lifecycle.ViewModel
 import com.epam.harrypotterspells.domain.UseCase
-import com.epam.harrypotterspells.feature.main.MainAction.SearchAction
+import com.epam.harrypotterspells.feature.main.MainAction.SearchByQueryAction
 import com.epam.harrypotterspells.feature.main.MainAction.SwitchSourceAction
-import com.epam.harrypotterspells.feature.main.MainIntent.SearchIntent
+import com.epam.harrypotterspells.feature.main.MainIntent.SearchByQueryIntent
 import com.epam.harrypotterspells.feature.main.MainIntent.SwitchSourceIntent
-import com.epam.harrypotterspells.feature.main.MainResult.SearchResult
+import com.epam.harrypotterspells.feature.main.MainResult.SearchByQueryResult
 import com.epam.harrypotterspells.feature.main.MainResult.SwitchSourceResult
 import com.epam.harrypotterspells.mvibase.MVIViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -18,12 +18,12 @@ import javax.inject.Inject
 
 @HiltViewModel
 class MainViewModel @Inject constructor(
-    private val searchUseCase: UseCase<SearchAction, SearchResult>,
+    private val searchUseCase: UseCase<SearchByQueryAction, SearchByQueryResult>,
     private val switchSourceUseCase: UseCase<SwitchSourceAction, SwitchSourceResult>,
 ) : ViewModel(), MVIViewModel<MainIntent, MainViewState> {
 
     private val intentsSubject = BehaviorSubject.create<MainIntent>()
-    private val initialState = MainViewState(isRemote = true, isSearchClosed = true)
+    private val initialState = MainViewState()
     private val statesObservable = compose()
 
     /**
@@ -41,7 +41,7 @@ class MainViewModel @Inject constructor(
 
     private fun getActionFromIntent(intent: MainIntent) = when (intent) {
         is SwitchSourceIntent -> getActionFromSwitchSourceIntent(intent)
-        is SearchIntent -> getActionFromSearchIntent(intent)
+        is SearchByQueryIntent -> SearchByQueryAction(intent.query)
     }
 
     private fun getActionFromSwitchSourceIntent(intent: SwitchSourceIntent) = when (intent) {
@@ -49,15 +49,9 @@ class MainViewModel @Inject constructor(
         is SwitchSourceIntent.ToLocalIntent -> SwitchSourceAction.ToLocalAction
     }
 
-    private fun getActionFromSearchIntent(intent: SearchIntent) = when (intent) {
-        is SearchIntent.OpenIntent -> SearchAction.OpenAction
-        is SearchIntent.QueryIntent -> SearchAction.QueryAction(intent.query)
-        is SearchIntent.CloseIntent -> SearchAction.CloseAction
-    }
-
     private fun performActions() = ObservableTransformer<MainAction, MainResult> { actions ->
         Observable.merge(
-            actions.ofType(SearchAction::class.java).compose(
+            actions.ofType(SearchByQueryAction::class.java).compose(
                 searchUseCase.performAction()
             ),
             actions.ofType(SwitchSourceAction::class.java).compose(
@@ -78,22 +72,17 @@ class MainViewModel @Inject constructor(
         /**
          * Returns new [MainViewState] by applying given [MainResult] on given [MainViewState].
          */
-        private val reducer = BiFunction<MainViewState, MainResult, MainViewState> { state, result ->
-            when (result) {
-                is SearchResult -> {
-                    when (result) {
-                        is SearchResult.OpenResult -> state.copy(isSearchClosed = false)
-                        is SearchResult.QueryResult -> state.copy()
-                        is SearchResult.CloseResult -> state.copy(isSearchClosed = true)
-                    }
-                }
-                is SwitchSourceResult -> {
-                    when (result) {
-                        is SwitchSourceResult.ToRemoteResult -> state.copy(isRemote = true)
-                        is SwitchSourceResult.ToLocalResult -> state.copy(isRemote = false)
+        private val reducer =
+            BiFunction<MainViewState, MainResult, MainViewState> { state, result ->
+                when (result) {
+                    is SearchByQueryResult -> state.copy()
+                    is SwitchSourceResult -> {
+                        when (result) {
+                            is SwitchSourceResult.ToRemoteResult -> state.copy(isRemote = true)
+                            is SwitchSourceResult.ToLocalResult -> state.copy(isRemote = false)
+                        }
                     }
                 }
             }
-        }
     }
 }

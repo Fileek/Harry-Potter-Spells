@@ -1,11 +1,9 @@
 package com.epam.harrypotterspells.feature.main
 
-import com.epam.harrypotterspells.feature.main.MainIntent.SearchIntent
-import com.epam.harrypotterspells.feature.main.MainIntent.SwitchSourceIntent
 import com.epam.harrypotterspells.data.repository.Repository
 import com.epam.harrypotterspells.domain.SearchUseCase
 import com.epam.harrypotterspells.domain.SwitchSourceUseCase
-import com.epam.harrypotterspells.util.TestSchedulerProvider
+import com.epam.harrypotterspells.feature.main.MainIntent.SwitchSourceIntent
 import io.mockk.MockKAnnotations
 import io.mockk.impl.annotations.MockK
 import io.reactivex.rxjava3.core.Observable
@@ -23,7 +21,7 @@ class MainViewModelTest {
 
     private lateinit var testObserver: TestObserver<MainViewState>
 
-    private val initialState = MainViewState(isRemote = true, isSearchClosed = true)
+    private val initialState = MainViewState()
 
     private val testString = "test"
     private val switchToLocalIntent = SwitchSourceIntent.ToLocalIntent
@@ -50,30 +48,12 @@ class MainViewModelTest {
     }
 
     @Test
-    fun `check that SearchOpenIntent returns correct state`() {
-        viewModel.processIntents(
-            Observable.just(SearchIntent.OpenIntent)
-        )
-        testObserver.await()
-        testObserver.assertValueAt(SECOND_VIEW_STATE_INDEX, initialState.copy(isSearchClosed = false))
-    }
-
-    @Test
     fun `check that SearchQueryIntent returns correct state`() {
         viewModel.processIntents(
-            Observable.just(SearchIntent.QueryIntent(testString))
+            Observable.just(MainIntent.SearchByQueryIntent(testString))
         )
         testObserver.await()
         testObserver.assertValueAt(FIRST_VIEW_STATE_INDEX, initialState)
-    }
-
-    @Test
-    fun `check that SearchCloseIntent returns correct state`() {
-        viewModel.processIntents(
-            Observable.just(SearchIntent.CloseIntent)
-        )
-        testObserver.await()
-        testObserver.assertValueAt(FIRST_VIEW_STATE_INDEX, initialState.copy(isSearchClosed = true))
     }
 
     @Test

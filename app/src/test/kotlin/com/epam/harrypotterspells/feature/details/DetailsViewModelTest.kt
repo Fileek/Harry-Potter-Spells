@@ -1,11 +1,10 @@
 package com.epam.harrypotterspells.feature.details
 
 import androidx.lifecycle.SavedStateHandle
-import com.epam.harrypotterspells.data.repository.Repository
 import com.epam.harrypotterspells.data.local.StubList
+import com.epam.harrypotterspells.data.repository.Repository
 import com.epam.harrypotterspells.domain.EditUseCase
 import com.epam.harrypotterspells.domain.UpdateUseCase
-import com.epam.harrypotterspells.util.TestSchedulerProvider
 import io.mockk.MockKAnnotations
 import io.mockk.impl.annotations.MockK
 import io.reactivex.rxjava3.core.Observable

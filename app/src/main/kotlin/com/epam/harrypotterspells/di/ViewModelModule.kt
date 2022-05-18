@@ -32,7 +32,7 @@ object ViewModelModule {
     @[ViewModelScoped Provides]
     fun providesSearchUseCase(
         repo: Repository
-    ): UseCase<MainAction.SearchAction, MainResult.SearchResult> {
+    ): UseCase<MainAction.SearchByQueryAction, MainResult.SearchByQueryResult> {
         return SearchUseCase(repo)
     }
 

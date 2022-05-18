@@ -8,9 +8,5 @@ sealed class MainResult : MVIResult {
         object ToLocalResult : SwitchSourceResult()
     }
 
-    sealed class SearchResult : MainResult() {
-        object OpenResult : SearchResult()
-        object QueryResult : SearchResult()
-        object CloseResult : SearchResult()
-    }
+    object SearchByQueryResult : MainResult()
 }
