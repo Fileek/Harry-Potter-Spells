@@ -3,15 +3,15 @@ package com.epam.harrypotterspells.domain
 import com.epam.harrypotterspells.data.repository.Repository
 import com.epam.harrypotterspells.feature.details.DetailsAction.UpdateAction
 import com.epam.harrypotterspells.feature.details.DetailsResult.UpdateResult
-import com.epam.harrypotterspells.util.`typealias`.UpdateActionTransformer
 import io.reactivex.rxjava3.core.Observable
+import io.reactivex.rxjava3.core.ObservableTransformer
 import javax.inject.Inject
 
 class UpdateUseCase @Inject constructor(
     private val repository: Repository
 ) : UseCase<UpdateAction, UpdateResult> {
 
-    override fun performAction() = UpdateActionTransformer {
+    override fun performAction() = ObservableTransformer<UpdateAction, UpdateResult> {
         it.flatMap { action ->
             Observable.just(
                 when (action) {

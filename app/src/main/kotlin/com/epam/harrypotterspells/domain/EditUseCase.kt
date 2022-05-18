@@ -2,12 +2,12 @@ package com.epam.harrypotterspells.domain
 
 import com.epam.harrypotterspells.feature.details.DetailsAction.EditAction
 import com.epam.harrypotterspells.feature.details.DetailsResult.EditResult
-import com.epam.harrypotterspells.util.`typealias`.EditActionTransformer
 import io.reactivex.rxjava3.core.Observable
+import io.reactivex.rxjava3.core.ObservableTransformer
 
 class EditUseCase : UseCase<EditAction, EditResult> {
 
-    override fun performAction() = EditActionTransformer {
+    override fun performAction() = ObservableTransformer<EditAction, EditResult> {
         it.flatMap { action ->
             Observable.just(
                 when (action) {

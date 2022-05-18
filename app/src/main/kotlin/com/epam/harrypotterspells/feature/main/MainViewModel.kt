@@ -6,14 +6,14 @@ import com.epam.harrypotterspells.feature.main.MainAction.SearchAction
 import com.epam.harrypotterspells.feature.main.MainAction.SwitchSourceAction
 import com.epam.harrypotterspells.feature.main.MainIntent.SearchIntent
 import com.epam.harrypotterspells.feature.main.MainIntent.SwitchSourceIntent
-import com.epam.harrypotterspells.feature.main.MainResult.SwitchSourceResult
 import com.epam.harrypotterspells.feature.main.MainResult.SearchResult
+import com.epam.harrypotterspells.feature.main.MainResult.SwitchSourceResult
 import com.epam.harrypotterspells.mvibase.MVIViewModel
-import com.epam.harrypotterspells.util.`typealias`.MainActionTransformer
-import com.epam.harrypotterspells.util.`typealias`.MainReducer
 import com.epam.harrypotterspells.util.scheduler.SchedulerProvider
 import dagger.hilt.android.lifecycle.HiltViewModel
 import io.reactivex.rxjava3.core.Observable
+import io.reactivex.rxjava3.core.ObservableTransformer
+import io.reactivex.rxjava3.functions.BiFunction
 import io.reactivex.rxjava3.subjects.BehaviorSubject
 import javax.inject.Inject
 
@@ -59,7 +59,7 @@ class MainViewModel @Inject constructor(
         is SearchIntent.CloseIntent -> SearchAction.CloseAction
     }
 
-    private fun performActions() = MainActionTransformer { actions ->
+    private fun performActions() = ObservableTransformer<MainAction, MainResult> { actions ->
         Observable.merge(
             actions.ofType(SearchAction::class.java).compose(
                 searchUseCase.performAction()
@@ -82,7 +82,7 @@ class MainViewModel @Inject constructor(
         /**
          * Returns new [MainViewState] by applying given [MainResult] on given [MainViewState].
          */
-        private val reducer = MainReducer { state, result ->
+        private val reducer = BiFunction<MainViewState, MainResult, MainViewState> { state, result ->
             when (result) {
                 is SearchResult -> {
                     when (result) {

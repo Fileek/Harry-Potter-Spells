@@ -11,11 +11,11 @@ import com.epam.harrypotterspells.feature.details.DetailsIntent.UpdateIntent
 import com.epam.harrypotterspells.feature.details.DetailsResult.EditResult
 import com.epam.harrypotterspells.feature.details.DetailsResult.UpdateResult
 import com.epam.harrypotterspells.mvibase.MVIViewModel
-import com.epam.harrypotterspells.util.`typealias`.DetailsActionTransformer
-import com.epam.harrypotterspells.util.`typealias`.DetailsReducer
 import com.epam.harrypotterspells.util.scheduler.SchedulerProvider
 import dagger.hilt.android.lifecycle.HiltViewModel
 import io.reactivex.rxjava3.core.Observable
+import io.reactivex.rxjava3.core.ObservableTransformer
+import io.reactivex.rxjava3.functions.BiFunction
 import io.reactivex.rxjava3.subjects.BehaviorSubject
 import javax.inject.Inject
 
@@ -83,7 +83,7 @@ class DetailsViewModel @Inject constructor(
         }
     }
 
-    private fun processActions() = DetailsActionTransformer { actions ->
+    private fun processActions() = ObservableTransformer<DetailsAction, DetailsResult> { actions ->
         Observable.merge(
             actions.ofType(EditAction::class.java).compose(
                 editUseCase.performAction()
@@ -107,7 +107,7 @@ class DetailsViewModel @Inject constructor(
         /**
          * Returns new [DetailsViewState] by applying given [DetailsResult] on given [DetailsViewState].
          */
-        private val reducer = DetailsReducer { state, result ->
+        private val reducer = BiFunction<DetailsViewState, DetailsResult, DetailsViewState> { state, result ->
             when (result) {
                 is EditResult -> {
                     val newState = state.copy(inputsTextsNotSet = false)

@@ -5,10 +5,10 @@ import com.epam.harrypotterspells.domain.UseCase
 import com.epam.harrypotterspells.feature.spells.SpellsAction.LoadAction
 import com.epam.harrypotterspells.feature.spells.SpellsResult.LoadResult
 import com.epam.harrypotterspells.mvibase.MVIViewModel
-import com.epam.harrypotterspells.util.`typealias`.SpellsReducer
 import com.epam.harrypotterspells.util.scheduler.SchedulerProvider
 import dagger.hilt.android.lifecycle.HiltViewModel
 import io.reactivex.rxjava3.core.Observable
+import io.reactivex.rxjava3.functions.BiFunction
 import io.reactivex.rxjava3.subjects.BehaviorSubject
 import javax.inject.Inject
 
@@ -54,7 +54,7 @@ class SpellsViewModel @Inject constructor(
         /**
          * Returns new [SpellsViewState] by applying given [SpellsResult] on given [SpellsViewState].
          */
-        private val reducer = SpellsReducer { _, result ->
+        private val reducer = BiFunction<SpellsViewState, SpellsResult, SpellsViewState> { _, result ->
             when (result) {
                 is LoadResult.Success -> SpellsViewState.Success(result.data)
                 is LoadResult.Error -> SpellsViewState.Error(result.error)
