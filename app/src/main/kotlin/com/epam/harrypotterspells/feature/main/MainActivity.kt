@@ -44,7 +44,8 @@ class MainActivity : AppCompatActivity(), MVIView<MainIntent, MainViewState> {
         setBinding()
         setContentView(binding.root)
         setToolbar()
-        bindViewModel()
+        provideIntents()
+        getStates()
     }
 
     private fun setBinding() {
@@ -104,8 +105,9 @@ class MainActivity : AppCompatActivity(), MVIView<MainIntent, MainViewState> {
         }
     }
 
-    private fun bindViewModel() {
-        viewModel.processIntents(getIntents())
+    private fun provideIntents() = viewModel.processIntents(getIntents())
+
+    private fun getStates() {
         disposables += viewModel.getStates()
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe(::render)

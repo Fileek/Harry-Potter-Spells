@@ -41,15 +41,17 @@ class SpellsFragment : Fragment(), MVIView<SpellsIntent, SpellsViewState> {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         setAdapter()
-        bindViewModel()
+        provideIntents()
+        getStates()
     }
 
     private fun setAdapter() {
         binding.list.adapter = spellAdapter
     }
 
-    private fun bindViewModel() {
-        viewModel.processIntents(getIntents())
+    private fun provideIntents() = viewModel.processIntents(getIntents())
+
+    private fun getStates() {
         disposables += viewModel.getStates()
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe(this::render)

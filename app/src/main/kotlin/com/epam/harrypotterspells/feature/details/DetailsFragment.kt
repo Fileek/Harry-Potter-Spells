@@ -46,7 +46,8 @@ class DetailsFragment : Fragment(), MVIView<DetailsIntent, DetailsViewState> {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         setListeners()
-        bindViewModel()
+        provideIntents()
+        getStates()
     }
 
     private fun setListeners() = binding.run {
@@ -120,8 +121,9 @@ class DetailsFragment : Fragment(), MVIView<DetailsIntent, DetailsViewState> {
         intentsSubject.onNext(intent)
     }
 
-    private fun bindViewModel() {
-        viewModel.processIntents(getIntents())
+    private fun provideIntents() = viewModel.processIntents(getIntents())
+
+    private fun getStates() {
         disposables += viewModel.getStates()
             .subscribe(this::render)
     }
