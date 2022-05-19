@@ -52,6 +52,8 @@ class SpellAdapter : ListAdapter<SpannedSpell, SpellAdapter.SpellViewHolder>(ite
 
             override fun areContentsTheSame(oldItem: SpannedSpell, newItem: SpannedSpell) =
                 oldItem == newItem
+
+            override fun getChangePayload(oldItem: SpannedSpell, newItem: SpannedSpell) = Any()
         }
     }
 
