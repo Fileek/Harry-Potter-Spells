@@ -19,6 +19,7 @@ class SpellsViewModelTest {
     private lateinit var viewModel: SpellsViewModel
     private lateinit var testObserver: TestObserver<SpellsViewState>
 
+    private val initialState = SpellsViewState()
     private val loadSpellsIntent = SpellsIntent.LoadIntent
     private val spells = StubList.spells.map { it.toSpannedSpell() }
 
@@ -38,7 +39,7 @@ class SpellsViewModelTest {
 
     @Test
     fun `check that initialState returns correct state`() {
-        testObserver.assertValue(SpellsViewState.Idle)
+        testObserver.assertValue(initialState)
     }
 
     @Test
@@ -48,7 +49,7 @@ class SpellsViewModelTest {
             Observable.just(loadSpellsIntent)
         )
         testObserver.await()
-        testObserver.assertValueAt(START_STATE_INDEX, SpellsViewState.Loading)
+        testObserver.assertValueAt(START_STATE_INDEX, initialState.copy(isLoading = true))
     }
 
     @Test
@@ -58,7 +59,7 @@ class SpellsViewModelTest {
             Observable.just(loadSpellsIntent)
         )
         testObserver.await()
-        testObserver.assertValueAt(FINAL_STATE_INDEX, SpellsViewState.Success(spells))
+        testObserver.assertValueAt(FINAL_STATE_INDEX, initialState.copy(data = spells))
     }
 
     @Test
@@ -69,7 +70,7 @@ class SpellsViewModelTest {
             Observable.just(loadSpellsIntent)
         )
         testObserver.await()
-        testObserver.assertValueAt(FINAL_STATE_INDEX, SpellsViewState.Error(error))
+        testObserver.assertValueAt(FINAL_STATE_INDEX, initialState.copy(error = error))
     }
 
     private companion object {

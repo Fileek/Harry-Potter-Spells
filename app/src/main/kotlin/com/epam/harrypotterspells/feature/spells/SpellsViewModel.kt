@@ -53,9 +53,9 @@ class SpellsViewModel @Inject constructor(
         private val reducer =
             BiFunction<SpellsViewState, SpellsResult, SpellsViewState> { state, result ->
                 when (result) {
+                    is LoadResult.Loading -> state.copy(isLoading = true)
                     is LoadResult.Success -> state.copy(isLoading = false, data = result.data)
                     is LoadResult.Error -> state.copy(isLoading = false, error = result.error)
-                    is LoadResult.Loading -> state.copy(isLoading = true)
                 }
             }
     }
