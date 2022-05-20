@@ -1,6 +1,7 @@
 package com.epam.harrypotterspells.domain
 
-import com.epam.harrypotterspells.data.repository.Repository
+import com.epam.harrypotterspells.data.repository.local.LocalRepository
+import com.epam.harrypotterspells.data.repository.remote.RemoteRepository
 import com.epam.harrypotterspells.feature.details.DetailsAction.UpdateAction
 import com.epam.harrypotterspells.feature.details.DetailsResult.UpdateResult
 import io.mockk.MockKAnnotations
@@ -12,7 +13,10 @@ import org.junit.Test
 class UpdateUseCaseTest {
 
     @MockK
-    lateinit var repository: Repository
+    lateinit var localRepository: LocalRepository
+
+    @MockK
+    lateinit var remoteRepository: RemoteRepository
 
     private lateinit var useCase: UpdateUseCase
     private lateinit var actionComposer: ActionComposer<UpdateAction, UpdateResult>
@@ -28,38 +32,38 @@ class UpdateUseCaseTest {
     @Before
     fun setup() {
         MockKAnnotations.init(this, relaxUnitFun = true)
-        useCase = UpdateUseCase(repository)
+        useCase = UpdateUseCase(localRepository, remoteRepository)
         actionComposer = ActionComposer(useCase)
     }
 
     @Test
     fun `check that IncantationAction calls updateIncantation on the repository`() {
         actionComposer(updateIncantationAction)
-        verify { repository.updateIncantation(testString, testString) }
+        verify { localRepository.updateIncantation(testString, testString) }
     }
 
     @Test
     fun `check that TypeAction calls updateType on the repository`() {
         actionComposer(updateTypeAction)
-        verify { repository.updateType(testString, testString) }
+        verify { localRepository.updateType(testString, testString) }
     }
 
     @Test
     fun `check that EffectAction calls updateEffect on the repository`() {
         actionComposer(updateEffectAction)
-        verify { repository.updateEffect(testString, testString) }
+        verify { localRepository.updateEffect(testString, testString) }
     }
 
     @Test
     fun `check that LightAction calls updateLight on the repository`() {
         actionComposer(updateLightAction)
-        verify { repository.updateLight(testString, testString) }
+        verify { localRepository.updateLight(testString, testString) }
     }
 
     @Test
     fun `check that CreatorAction calls updateCreator on the repository`() {
         actionComposer(updateCreatorAction)
-        verify { repository.updateCreator(testString, testString) }
+        verify { localRepository.updateCreator(testString, testString) }
     }
 
     @Test

@@ -6,7 +6,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.viewModels
+import androidx.fragment.app.activityViewModels
 import com.epam.harrypotterspells.R
 import com.epam.harrypotterspells.databinding.FragmentSpellsBinding
 import com.epam.harrypotterspells.feature.spells.adapter.SpellAdapter
@@ -25,7 +25,7 @@ class SpellsFragment : Fragment(), MVIView<SpellsIntent, SpellsViewState> {
 
     private val spellAdapter = SpellAdapter()
 
-    private val viewModel: SpellsViewModel by viewModels()
+    private val viewModel: SpellsViewModel by activityViewModels()
     private val disposables = CompositeDisposable()
 
     private val errorStub by lazy { getString(R.string.error_placeholder) }
@@ -41,7 +41,7 @@ class SpellsFragment : Fragment(), MVIView<SpellsIntent, SpellsViewState> {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         setAdapter()
-        provideIntents()
+        processIntents()
         getStates()
     }
 
@@ -49,7 +49,9 @@ class SpellsFragment : Fragment(), MVIView<SpellsIntent, SpellsViewState> {
         binding.list.adapter = spellAdapter
     }
 
-    private fun provideIntents() = viewModel.processIntents(getIntents())
+    private fun processIntents() {
+        viewModel.processIntents(getIntents())
+    }
 
     private fun getStates() {
         disposables += viewModel.getStates()
@@ -64,7 +66,7 @@ class SpellsFragment : Fragment(), MVIView<SpellsIntent, SpellsViewState> {
     override fun render(state: SpellsViewState) {
         binding.progressBar.isVisible = state.isLoading
         spellAdapter.submitList(state.data)
-        if (state.error != null) showError(state.error)
+        state.error?.let { showError(state.error) }
     }
 
     private fun showError(error: Throwable) = binding.errorMessage.run {

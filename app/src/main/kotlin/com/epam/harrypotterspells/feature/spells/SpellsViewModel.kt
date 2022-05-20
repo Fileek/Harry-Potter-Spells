@@ -2,20 +2,29 @@ package com.epam.harrypotterspells.feature.spells
 
 import androidx.lifecycle.ViewModel
 import com.epam.harrypotterspells.domain.UseCase
-import com.epam.harrypotterspells.feature.spells.SpellsAction.LoadAction
-import com.epam.harrypotterspells.feature.spells.SpellsResult.LoadResult
+import com.epam.harrypotterspells.feature.spells.SpellsAction.LoadFilteredAction.LoadLocalAction
+import com.epam.harrypotterspells.feature.spells.SpellsAction.LoadFilteredAction.LoadRemoteAction
+import com.epam.harrypotterspells.feature.spells.SpellsAction.LoadFilteredAction
+import com.epam.harrypotterspells.feature.spells.SpellsIntent.LoadIntent
+import com.epam.harrypotterspells.feature.spells.SpellsIntent.LoadLocalIntent
+import com.epam.harrypotterspells.feature.spells.SpellsIntent.LoadRemoteIntent
+import com.epam.harrypotterspells.feature.spells.SpellsIntent.SearchByQueryIntent
 import com.epam.harrypotterspells.mvibase.MVIViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import io.reactivex.rxjava3.core.Observable
+import io.reactivex.rxjava3.core.ObservableTransformer
 import io.reactivex.rxjava3.functions.BiFunction
 import io.reactivex.rxjava3.subjects.BehaviorSubject
 import javax.inject.Inject
 
 @HiltViewModel
 class SpellsViewModel @Inject constructor(
-    private val loadUseCase: UseCase<LoadAction, LoadResult>
+    private val loadRemoteFilteredSpellsUseCase: UseCase<LoadRemoteAction, SpellsResult>,
+    private val loadLocalFilteredSpellsUseCase: UseCase<LoadLocalAction, SpellsResult>
 ) : ViewModel(), MVIViewModel<SpellsIntent, SpellsViewState> {
 
+    private var isRemote = true
+    private var searchQuery = ""
     private val intentsSubject = BehaviorSubject.create<SpellsIntent>()
     private val initialState = SpellsViewState()
     private val statesObservable: Observable<SpellsViewState> = compose()
@@ -26,7 +35,7 @@ class SpellsViewModel @Inject constructor(
     private fun compose(): Observable<SpellsViewState> {
         return intentsSubject
             .map(this::getActionFromIntent)
-            .compose(loadUseCase.performAction())
+            .compose(performActions())
             .scan(initialState, reducer)
             .replay(VIEW_STATE_BUFFER_SIZE)
             .autoConnect(NUMBER_OF_OBSERVERS)
@@ -34,11 +43,47 @@ class SpellsViewModel @Inject constructor(
     }
 
     private fun getActionFromIntent(intent: SpellsIntent) = when (intent) {
-        is SpellsIntent.LoadIntent -> LoadAction
+        is LoadIntent -> getLoadFilteredAction()
+        is LoadRemoteIntent -> setIsRemoteAndGetLoadRemoteAction()
+        is LoadLocalIntent -> setIsRemoteAndGetLoadLocalAction()
+        is SearchByQueryIntent -> setSearchQueryAndGetAction(intent)
+    }
+
+    private fun getLoadFilteredAction(): LoadFilteredAction {
+        return if (isRemote) LoadRemoteAction(searchQuery)
+        else LoadLocalAction(searchQuery)
+    }
+
+    private fun setIsRemoteAndGetLoadRemoteAction(): LoadRemoteAction {
+        isRemote = true
+        return LoadRemoteAction(searchQuery)
+    }
+
+    private fun setIsRemoteAndGetLoadLocalAction(): LoadLocalAction {
+        isRemote = false
+        return LoadLocalAction(searchQuery)
+    }
+
+    private fun setSearchQueryAndGetAction(intent: SearchByQueryIntent): SpellsAction {
+        searchQuery = intent.query
+        return getLoadFilteredAction()
+    }
+
+    private fun performActions() = ObservableTransformer<SpellsAction, SpellsResult> { actions ->
+        Observable.merge(
+            actions.ofType(LoadRemoteAction::class.java).compose(
+                loadRemoteFilteredSpellsUseCase.performAction()
+            ),
+            actions.ofType(LoadLocalAction::class.java).compose(
+                loadLocalFilteredSpellsUseCase.performAction()
+            ),
+        )
     }
 
     override fun processIntents(observable: Observable<SpellsIntent>) {
-        observable.subscribe(intentsSubject)
+        observable.subscribe {
+            intentsSubject.onNext(it)
+        }
     }
 
     override fun getStates(): Observable<SpellsViewState> = statesObservable
@@ -53,9 +98,9 @@ class SpellsViewModel @Inject constructor(
         private val reducer =
             BiFunction<SpellsViewState, SpellsResult, SpellsViewState> { state, result ->
                 when (result) {
-                    is LoadResult.Loading -> state.copy(isLoading = true)
-                    is LoadResult.Success -> state.copy(isLoading = false, data = result.data)
-                    is LoadResult.Error -> state.copy(isLoading = false, error = result.error)
+                    is SpellsResult.Loading -> state.copy(isLoading = true)
+                    is SpellsResult.Success -> state.copy(isLoading = false, data = result.data)
+                    is SpellsResult.Error -> state.copy(isLoading = false, error = result.error)
                 }
             }
     }

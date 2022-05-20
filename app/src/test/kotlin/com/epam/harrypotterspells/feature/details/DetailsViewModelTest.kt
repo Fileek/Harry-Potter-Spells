@@ -1,8 +1,9 @@
 package com.epam.harrypotterspells.feature.details
 
 import androidx.lifecycle.SavedStateHandle
-import com.epam.harrypotterspells.data.local.StubList
-import com.epam.harrypotterspells.data.repository.Repository
+import com.epam.harrypotterspells.data.repository.local.LocalRepository
+import com.epam.harrypotterspells.data.repository.local.StubList
+import com.epam.harrypotterspells.data.repository.remote.RemoteRepository
 import com.epam.harrypotterspells.domain.EditUseCase
 import com.epam.harrypotterspells.domain.UpdateUseCase
 import io.mockk.MockKAnnotations
@@ -16,7 +17,10 @@ import org.junit.Test
 class DetailsViewModelTest {
 
     @MockK
-    lateinit var repository: Repository
+    lateinit var localRepository: LocalRepository
+
+    @MockK
+    lateinit var remoteRepository: RemoteRepository
 
     private lateinit var viewModel: DetailsViewModel
     private lateinit var testObserver: TestObserver<DetailsViewState>
@@ -35,7 +39,7 @@ class DetailsViewModelTest {
         viewModel = DetailsViewModel(
             state = SavedStateHandle(mapOf("spell" to spell)),
             editUseCase = EditUseCase(),
-            updateUseCase = UpdateUseCase(repository),
+            updateUseCase = UpdateUseCase(localRepository, remoteRepository),
         )
         testObserver = viewModel.getStates().test()
     }

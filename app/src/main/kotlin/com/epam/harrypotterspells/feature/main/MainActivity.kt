@@ -2,17 +2,21 @@ package com.epam.harrypotterspells.feature.main
 
 import android.graphics.Color
 import android.os.Bundle
+import android.widget.CompoundButton
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.SearchView
 import androidx.appcompat.widget.SwitchCompat
 import androidx.core.view.forEach
 import androidx.navigation.NavController
+import androidx.navigation.NavDestination
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.setupWithNavController
 import com.epam.harrypotterspells.R
 import com.epam.harrypotterspells.databinding.ActivityMainBinding
+import com.epam.harrypotterspells.feature.spells.SpellsIntent
+import com.epam.harrypotterspells.feature.spells.SpellsViewModel
 import com.epam.harrypotterspells.mvibase.MVIView
 import dagger.hilt.android.AndroidEntryPoint
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
@@ -35,9 +39,11 @@ class MainActivity : AppCompatActivity(), MVIView<MainIntent, MainViewState> {
     private val remote by lazy { getString(R.string.remote) }
     private val spellsFragmentLabel by lazy { getString(R.string.spells_label) }
 
-    private val viewModel: MainViewModel by viewModels()
     private val disposables = CompositeDisposable()
-    private val intentsSubject = PublishSubject.create<MainIntent>()
+    private val mainViewModel: MainViewModel by viewModels()
+    private val spellsViewModel: SpellsViewModel by viewModels()
+    private val mainIntentsSubject = PublishSubject.create<MainIntent>()
+    private val spellsIntentsSubject = PublishSubject.create<SpellsIntent>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -67,62 +73,85 @@ class MainActivity : AppCompatActivity(), MVIView<MainIntent, MainViewState> {
         }
     }
 
-    private fun setOnDestinationChangedListener() = binding.toolbar.run {
+    private fun setOnDestinationChangedListener() {
         navController?.addOnDestinationChangedListener { _, destination, _ ->
-            val isQueryEmpty = searchView?.query.toString() == "" || searchView?.query == null
-            val isSpellsFragment = destination.label == spellsFragmentLabel
-            searchView?.isIconified = isQueryEmpty
-            menu.forEach { it.isVisible = isSpellsFragment }
+            renderSearchView()
+            renderMenu(destination)
         }
+    }
+
+    private fun renderSearchView() {
+        val isQueryEmpty = searchView?.query.toString() == "" || searchView?.query == null
+        searchView?.isIconified = isQueryEmpty
+    }
+
+    private fun renderMenu(destination: NavDestination) {
+        val isSpellsFragment = destination.label == spellsFragmentLabel
+        binding.toolbar.menu.forEach { it.isVisible = isSpellsFragment }
     }
 
     private fun setSwitch() {
         switch = binding.toolbar.menu.findItem(R.id.switch_view).actionView as? SwitchCompat
         switch?.setTextColor(Color.BLACK)
-        switch?.setOnCheckedChangeListener { _, checked ->
-            intentsSubject.onNext(
-                if (checked) MainIntent.SwitchSourceIntent.ToRemoteIntent
-                else MainIntent.SwitchSourceIntent.ToLocalIntent
-            )
-        }
+        switch?.setOnCheckedChangeListener(getOnCheckedChangeListener())
     }
+
+    private fun getOnCheckedChangeListener() =
+        CompoundButton.OnCheckedChangeListener { _, checked ->
+            if (checked) {
+                mainIntentsSubject.onNext(MainIntent.SwitchToRemoteIntent)
+                spellsIntentsSubject.onNext(SpellsIntent.LoadRemoteIntent)
+            } else {
+                mainIntentsSubject.onNext(MainIntent.SwitchToLocalIntent)
+                spellsIntentsSubject.onNext(SpellsIntent.LoadLocalIntent)
+            }
+        }
 
     private fun setSearchView() {
         searchView = binding.toolbar.menu.findItem(R.id.search_view).actionView as? SearchView
-        searchView?.run {
-            setOnQueryTextListener(getOnQueryTextListener())
-        }
+        searchView?.setOnQueryTextListener(getOnQueryTextListener())
     }
 
     private fun getOnQueryTextListener() = object : SearchView.OnQueryTextListener {
         override fun onQueryTextChange(query: String): Boolean {
-            intentsSubject.onNext(MainIntent.SearchByQueryIntent(query))
+            spellsIntentsSubject.onNext(
+                SpellsIntent.SearchByQueryIntent(query)
+            )
             return false
         }
 
-        override fun onQueryTextSubmit(p0: String?): Boolean {
-            return false
-        }
+        override fun onQueryTextSubmit(p0: String?) = false
     }
 
-    private fun provideIntents() = viewModel.processIntents(getIntents())
+    private fun provideIntents() {
+        mainViewModel.processIntents(getIntents())
+        spellsViewModel.processIntents(getSpellsIntents())
+    }
 
     private fun getStates() {
-        disposables += viewModel.getStates()
+        disposables += mainViewModel.getStates()
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe(::render)
     }
 
-    override fun getIntents(): Observable<MainIntent> = intentsSubject.serialize()
+    override fun getIntents(): Observable<MainIntent> = mainIntentsSubject.serialize()
+
+    private fun getSpellsIntents(): Observable<SpellsIntent> = spellsIntentsSubject.serialize()
 
     override fun render(state: MainViewState) {
-        switch?.isChecked = state.isRemote
-        switch?.text = if (state.isRemote) remote else local
+        renderSwitch(state.isRemote)
+    }
+
+    private fun renderSwitch(isRemote: Boolean) {
+        switch?.isChecked = isRemote
+        switch?.text = if (isRemote) remote else local
     }
 
     override fun onDestroy() {
         super.onDestroy()
         _binding = null
+        switch = null
+        searchView = null
         disposables.dispose()
     }
 }

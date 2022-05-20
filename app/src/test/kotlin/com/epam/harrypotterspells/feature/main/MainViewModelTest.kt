@@ -1,11 +1,5 @@
 package com.epam.harrypotterspells.feature.main
 
-import com.epam.harrypotterspells.data.repository.Repository
-import com.epam.harrypotterspells.domain.SearchUseCase
-import com.epam.harrypotterspells.domain.SwitchSourceUseCase
-import com.epam.harrypotterspells.feature.main.MainIntent.SwitchSourceIntent
-import io.mockk.MockKAnnotations
-import io.mockk.impl.annotations.MockK
 import io.reactivex.rxjava3.core.Observable
 import io.reactivex.rxjava3.observers.TestObserver
 import io.reactivex.rxjava3.subjects.BehaviorSubject
@@ -14,26 +8,17 @@ import org.junit.Test
 
 class MainViewModelTest {
 
-    @MockK
-    lateinit var repository: Repository
-
-    private lateinit var viewModel: MainViewModel
+    private val viewModel = MainViewModel()
 
     private lateinit var testObserver: TestObserver<MainViewState>
 
     private val initialState = MainViewState()
 
-    private val testString = "test"
-    private val switchToLocalIntent = SwitchSourceIntent.ToLocalIntent
-    private val switchToRemoteIntent = SwitchSourceIntent.ToRemoteIntent
+    private val switchToRemoteIntent = MainIntent.SwitchToRemoteIntent
+    private val switchToLocalIntent = MainIntent.SwitchToLocalIntent
 
     @Before
     fun setup() {
-        MockKAnnotations.init(this, relaxUnitFun = true)
-        viewModel = MainViewModel(
-            SearchUseCase(repository),
-            SwitchSourceUseCase(repository)
-        )
         testObserver = viewModel.getStates().test()
     }
 
@@ -48,12 +33,12 @@ class MainViewModelTest {
     }
 
     @Test
-    fun `check that SearchQueryIntent returns correct state`() {
+    fun `check that SwitchToRemoteIntent returns correct state`() {
         viewModel.processIntents(
-            Observable.just(MainIntent.SearchByQueryIntent(testString))
+            Observable.just(switchToRemoteIntent)
         )
         testObserver.await()
-        testObserver.assertValueAt(FIRST_VIEW_STATE_INDEX, initialState)
+        testObserver.assertValueAt(FIRST_VIEW_STATE_INDEX, initialState.copy(isRemote = true))
     }
 
     @Test
@@ -63,15 +48,6 @@ class MainViewModelTest {
         )
         testObserver.await()
         testObserver.assertValueAt(SECOND_VIEW_STATE_INDEX, initialState.copy(isRemote = false))
-    }
-
-    @Test
-    fun `check that SwitchToRemoteIntent returns correct state`() {
-        viewModel.processIntents(
-            Observable.just(switchToRemoteIntent)
-        )
-        testObserver.await()
-        testObserver.assertValueAt(FIRST_VIEW_STATE_INDEX, initialState.copy(isRemote = true))
     }
 
     @Test

@@ -1,16 +1,14 @@
 package com.epam.harrypotterspells.di
 
-import com.epam.harrypotterspells.data.repository.Repository
+import com.epam.harrypotterspells.data.repository.local.LocalRepository
+import com.epam.harrypotterspells.data.repository.remote.RemoteRepository
 import com.epam.harrypotterspells.domain.EditUseCase
-import com.epam.harrypotterspells.domain.LoadSpellsUseCase
-import com.epam.harrypotterspells.domain.SearchUseCase
-import com.epam.harrypotterspells.domain.SwitchSourceUseCase
+import com.epam.harrypotterspells.domain.LoadLocalFilteredSpellsUseCase
+import com.epam.harrypotterspells.domain.LoadRemoteFilteredSpellsUseCase
 import com.epam.harrypotterspells.domain.UpdateUseCase
 import com.epam.harrypotterspells.domain.UseCase
 import com.epam.harrypotterspells.feature.details.DetailsAction
 import com.epam.harrypotterspells.feature.details.DetailsResult
-import com.epam.harrypotterspells.feature.main.MainAction
-import com.epam.harrypotterspells.feature.main.MainResult
 import com.epam.harrypotterspells.feature.spells.SpellsAction
 import com.epam.harrypotterspells.feature.spells.SpellsResult
 import dagger.Module
@@ -23,35 +21,29 @@ import dagger.hilt.android.scopes.ViewModelScoped
 object ViewModelModule {
 
     @[ViewModelScoped Provides]
-    fun providesLoadSpellsUseCase(
-        repo: Repository
-    ): UseCase<SpellsAction.LoadAction, SpellsResult.LoadResult> {
-        return LoadSpellsUseCase(repo)
-    }
-
-    @[ViewModelScoped Provides]
-    fun providesSearchUseCase(
-        repo: Repository
-    ): UseCase<MainAction.SearchByQueryAction, MainResult.SearchByQueryResult> {
-        return SearchUseCase(repo)
-    }
-
-    @[ViewModelScoped Provides]
     fun providesEditUseCase(): UseCase<DetailsAction.EditAction, DetailsResult.EditResult> {
         return EditUseCase()
     }
 
     @[ViewModelScoped Provides]
     fun providesUpdateUseCase(
-        repo: Repository
+        localRepository: LocalRepository,
+        remoteRepository: RemoteRepository
     ): UseCase<DetailsAction.UpdateAction, DetailsResult.UpdateResult> {
-        return UpdateUseCase(repo)
+        return UpdateUseCase(localRepository, remoteRepository)
     }
 
     @[ViewModelScoped Provides]
-    fun providesSwitchSourceUseCase(
-        repo: Repository
-    ): UseCase<MainAction.SwitchSourceAction, MainResult.SwitchSourceResult> {
-        return SwitchSourceUseCase(repo)
+    fun providesGetFilteredRemoteSpellsUseCase(
+        repo: RemoteRepository
+    ): UseCase<SpellsAction.LoadFilteredAction.LoadRemoteAction, SpellsResult> {
+        return LoadRemoteFilteredSpellsUseCase(repo)
+    }
+
+    @[ViewModelScoped Provides]
+    fun providesGetFilteredLocalSpellsUseCase(
+        repo: LocalRepository
+    ): UseCase<SpellsAction.LoadFilteredAction.LoadLocalAction, SpellsResult> {
+        return LoadLocalFilteredSpellsUseCase(repo)
     }
 }

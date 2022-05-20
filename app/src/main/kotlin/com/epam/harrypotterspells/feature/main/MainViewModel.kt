@@ -1,26 +1,19 @@
 package com.epam.harrypotterspells.feature.main
 
 import androidx.lifecycle.ViewModel
-import com.epam.harrypotterspells.domain.UseCase
-import com.epam.harrypotterspells.feature.main.MainAction.SearchByQueryAction
-import com.epam.harrypotterspells.feature.main.MainAction.SwitchSourceAction
-import com.epam.harrypotterspells.feature.main.MainIntent.SearchByQueryIntent
-import com.epam.harrypotterspells.feature.main.MainIntent.SwitchSourceIntent
-import com.epam.harrypotterspells.feature.main.MainResult.SearchByQueryResult
-import com.epam.harrypotterspells.feature.main.MainResult.SwitchSourceResult
+import com.epam.harrypotterspells.feature.main.MainAction.SwitchToLocalAction
+import com.epam.harrypotterspells.feature.main.MainAction.SwitchToRemoteAction
+import com.epam.harrypotterspells.feature.main.MainIntent.SwitchToLocalIntent
+import com.epam.harrypotterspells.feature.main.MainIntent.SwitchToRemoteIntent
+import com.epam.harrypotterspells.feature.main.MainResult.SwitchToLocalResult
+import com.epam.harrypotterspells.feature.main.MainResult.SwitchToRemoteResult
 import com.epam.harrypotterspells.mvibase.MVIViewModel
-import dagger.hilt.android.lifecycle.HiltViewModel
 import io.reactivex.rxjava3.core.Observable
 import io.reactivex.rxjava3.core.ObservableTransformer
 import io.reactivex.rxjava3.functions.BiFunction
 import io.reactivex.rxjava3.subjects.BehaviorSubject
-import javax.inject.Inject
 
-@HiltViewModel
-class MainViewModel @Inject constructor(
-    private val searchUseCase: UseCase<SearchByQueryAction, SearchByQueryResult>,
-    private val switchSourceUseCase: UseCase<SwitchSourceAction, SwitchSourceResult>,
-) : ViewModel(), MVIViewModel<MainIntent, MainViewState> {
+class MainViewModel : ViewModel(), MVIViewModel<MainIntent, MainViewState> {
 
     private val intentsSubject = BehaviorSubject.create<MainIntent>()
     private val initialState = MainViewState()
@@ -40,24 +33,19 @@ class MainViewModel @Inject constructor(
     }
 
     private fun getActionFromIntent(intent: MainIntent) = when (intent) {
-        is SwitchSourceIntent -> getActionFromSwitchSourceIntent(intent)
-        is SearchByQueryIntent -> SearchByQueryAction(intent.query)
+        is SwitchToRemoteIntent -> SwitchToRemoteAction
+        is SwitchToLocalIntent -> SwitchToLocalAction
     }
 
-    private fun getActionFromSwitchSourceIntent(intent: SwitchSourceIntent) = when (intent) {
-        is SwitchSourceIntent.ToRemoteIntent -> SwitchSourceAction.ToRemoteAction
-        is SwitchSourceIntent.ToLocalIntent -> SwitchSourceAction.ToLocalAction
-    }
-
-    private fun performActions() = ObservableTransformer<MainAction, MainResult> { actions ->
-        Observable.merge(
-            actions.ofType(SearchByQueryAction::class.java).compose(
-                searchUseCase.performAction()
-            ),
-            actions.ofType(SwitchSourceAction::class.java).compose(
-                switchSourceUseCase.performAction()
+    private fun performActions() = ObservableTransformer<MainAction, MainResult> {
+        it.flatMap { action ->
+            Observable.just(
+                when (action) {
+                    is SwitchToRemoteAction -> SwitchToRemoteResult
+                    is SwitchToLocalAction -> SwitchToLocalResult
+                }
             )
-        )
+        }
     }
 
     override fun processIntents(observable: Observable<MainIntent>) {
@@ -75,13 +63,8 @@ class MainViewModel @Inject constructor(
         private val reducer =
             BiFunction<MainViewState, MainResult, MainViewState> { state, result ->
                 when (result) {
-                    is SearchByQueryResult -> state.copy()
-                    is SwitchSourceResult -> {
-                        when (result) {
-                            is SwitchSourceResult.ToRemoteResult -> state.copy(isRemote = true)
-                            is SwitchSourceResult.ToLocalResult -> state.copy(isRemote = false)
-                        }
-                    }
+                    is SwitchToRemoteResult -> state.copy(isRemote = true)
+                    is SwitchToLocalResult -> state.copy(isRemote = false)
                 }
             }
     }

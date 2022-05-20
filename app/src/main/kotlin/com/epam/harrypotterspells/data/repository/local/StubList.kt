@@ -1,4 +1,4 @@
-package com.epam.harrypotterspells.data.local
+package com.epam.harrypotterspells.data.repository.local
 
 import com.epam.harrypotterspells.entity.JsonSpell
 
