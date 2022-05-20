@@ -2,10 +2,9 @@ package com.epam.harrypotterspells.di
 
 import com.epam.harrypotterspells.data.repository.local.LocalRepository
 import com.epam.harrypotterspells.data.repository.remote.RemoteRepository
-import com.epam.harrypotterspells.domain.EditUseCase
 import com.epam.harrypotterspells.domain.LoadLocalFilteredSpellsUseCase
 import com.epam.harrypotterspells.domain.LoadRemoteFilteredSpellsUseCase
-import com.epam.harrypotterspells.domain.UpdateUseCase
+import com.epam.harrypotterspells.domain.SaveSpellUseCase
 import com.epam.harrypotterspells.domain.UseCase
 import com.epam.harrypotterspells.feature.details.DetailsAction
 import com.epam.harrypotterspells.feature.details.DetailsResult
@@ -21,16 +20,11 @@ import dagger.hilt.android.scopes.ViewModelScoped
 object ViewModelModule {
 
     @[ViewModelScoped Provides]
-    fun providesEditUseCase(): UseCase<DetailsAction.EditAction, DetailsResult.EditResult> {
-        return EditUseCase()
-    }
-
-    @[ViewModelScoped Provides]
-    fun providesUpdateUseCase(
+    fun providesSaveSpellUseCase(
         localRepository: LocalRepository,
         remoteRepository: RemoteRepository
-    ): UseCase<DetailsAction.UpdateAction, DetailsResult.UpdateResult> {
-        return UpdateUseCase(localRepository, remoteRepository)
+    ): UseCase<DetailsAction.SaveSpellAction, DetailsResult.SaveSpellFieldResult> {
+        return SaveSpellUseCase(localRepository, remoteRepository)
     }
 
     @[ViewModelScoped Provides]

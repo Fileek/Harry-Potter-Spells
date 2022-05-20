@@ -1,21 +1,22 @@
 package com.epam.harrypotterspells.feature.details
 
+import com.epam.harrypotterspells.entity.Spell
 import com.epam.harrypotterspells.mvibase.MVIAction
 
 sealed class DetailsAction : MVIAction {
-    sealed class EditAction : DetailsAction() {
-        object IncantationAction : EditAction()
-        object TypeAction : EditAction()
-        object EffectAction : EditAction()
-        object LightAction : EditAction()
-        object CreatorAction : EditAction()
-    }
+    /**
+     * Action adds [field] to [DetailsViewState.fieldsNowEditing]
+     *
+     * @param field [SpellField] user wants to edit
+     */
+    data class AddInFieldsNowEditingAction(val field: SpellField) : DetailsAction()
 
-    sealed class UpdateAction : DetailsAction() {
-        data class IncantationAction(val id: String, val incantation: String) : UpdateAction()
-        data class TypeAction(val id: String, val type: String) : UpdateAction()
-        data class EffectAction(val id: String, val effect: String) : UpdateAction()
-        data class LightAction(val id: String, val light: String) : UpdateAction()
-        data class CreatorAction(val id: String, val creator: String) : UpdateAction()
-    }
+    /**
+     * Action saves [spell] in repositories
+     * and removes [field] from [DetailsViewState.fieldsNowEditing]
+     *
+     * @param spell [Spell] to save
+     * @param field changed [SpellField]
+     */
+    data class SaveSpellAction(val spell: Spell, val field: SpellField) : DetailsAction()
 }

@@ -8,11 +8,11 @@ import androidx.core.view.isGone
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
-import androidx.navigation.fragment.navArgs
 import com.epam.harrypotterspells.databinding.FragmentDetailsBinding
 import com.epam.harrypotterspells.entity.Spell
-import com.epam.harrypotterspells.feature.details.DetailsIntent.EditIntent
-import com.epam.harrypotterspells.feature.details.DetailsIntent.UpdateIntent
+import com.epam.harrypotterspells.feature.details.DetailsIntent.EditSpellFieldIntent
+import com.epam.harrypotterspells.feature.details.DetailsIntent.FocusOnFieldIntent
+import com.epam.harrypotterspells.feature.details.DetailsIntent.SaveSpellFieldIntent
 import com.epam.harrypotterspells.mvibase.MVIView
 import com.epam.harrypotterspells.util.extension.focusAndShowKeyboard
 import com.epam.harrypotterspells.util.extension.hideKeyboard
@@ -28,8 +28,8 @@ class DetailsFragment : Fragment(), MVIView<DetailsIntent, DetailsViewState> {
     private var _binding: FragmentDetailsBinding? = null
     private val binding get() = checkNotNull(_binding) { "Binding is not initialized" }
 
-    private val args: DetailsFragmentArgs by navArgs()
-    private val spellId by lazy { args.spell.id }
+    private var _spell: Spell? = null
+    private val spell get() = checkNotNull(_spell) { "Spell is not initialized" }
 
     private val viewModel: DetailsViewModel by viewModels()
     private val disposables = CompositeDisposable()
@@ -52,15 +52,32 @@ class DetailsFragment : Fragment(), MVIView<DetailsIntent, DetailsViewState> {
 
     private fun setListeners() = binding.run {
         setEditButtonsListeners()
+        setFocusListeners()
         setSaveButtonsListeners()
     }
 
     private fun setEditButtonsListeners() = binding.run {
-        editIncantation.setOnClickListener(getEditIncantationListener())
-        editType.setOnClickListener(getEditTypeListener())
-        editEffect.setOnClickListener(getEditEffectListener())
-        editLight.setOnClickListener(getEditLightListener())
-        editCreator.setOnClickListener(getEditCreatorListener())
+        editIncantation.setOnClickListener { sendEditSpellFieldIntent(SpellField.INCANTATION) }
+        editType.setOnClickListener { sendEditSpellFieldIntent(SpellField.TYPE) }
+        editEffect.setOnClickListener { sendEditSpellFieldIntent(SpellField.EFFECT) }
+        editLight.setOnClickListener { sendEditSpellFieldIntent(SpellField.LIGHT) }
+        editCreator.setOnClickListener { sendEditSpellFieldIntent(SpellField.CREATOR) }
+    }
+
+    private fun sendEditSpellFieldIntent(field: SpellField) {
+        intentsSubject.onNext(EditSpellFieldIntent(field))
+    }
+
+    private fun setFocusListeners() = binding.run {
+        incantationInput.onFocusChangeListener = getOnFocusChangeListener(SpellField.INCANTATION)
+        typeInput.onFocusChangeListener = getOnFocusChangeListener(SpellField.TYPE)
+        effectInput.onFocusChangeListener = getOnFocusChangeListener(SpellField.EFFECT)
+        lightInput.onFocusChangeListener = getOnFocusChangeListener(SpellField.LIGHT)
+        creatorInput.onFocusChangeListener = getOnFocusChangeListener(SpellField.CREATOR)
+    }
+
+    private fun getOnFocusChangeListener(field: SpellField) = View.OnFocusChangeListener { _, hasFocus ->
+        if (hasFocus) intentsSubject.onNext(FocusOnFieldIntent(field))
     }
 
     private fun setSaveButtonsListeners() = binding.run {
@@ -71,61 +88,35 @@ class DetailsFragment : Fragment(), MVIView<DetailsIntent, DetailsViewState> {
         saveCreator.setOnClickListener(getSaveCreatorListener())
     }
 
-    private fun getEditIncantationListener() = View.OnClickListener {
-        intentsSubject.onNext(EditIntent.IncantationIntent)
-    }
-
-    private fun getEditTypeListener() = View.OnClickListener {
-        intentsSubject.onNext(EditIntent.TypeIntent)
-    }
-
-    private fun getEditEffectListener() = View.OnClickListener {
-        intentsSubject.onNext(EditIntent.EffectIntent)
-    }
-
-    private fun getEditLightListener() = View.OnClickListener {
-        intentsSubject.onNext(EditIntent.LightIntent)
-    }
-
-    private fun getEditCreatorListener() = View.OnClickListener {
-        intentsSubject.onNext(EditIntent.CreatorIntent)
-    }
-
     private fun getSaveIncantationListener() = View.OnClickListener {
-        val incantation = binding.incantationInput.text.toString()
-        val intent = UpdateIntent.IncantationIntent(spellId, incantation)
-        intentsSubject.onNext(intent)
+        val newSpell = spell.copy(incantation = binding.incantationInput.text.toString())
+        intentsSubject.onNext(SaveSpellFieldIntent(newSpell, SpellField.INCANTATION))
     }
 
     private fun getSaveTypeListener() = View.OnClickListener {
-        val type = binding.typeInput.text.toString()
-        val intent = UpdateIntent.TypeIntent(spellId, type)
-        intentsSubject.onNext(intent)
+        val newSpell = spell.copy(type = binding.typeInput.text.toString())
+        intentsSubject.onNext(SaveSpellFieldIntent(newSpell, SpellField.TYPE))
     }
 
     private fun getSaveEffectListener() = View.OnClickListener {
-        val effect = binding.effectInput.text.toString()
-        val intent = UpdateIntent.EffectIntent(spellId, effect)
-        intentsSubject.onNext(intent)
+        val newSpell = spell.copy(effect = binding.effectInput.text.toString())
+        intentsSubject.onNext(SaveSpellFieldIntent(newSpell, SpellField.EFFECT))
     }
 
     private fun getSaveLightListener() = View.OnClickListener {
-        val light = binding.lightInput.text.toString()
-        val intent = UpdateIntent.LightIntent(spellId, light)
-        intentsSubject.onNext(intent)
+        val newSpell = spell.copy(light = binding.lightInput.text.toString())
+        intentsSubject.onNext(SaveSpellFieldIntent(newSpell, SpellField.LIGHT))
     }
 
     private fun getSaveCreatorListener() = View.OnClickListener {
-        val creator = binding.creatorInput.text.toString()
-        val intent = UpdateIntent.CreatorIntent(spellId, creator)
-        intentsSubject.onNext(intent)
+        val newSpell = spell.copy(creator = binding.creatorInput.text.toString())
+        intentsSubject.onNext(SaveSpellFieldIntent(newSpell, SpellField.CREATOR))
     }
 
     private fun provideIntents() = viewModel.processIntents(getIntents())
 
     private fun getStates() {
-        disposables += viewModel.getStates()
-            .subscribe(this::render)
+        disposables += viewModel.getStates().subscribe(this::render)
     }
 
     override fun getIntents(): Observable<DetailsIntent> = intentsSubject.serialize()
@@ -136,24 +127,25 @@ class DetailsFragment : Fragment(), MVIView<DetailsIntent, DetailsViewState> {
         renderFocus(state.focus)
     }
 
-    private fun renderSpell(spell: Spell) = binding.run {
-        name.text = spell.name
-        type.text = spell.type
-        effect.text = spell.effect
-        incantation.text = spell.incantation
-        light.text = spell.light
-        creator.text = spell.creator
-        canBeVerbal.text = spell.canBeVerbal
+    private fun renderSpell(newSpell: Spell) = binding.run {
+        _spell = newSpell
+        name.text = newSpell.name
+        type.text = newSpell.type
+        effect.text = newSpell.effect
+        incantation.text = newSpell.incantation
+        light.text = newSpell.light
+        creator.text = newSpell.creator
+        canBeVerbal.text = newSpell.canBeVerbal
     }
 
     private fun renderInputState(state: DetailsViewState) {
-        if (state.inputsTextsNotSet) state.spell?.let { setTextInInputs(it) }
+        if (state.editTextsNotSet) state.spell?.let { setTextInInputs(it) }
 
-        renderIncantationGroups(state.incantationIsEditing)
-        renderTypeGroups(state.typeIsEditing)
-        renderEffectGroups(state.effectIsEditing)
-        renderLightGroups(state.lightIsEditing)
-        renderCreatorGroups(state.creatorIsEditing)
+        renderIncantationGroups(state.fieldsNowEditing.contains(SpellField.INCANTATION))
+        renderTypeGroups(state.fieldsNowEditing.contains(SpellField.TYPE))
+        renderEffectGroups(state.fieldsNowEditing.contains(SpellField.EFFECT))
+        renderLightGroups(state.fieldsNowEditing.contains(SpellField.LIGHT))
+        renderCreatorGroups(state.fieldsNowEditing.contains(SpellField.CREATOR))
     }
 
     private fun setTextInInputs(spell: Spell) = binding.run {
@@ -189,20 +181,21 @@ class DetailsFragment : Fragment(), MVIView<DetailsIntent, DetailsViewState> {
         creatorInputGroup.isVisible = isEditing
     }
 
-    private fun renderFocus(focus: SpellFieldFocus) = binding.run {
+    private fun renderFocus(focus: SpellField?) = binding.run {
         when (focus) {
-            SpellFieldFocus.NONE -> root.hideKeyboard()
-            SpellFieldFocus.INCANTATION -> incantationInput.focusAndShowKeyboard()
-            SpellFieldFocus.TYPE -> typeInput.focusAndShowKeyboard()
-            SpellFieldFocus.EFFECT -> effectInput.focusAndShowKeyboard()
-            SpellFieldFocus.LIGHT -> lightInput.focusAndShowKeyboard()
-            SpellFieldFocus.CREATOR -> creatorInput.focusAndShowKeyboard()
+            SpellField.INCANTATION -> incantationInput.focusAndShowKeyboard()
+            SpellField.TYPE -> typeInput.focusAndShowKeyboard()
+            SpellField.EFFECT -> effectInput.focusAndShowKeyboard()
+            SpellField.LIGHT -> lightInput.focusAndShowKeyboard()
+            SpellField.CREATOR -> creatorInput.focusAndShowKeyboard()
+            null -> root.hideKeyboard()
         }
     }
 
     override fun onDestroy() {
         super.onDestroy()
         _binding = null
+        _spell = null
         disposables.dispose()
     }
 }
