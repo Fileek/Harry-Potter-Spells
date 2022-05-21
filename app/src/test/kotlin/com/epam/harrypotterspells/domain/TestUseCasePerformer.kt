@@ -5,7 +5,7 @@ import com.epam.harrypotterspells.mvibase.MVIResult
 import io.reactivex.rxjava3.core.Observable
 import io.reactivex.rxjava3.observers.TestObserver
 
-class ActionComposer<A : MVIAction, R : MVIResult>(
+class TestUseCasePerformer<A : MVIAction, R : MVIResult>(
     private val useCase: UseCase<A, R>
 ) {
 

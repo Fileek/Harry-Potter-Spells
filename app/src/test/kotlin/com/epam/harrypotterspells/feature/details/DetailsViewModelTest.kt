@@ -52,9 +52,9 @@ class DetailsViewModelTest {
     fun `check that EditSpellFieldIntent returns correct state`() {
         val expectedState =
             initialState.copy(
-                fieldsNowEditing = setOf(SpellField.INCANTATION),
                 editTextsNotSet = false,
-                focus = SpellField.INCANTATION
+                fieldsNowEditing = setOf(testField),
+                focus = testField
             )
         viewModel.processIntents(
             Observable.just(editSpellFieldIntent)
@@ -64,10 +64,24 @@ class DetailsViewModelTest {
     }
 
     @Test
-    fun `check that UpdateSpellFieldIntent returns correct state`() {
+    fun `check that FocusOnFieldIntent returns correct state`() {
+        val expectedState =
+            initialState.copy(
+                editTextsNotSet = false,
+                fieldsNowEditing = setOf(testField),
+                focus = testField
+            )
+        viewModel.processIntents(
+            Observable.just(editSpellFieldIntent)
+        )
+        testObserver.await()
+        testObserver.assertValueAt(AFTER_EDIT_STATE_INDEX, expectedState)
+    }
+
+    @Test
+    fun `check that SaveSpellFieldIntent returns correct state`() {
         val newSpell = testSpell.copy(incantation = "test")
-        val updateIntent =
-            DetailsIntent.SaveSpellFieldIntent(newSpell, testField)
+        val updateIntent = DetailsIntent.SaveSpellFieldIntent(newSpell, testField)
         val expectedState =
             initialState.copy(
                 spell = newSpell,

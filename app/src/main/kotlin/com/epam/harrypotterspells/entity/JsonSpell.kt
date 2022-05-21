@@ -1,5 +1,7 @@
 package com.epam.harrypotterspells.entity
 
+import android.text.SpannedString
+
 data class JsonSpell(
     val id: String,
     val name: String,
@@ -17,6 +19,22 @@ data class JsonSpell(
             incantation = this.incantation ?: INCANTATION_STUB,
             type = this.type,
             effect = this.effect,
+            light = this.light,
+            creator = this.creator ?: CREATOR_STUB,
+            canBeVerbal = when (this.canBeVerbal) {
+                true -> CAN_BE_VERBAL
+                false -> CAN_NOT_BE_VERBAL
+                null -> CAN_BE_VERBAL_STUB
+            },
+        )
+
+    fun toSpannedSpell() =
+        SpannedSpell(
+            id = this.id,
+            name = SpannedString(this.name),
+            incantation = SpannedString(this.incantation),
+            type = SpannedString(this.type),
+            effect = SpannedString(this.effect),
             light = this.light,
             creator = this.creator ?: CREATOR_STUB,
             canBeVerbal = when (this.canBeVerbal) {

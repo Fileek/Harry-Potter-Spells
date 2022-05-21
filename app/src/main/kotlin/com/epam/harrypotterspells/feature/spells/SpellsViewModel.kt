@@ -2,13 +2,16 @@ package com.epam.harrypotterspells.feature.spells
 
 import androidx.lifecycle.ViewModel
 import com.epam.harrypotterspells.domain.UseCase
+import com.epam.harrypotterspells.feature.spells.SpellsAction.LoadFilteredAction
 import com.epam.harrypotterspells.feature.spells.SpellsAction.LoadFilteredAction.LoadLocalAction
 import com.epam.harrypotterspells.feature.spells.SpellsAction.LoadFilteredAction.LoadRemoteAction
-import com.epam.harrypotterspells.feature.spells.SpellsAction.LoadFilteredAction
 import com.epam.harrypotterspells.feature.spells.SpellsIntent.LoadIntent
 import com.epam.harrypotterspells.feature.spells.SpellsIntent.LoadLocalIntent
 import com.epam.harrypotterspells.feature.spells.SpellsIntent.LoadRemoteIntent
 import com.epam.harrypotterspells.feature.spells.SpellsIntent.SearchByQueryIntent
+import com.epam.harrypotterspells.feature.spells.SpellsResult.Error
+import com.epam.harrypotterspells.feature.spells.SpellsResult.Loading
+import com.epam.harrypotterspells.feature.spells.SpellsResult.Success
 import com.epam.harrypotterspells.mvibase.MVIViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import io.reactivex.rxjava3.core.Observable
@@ -98,9 +101,9 @@ class SpellsViewModel @Inject constructor(
         private val reducer =
             BiFunction<SpellsViewState, SpellsResult, SpellsViewState> { state, result ->
                 when (result) {
-                    is SpellsResult.Loading -> state.copy(isLoading = true)
-                    is SpellsResult.Success -> state.copy(isLoading = false, data = result.data)
-                    is SpellsResult.Error -> state.copy(isLoading = false, error = result.error)
+                    is Loading -> state.copy(isLoading = true)
+                    is Success -> state.copy(isLoading = false, data = result.data)
+                    is Error -> state.copy(isLoading = false, error = result.error)
                 }
             }
     }

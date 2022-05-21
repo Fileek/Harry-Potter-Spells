@@ -21,7 +21,7 @@ class SaveSpellUseCaseTest {
     lateinit var remoteRepository: RemoteRepository
 
     private lateinit var useCase: SaveSpellUseCase
-    private lateinit var actionComposer: ActionComposer<SaveSpellAction, SaveSpellFieldResult>
+    private lateinit var testUseCasePerformer: TestUseCasePerformer<SaveSpellAction, SaveSpellFieldResult>
 
     private val spell = StubList.spells.last().toSpell()
 
@@ -31,24 +31,24 @@ class SaveSpellUseCaseTest {
     fun setup() {
         MockKAnnotations.init(this, relaxUnitFun = true)
         useCase = SaveSpellUseCase(localRepository, remoteRepository)
-        actionComposer = ActionComposer(useCase)
+        testUseCasePerformer = TestUseCasePerformer(useCase)
     }
 
     @Test
     fun `check that SaveSpellAction calls updateSpell on the localRepository`() {
-        actionComposer(saveSpellAction)
+        testUseCasePerformer(saveSpellAction)
         verify { localRepository.saveSpell(spell) }
     }
 
     @Test
     fun `check that SaveSpellAction calls updateSpell on the remoteRepository`() {
-        actionComposer(saveSpellAction)
+        testUseCasePerformer(saveSpellAction)
         verify { remoteRepository.saveSpell(spell) }
     }
 
     @Test
     fun `check that SaveSpellAction returns SaveSpellFieldResult`() {
-        val testObserver = actionComposer(saveSpellAction)
+        val testObserver = testUseCasePerformer(saveSpellAction)
         testObserver.assertValue(SaveSpellFieldResult(spell, SpellField.INCANTATION))
     }
 }
