@@ -3,6 +3,7 @@ package com.epam.harrypotterspells.feature.main
 import io.reactivex.rxjava3.core.Observable
 import io.reactivex.rxjava3.observers.TestObserver
 import io.reactivex.rxjava3.subjects.BehaviorSubject
+import org.junit.After
 import org.junit.Before
 import org.junit.Test
 
@@ -67,6 +68,11 @@ class MainViewModelTest {
         intentsSubject.onNext(switchToRemoteIntent)
 
         testObserver.assertValueCount(3)
+    }
+
+    @After
+    fun clearObservers() {
+        testObserver.dispose()
     }
 
     private companion object {

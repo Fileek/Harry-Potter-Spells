@@ -10,6 +10,7 @@ import io.mockk.every
 import io.mockk.impl.annotations.MockK
 import io.reactivex.rxjava3.core.Single
 import io.reactivex.rxjava3.observers.TestObserver
+import org.junit.After
 import org.junit.Assert.assertEquals
 import org.junit.Before
 import org.junit.Test
@@ -42,5 +43,10 @@ class RemoteRepositoryTest {
         repo.saveSpell(newSpell)
         val actualSpell = spellsObserver.values().last().last()
         assertEquals(newSpell, actualSpell)
+    }
+
+    @After
+    fun clearObservers() {
+        spellsObserver.dispose()
     }
 }

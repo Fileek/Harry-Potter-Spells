@@ -7,6 +7,7 @@ import com.epam.harrypotterspells.domain.LoadRemoteFilteredSpellsUseCase
 import io.mockk.MockKAnnotations
 import io.mockk.impl.annotations.MockK
 import io.reactivex.rxjava3.observers.TestObserver
+import org.junit.After
 import org.junit.Before
 import org.junit.Test
 
@@ -41,5 +42,10 @@ class SpellsViewModelTest {
     @Test
     fun `check that initialState returns correct state`() {
         testObserver.assertValue(initialState)
+    }
+
+    @After
+    fun clearObservers() {
+        testObserver.dispose()
     }
 }

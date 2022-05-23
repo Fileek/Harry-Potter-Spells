@@ -9,6 +9,8 @@ import com.epam.harrypotterspells.feature.details.SpellField
 import io.mockk.MockKAnnotations
 import io.mockk.impl.annotations.MockK
 import io.mockk.verify
+import io.reactivex.rxjava3.observers.TestObserver
+import org.junit.After
 import org.junit.Before
 import org.junit.Test
 
@@ -22,6 +24,7 @@ class SaveSpellUseCaseTest {
 
     private lateinit var useCase: SaveSpellUseCase
     private lateinit var testUseCasePerformer: TestUseCasePerformer<SaveSpellAction, SaveSpellFieldResult>
+    private lateinit var testObserver: TestObserver<SaveSpellFieldResult>
 
     private val spell = StubList.spells.last().toSpell()
 
@@ -32,23 +35,27 @@ class SaveSpellUseCaseTest {
         MockKAnnotations.init(this, relaxUnitFun = true)
         useCase = SaveSpellUseCase(localRepository, remoteRepository)
         testUseCasePerformer = TestUseCasePerformer(useCase)
+        testObserver = testUseCasePerformer(saveSpellAction)
     }
 
     @Test
     fun `check that SaveSpellAction calls updateSpell on the localRepository`() {
-        testUseCasePerformer(saveSpellAction)
         verify { localRepository.saveSpell(spell) }
     }
 
     @Test
     fun `check that SaveSpellAction calls updateSpell on the remoteRepository`() {
-        testUseCasePerformer(saveSpellAction)
         verify { remoteRepository.saveSpell(spell) }
     }
 
     @Test
     fun `check that SaveSpellAction returns SaveSpellFieldResult`() {
-        val testObserver = testUseCasePerformer(saveSpellAction)
         testObserver.assertValue(SaveSpellFieldResult(spell, SpellField.INCANTATION))
+        testObserver.dispose()
+    }
+
+    @After
+    fun clearObservers() {
+        testObserver.dispose()
     }
 }

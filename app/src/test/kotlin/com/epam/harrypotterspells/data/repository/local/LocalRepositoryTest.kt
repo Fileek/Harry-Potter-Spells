@@ -1,5 +1,6 @@
 package com.epam.harrypotterspells.data.repository.local
 
+import org.junit.After
 import org.junit.Assert.assertEquals
 import org.junit.Test
 
@@ -20,5 +21,10 @@ class LocalRepositoryTest {
         repo.saveSpell(newSpell)
         val actualSpell = spellsObserver.values().last().last()
         assertEquals(newSpell, actualSpell)
+    }
+
+    @After
+    fun clearObservers() {
+        spellsObserver.dispose()
     }
 }

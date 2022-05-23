@@ -10,6 +10,7 @@ import io.mockk.impl.annotations.MockK
 import io.reactivex.rxjava3.core.Observable
 import io.reactivex.rxjava3.observers.TestObserver
 import io.reactivex.rxjava3.subjects.BehaviorSubject
+import org.junit.After
 import org.junit.Before
 import org.junit.Test
 
@@ -112,6 +113,11 @@ class DetailsViewModelTest {
         intentsSubject.onNext(updateIntent)
         intentsSubject.onNext(updateIntent)
         testObserver.assertValueCount(3)
+    }
+
+    @After
+    fun clearObservers() {
+        testObserver.dispose()
     }
 
     private companion object {
