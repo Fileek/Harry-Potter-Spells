@@ -9,6 +9,11 @@ import com.epam.harrypotterspells.util.scheduler.SchedulerProvider
 import io.reactivex.rxjava3.core.Single
 import javax.inject.Inject
 
+/**
+ * Remote realisation of [Repository] that provides data from given [api].
+ * @param api data source for the repository.
+ * @param schedulerProvider [SchedulerProvider] for network requests.
+ */
 class RemoteRepository @Inject constructor(
     private val api: SpellApi,
     private val schedulerProvider: SchedulerProvider
@@ -16,7 +21,7 @@ class RemoteRepository @Inject constructor(
 
     override fun loadSpells(): Single<List<Spell>> {
         return api.getSpells()
-            .subscribeOn(schedulerProvider.io())
+            .subscribeOn(schedulerProvider.getIOScheduler())
             .map(::processSuccessResponse)
             .onErrorReturn(::processErrorResponse)
     }

@@ -5,9 +5,9 @@ import io.reactivex.rxjava3.core.Scheduler
 import io.reactivex.rxjava3.schedulers.Schedulers
 
 class DefaultSchedulerProvider : SchedulerProvider {
-    override fun io(): Scheduler = Schedulers.io()
+    override fun getIOScheduler(): Scheduler = Schedulers.io()
 
-    override fun computation(): Scheduler = Schedulers.computation()
+    override fun getComputationScheduler(): Scheduler = Schedulers.computation()
 
-    override fun ui(): Scheduler = AndroidSchedulers.mainThread()
+    override fun getUIScheduler(): Scheduler = AndroidSchedulers.mainThread()
 }

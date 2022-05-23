@@ -5,15 +5,14 @@ import com.epam.harrypotterspells.mvibase.MVIAction
 
 sealed class DetailsAction : MVIAction {
     /**
-     * Action adds [field] to [DetailsViewState.fieldsNowEditing]
-     *
-     * @param field [SpellField] user wants to edit
+     * Action adds [field] to [DetailsViewState.fieldsNowEditing].
+     * @param field [SpellField] user wants to edit.
      */
     data class AddInFieldsNowEditingAction(val field: SpellField) : DetailsAction()
 
     /**
      * Action saves [spell] in repositories
-     * and removes [field] from [DetailsViewState.fieldsNowEditing]
+     * and removes [field] from [DetailsViewState.fieldsNowEditing].
      *
      * @param spell [Spell] to save
      * @param field changed [SpellField]

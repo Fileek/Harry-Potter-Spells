@@ -1,8 +1,8 @@
 package com.epam.harrypotterspells.feature.main
 
 import androidx.lifecycle.ViewModel
-import com.epam.harrypotterspells.feature.main.MainAction.SwitchToLocalAction
-import com.epam.harrypotterspells.feature.main.MainAction.SwitchToRemoteAction
+import com.epam.harrypotterspells.feature.main.MainAction.SwitchViewToLocalAction
+import com.epam.harrypotterspells.feature.main.MainAction.SwitchViewToRemoteAction
 import com.epam.harrypotterspells.feature.main.MainIntent.SwitchToLocalIntent
 import com.epam.harrypotterspells.feature.main.MainIntent.SwitchToRemoteIntent
 import com.epam.harrypotterspells.feature.main.MainResult.SwitchToLocalResult
@@ -33,16 +33,16 @@ class MainViewModel : ViewModel(), MVIViewModel<MainIntent, MainViewState> {
     }
 
     private fun getActionFromIntent(intent: MainIntent) = when (intent) {
-        is SwitchToRemoteIntent -> SwitchToRemoteAction
-        is SwitchToLocalIntent -> SwitchToLocalAction
+        is SwitchToRemoteIntent -> SwitchViewToRemoteAction
+        is SwitchToLocalIntent -> SwitchViewToLocalAction
     }
 
     private fun performActions() = ObservableTransformer<MainAction, MainResult> {
         it.flatMap { action ->
             Observable.just(
                 when (action) {
-                    is SwitchToRemoteAction -> SwitchToRemoteResult
-                    is SwitchToLocalAction -> SwitchToLocalResult
+                    is SwitchViewToRemoteAction -> SwitchToRemoteResult
+                    is SwitchViewToLocalAction -> SwitchToLocalResult
                 }
             )
         }

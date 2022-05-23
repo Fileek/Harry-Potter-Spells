@@ -1,11 +1,12 @@
 package com.epam.harrypotterspells.entity
 
 import android.graphics.Color
-import android.text.Spannable
 import android.text.SpannableString
 import android.text.SpannedString
 import android.text.style.BackgroundColorSpan
+import androidx.annotation.ColorInt
 import androidx.core.text.clearSpans
+import com.epam.harrypotterspells.util.extension.highlightString
 
 data class SpannableSpell(
     val id: String,
@@ -32,16 +33,21 @@ data class SpannableSpell(
     /**
      * Highlights the given [string] in [SpannableSpell.name], [SpannableSpell.incantation],
      * [SpannableSpell.type] and [SpannableSpell.effect] if they contain it as a substring
-     * by setting blue [BackgroundColorSpan].
-     *
+     * by setting [BackgroundColorSpan] with given [color].
+     * @param string string to highlight.
      * @param ignoreCase `true` to ignore character case when comparing strings.
+     * @param color color to highlight.
      */
-    fun highlightStrings(string: String, ignoreCase: Boolean) {
+    fun highlightStrings(
+        string: String,
+        ignoreCase: Boolean,
+        @ColorInt color: Int
+    ) {
         clearSpans()
-        if (name.contains(string, ignoreCase)) highlightStringInName(string)
-        if (incantation.contains(string, ignoreCase)) highlightStringInIncantation(string)
-        if (type.contains(string, ignoreCase)) highlightStringInType(string)
-        if (effect.contains(string, ignoreCase)) highlightStringInEffect(string)
+        if (name.contains(string, ignoreCase)) name.highlightString(string, ignoreCase, color)
+        if (incantation.contains(string, ignoreCase)) incantation.highlightString(string, ignoreCase, color)
+        if (type.contains(string, ignoreCase)) type.highlightString(string, ignoreCase, color)
+        if (effect.contains(string, ignoreCase)) effect.highlightString(string, ignoreCase, color)
     }
 
     private fun clearSpans() {
@@ -49,33 +55,5 @@ data class SpannableSpell(
         incantation.clearSpans()
         type.clearSpans()
         effect.clearSpans()
-    }
-
-    private fun highlightStringInName(string: String) {
-        val start = name.indexOf(string, ignoreCase = true)
-        val end = start + string.length
-        name.setSpan(span, start, end, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
-    }
-
-    private fun highlightStringInIncantation(string: String) {
-        val start = incantation.indexOf(string, ignoreCase = true)
-        val end = start + string.length
-        incantation.setSpan(span, start, end, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
-    }
-
-    private fun highlightStringInType(string: String) {
-        val start = type.indexOf(string, ignoreCase = true)
-        val end = start + string.length
-        type.setSpan(span, start, end, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
-    }
-
-    private fun highlightStringInEffect(string: String) {
-        val start = effect.indexOf(string, ignoreCase = true)
-        val end = start + string.length
-        effect.setSpan(span, start, end, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
-    }
-
-    private companion object {
-        private val span = BackgroundColorSpan(Color.BLUE)
     }
 }

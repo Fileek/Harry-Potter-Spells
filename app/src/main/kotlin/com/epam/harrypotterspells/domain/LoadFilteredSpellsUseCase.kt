@@ -6,10 +6,18 @@ import com.epam.harrypotterspells.feature.spells.SpellsResult
 import com.epam.harrypotterspells.util.extension.filterByStringAndHighlightIt
 import io.reactivex.rxjava3.core.ObservableTransformer
 
+/**
+ * Load and filter spells from given [repository].
+ * @param repository data source for spells.
+ */
 abstract class LoadFilteredSpellsUseCase<A : LoadFilteredAction>(
     private val repository: Repository
 ) : UseCase<A, SpellsResult> {
 
+    /**
+     * Load and filter spells. Starts with [SpellsResult.Loading].
+     * On success returns [SpellsResult.Success]. On error returns [SpellsResult.Error].
+     */
     override fun performAction() =
         ObservableTransformer<A, SpellsResult> {
             it.flatMap { action ->
