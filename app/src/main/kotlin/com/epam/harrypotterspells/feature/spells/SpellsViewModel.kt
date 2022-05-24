@@ -13,6 +13,7 @@ import com.epam.harrypotterspells.feature.spells.SpellsResult.Error
 import com.epam.harrypotterspells.feature.spells.SpellsResult.Loading
 import com.epam.harrypotterspells.feature.spells.SpellsResult.Success
 import com.epam.harrypotterspells.mvibase.MVIViewModel
+import com.epam.harrypotterspells.util.scheduler.SchedulerProvider
 import dagger.hilt.android.lifecycle.HiltViewModel
 import io.reactivex.rxjava3.core.Observable
 import io.reactivex.rxjava3.core.ObservableTransformer
@@ -22,6 +23,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 class SpellsViewModel @Inject constructor(
+    private val schedulerProvider: SchedulerProvider,
     private val loadRemoteFilteredSpellsUseCase: UseCase<LoadRemoteAction, SpellsResult>,
     private val loadLocalFilteredSpellsUseCase: UseCase<LoadLocalAction, SpellsResult>
 ) : ViewModel(), MVIViewModel<SpellsIntent, SpellsViewState> {
@@ -40,6 +42,7 @@ class SpellsViewModel @Inject constructor(
             .map(this::getActionFromIntent)
             .compose(performActions())
             .scan(initialState, reducer)
+            .observeOn(schedulerProvider.getUIScheduler())
             .replay(VIEW_STATE_BUFFER_SIZE)
             .autoConnect(NUMBER_OF_OBSERVERS)
             .distinctUntilChanged()

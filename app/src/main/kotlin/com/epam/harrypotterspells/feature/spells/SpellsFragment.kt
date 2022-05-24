@@ -12,7 +12,6 @@ import com.epam.harrypotterspells.databinding.FragmentSpellsBinding
 import com.epam.harrypotterspells.feature.spells.adapter.SpellAdapter
 import com.epam.harrypotterspells.mvibase.MVIView
 import dagger.hilt.android.AndroidEntryPoint
-import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
 import io.reactivex.rxjava3.core.Observable
 import io.reactivex.rxjava3.disposables.CompositeDisposable
 import io.reactivex.rxjava3.kotlin.plusAssign
@@ -54,9 +53,7 @@ class SpellsFragment : Fragment(), MVIView<SpellsIntent, SpellsViewState> {
     }
 
     private fun getStates() {
-        disposables += viewModel.getStates()
-            .observeOn(AndroidSchedulers.mainThread())
-            .subscribe(this::render)
+        disposables += viewModel.getStates().subscribe(this::render)
     }
 
     override fun getIntents(): Observable<SpellsIntent> {
@@ -76,6 +73,7 @@ class SpellsFragment : Fragment(), MVIView<SpellsIntent, SpellsViewState> {
 
     override fun onDestroy() {
         super.onDestroy()
+        binding.list.adapter = null
         _binding = null
         disposables.dispose()
     }

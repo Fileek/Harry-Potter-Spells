@@ -4,6 +4,7 @@ import com.epam.harrypotterspells.data.repository.local.LocalRepository
 import com.epam.harrypotterspells.data.repository.remote.RemoteRepository
 import com.epam.harrypotterspells.domain.LoadLocalFilteredSpellsUseCase
 import com.epam.harrypotterspells.domain.LoadRemoteFilteredSpellsUseCase
+import com.epam.harrypotterspells.util.TestSchedulerProvider
 import io.mockk.MockKAnnotations
 import io.mockk.impl.annotations.MockK
 import io.reactivex.rxjava3.observers.TestObserver
@@ -28,6 +29,7 @@ class SpellsViewModelTest {
     fun setup() {
         MockKAnnotations.init(this)
         viewModel = SpellsViewModel(
+            TestSchedulerProvider(),
             LoadRemoteFilteredSpellsUseCase(remoteRepository),
             LoadLocalFilteredSpellsUseCase(localRepository)
         )
