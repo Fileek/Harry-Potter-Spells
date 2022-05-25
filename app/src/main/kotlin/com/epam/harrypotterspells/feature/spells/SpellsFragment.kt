@@ -22,7 +22,7 @@ class SpellsFragment : Fragment(), MVIView<SpellsIntent, SpellsViewState> {
     private var _binding: FragmentSpellsBinding? = null
     private val binding get() = checkNotNull(_binding) { "Binding is not initialized" }
 
-    private val spellAdapter = SpellAdapter()
+    private var spellAdapter: SpellAdapter? = null
 
     private val viewModel: SpellsViewModel by activityViewModels()
     private val disposables = CompositeDisposable()
@@ -45,6 +45,7 @@ class SpellsFragment : Fragment(), MVIView<SpellsIntent, SpellsViewState> {
     }
 
     private fun setAdapter() {
+        spellAdapter = SpellAdapter()
         binding.list.adapter = spellAdapter
     }
 
@@ -62,7 +63,7 @@ class SpellsFragment : Fragment(), MVIView<SpellsIntent, SpellsViewState> {
 
     override fun render(state: SpellsViewState) {
         binding.progressBar.isVisible = state.isLoading
-        spellAdapter.submitList(state.data)
+        spellAdapter?.submitList(state.data)
         state.error?.let { showError(state.error) }
     }
 
@@ -73,7 +74,7 @@ class SpellsFragment : Fragment(), MVIView<SpellsIntent, SpellsViewState> {
 
     override fun onDestroy() {
         super.onDestroy()
-        binding.list.adapter = null
+        spellAdapter = null
         _binding = null
         disposables.dispose()
     }
