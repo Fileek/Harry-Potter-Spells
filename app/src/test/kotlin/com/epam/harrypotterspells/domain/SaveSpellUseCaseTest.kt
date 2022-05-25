@@ -51,7 +51,6 @@ class SaveSpellUseCaseTest {
     @Test
     fun `check that SaveSpellAction returns SaveSpellFieldResult`() {
         testObserver.assertValue(SaveSpellFieldResult(spell, SpellField.INCANTATION))
-        testObserver.dispose()
     }
 
     @After
