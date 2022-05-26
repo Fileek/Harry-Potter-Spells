@@ -1,7 +1,6 @@
 package com.epam.harrypotterspells.entity
 
 import android.os.Parcelable
-import android.text.SpannedString
 import kotlinx.parcelize.Parcelize
 
 @Parcelize
@@ -13,18 +12,22 @@ data class Spell(
     val effect: String,
     val light: String,
     val creator: String,
-    val canBeVerbal: String,
+    val canBeVerbal: CanBeVerbal,
 ) : Parcelable {
 
-    fun toSpannedSpell() =
-        SpannedSpell(
+    fun toJsonSpell() =
+        JsonSpell(
             id = this.id,
-            name = SpannedString(this.name),
-            incantation = SpannedString(this.incantation),
-            type = SpannedString(this.type),
-            effect = SpannedString(this.effect),
+            name = this.name,
+            incantation = this.incantation,
+            type = this.type,
+            effect = this.effect,
             light = this.light,
             creator = this.creator,
-            canBeVerbal = this.canBeVerbal
+            canBeVerbal = when (this.canBeVerbal) {
+                CanBeVerbal.YES -> true
+                CanBeVerbal.NO -> false
+                CanBeVerbal.UNKNOWN -> null
+            },
         )
 }

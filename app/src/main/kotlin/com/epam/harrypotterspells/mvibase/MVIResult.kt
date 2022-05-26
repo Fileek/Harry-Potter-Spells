@@ -1,6 +1,6 @@
 package com.epam.harrypotterspells.mvibase
 
 /**
- * Result of performed [MVIAction].
+ * Represents a result of some operation.
  */
 interface MVIResult

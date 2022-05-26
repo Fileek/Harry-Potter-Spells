@@ -15,25 +15,22 @@ data class JsonSpell(
 ) {
     fun toSpell() =
         Spell(
-            id = this.id,
-            name = this.name,
-            incantation = this.incantation ?: INCANTATION_STUB,
-            type = this.type,
-            effect = this.effect,
-            light = this.light,
-            creator = this.creator ?: CREATOR_STUB,
-            canBeVerbal = when (this.canBeVerbal) {
-                true -> CAN_BE_VERBAL
-                false -> CAN_NOT_BE_VERBAL
-                null -> CAN_BE_VERBAL_STUB
+            id = id,
+            name = name,
+            incantation = incantation ?: INCANTATION_STUB,
+            type = type,
+            effect = effect,
+            light = light,
+            creator = creator ?: CREATOR_STUB,
+            canBeVerbal = when (canBeVerbal) {
+                true -> CanBeVerbal.YES
+                false -> CanBeVerbal.NO
+                null -> CanBeVerbal.UNKNOWN
             },
         )
 
-    private companion object {
-        private const val INCANTATION_STUB = "Unknown"
-        private const val CAN_BE_VERBAL = "Yes"
-        private const val CAN_NOT_BE_VERBAL = "No"
-        private const val CAN_BE_VERBAL_STUB = "Unknown"
-        private const val CREATOR_STUB = "Unknown"
+    companion object {
+        const val INCANTATION_STUB = "Unknown"
+        const val CREATOR_STUB = "Unknown"
     }
 }

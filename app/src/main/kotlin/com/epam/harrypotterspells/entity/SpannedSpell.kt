@@ -1,6 +1,5 @@
 package com.epam.harrypotterspells.entity
 
-import android.text.SpannableString
 import android.text.SpannedString
 
 data class SpannedSpell(
@@ -11,38 +10,17 @@ data class SpannedSpell(
     val effect: SpannedString,
     val light: String,
     val creator: String,
-    val canBeVerbal: String,
+    val canBeVerbal: CanBeVerbal,
 ) {
     fun toSpell() =
         Spell(
-            id,
-            name.toString(),
-            incantation.toString(),
-            type.toString(),
-            effect.toString(),
-            light, creator, canBeVerbal
+            id = id,
+            name = name.toString(),
+            incantation = incantation.toString(),
+            type = type.toString(),
+            effect = effect.toString(),
+            light = light,
+            creator = creator,
+            canBeVerbal = canBeVerbal
         )
-
-    fun toSpannableSpell() =
-        SpannableSpell(
-            id,
-            SpannableString(name),
-            SpannableString(incantation),
-            SpannableString(type),
-            SpannableString(effect),
-            light, creator, canBeVerbal
-        )
-
-    /**
-     * Returns `true` if this [SpannedSpell] contains the specified [string] as a substring
-     * in [SpannedSpell.name], [SpannedSpell.incantation], [SpannedSpell.type] or [SpannedSpell.effect].
-     *
-     * @param ignoreCase `true` to ignore character case when comparing strings.
-     */
-    fun containsString(string: String, ignoreCase: Boolean): Boolean {
-        return name.contains(string, ignoreCase) ||
-                incantation.contains(string, ignoreCase) ||
-                type.contains(string, ignoreCase) ||
-                effect.contains(string, ignoreCase)
-    }
 }

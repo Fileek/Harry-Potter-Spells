@@ -1,10 +1,12 @@
 package com.epam.harrypotterspells.feature.spells
 
+import com.epam.harrypotterspells.entity.Spell
 import com.epam.harrypotterspells.mvibase.MVIIntent
 
 sealed class SpellsIntent : MVIIntent {
-    object LoadIntent : SpellsIntent()
-    object LoadRemoteIntent : SpellsIntent()
-    object LoadLocalIntent : SpellsIntent()
+    object InitialIntent : SpellsIntent()
+    object GetRemoteIntent : SpellsIntent()
+    object GetLocalIntent : SpellsIntent()
     data class SearchByQueryIntent(val query: String): SpellsIntent()
+    data class SaveSpellIntent(val spell: Spell): SpellsIntent()
 }

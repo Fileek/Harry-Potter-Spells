@@ -19,6 +19,12 @@ class MainViewModel : ViewModel(), MVIViewModel<MainIntent, MainViewState> {
     private val initialState = MainViewState()
     private val statesObservable = compose()
 
+    override fun processIntents(observable: Observable<MainIntent>) {
+        observable.subscribe(intentsSubject)
+    }
+
+    override fun getStates(): Observable<MainViewState> = statesObservable
+
     /**
      * Composes [MainViewState] based on received intents in [intentsSubject]
      */
@@ -37,22 +43,16 @@ class MainViewModel : ViewModel(), MVIViewModel<MainIntent, MainViewState> {
         is SwitchToLocalIntent -> SwitchViewToLocalAction
     }
 
-    private fun performActions() = ObservableTransformer<MainAction, MainResult> {
-        it.flatMap { action ->
-            Observable.just(
-                when (action) {
-                    is SwitchViewToRemoteAction -> SwitchToRemoteResult
-                    is SwitchViewToLocalAction -> SwitchToLocalResult
-                }
-            )
-        }
+    private fun performActions() = ObservableTransformer<MainAction, MainResult> { actions ->
+        Observable.merge(
+            actions.ofType(SwitchViewToRemoteAction::class.java).map {
+                SwitchToRemoteResult
+            },
+            actions.ofType(SwitchViewToLocalAction::class.java).map {
+                SwitchToLocalResult
+            }
+        )
     }
-
-    override fun processIntents(observable: Observable<MainIntent>) {
-        observable.subscribe(intentsSubject)
-    }
-
-    override fun getStates(): Observable<MainViewState> = statesObservable
 
     private companion object {
         private const val VIEW_STATE_BUFFER_SIZE = 1

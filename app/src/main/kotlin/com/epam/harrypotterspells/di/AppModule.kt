@@ -20,6 +20,9 @@ object AppModule {
     private const val BASE_URL = "https://wizard-world-api.herokuapp.com"
 
     @[Singleton Provides]
+    fun providesSchedulerProvider(): SchedulerProvider = DefaultSchedulerProvider()
+
+    @[Singleton Provides]
     fun providesApi(): SpellApi {
         return Retrofit.Builder()
             .baseUrl(BASE_URL)
@@ -39,7 +42,4 @@ object AppModule {
 
     @[Singleton Provides]
     fun providesLocalRepository(): LocalRepository = LocalRepository()
-
-    @[Singleton Provides]
-    fun providesSchedulerProvider(): SchedulerProvider = DefaultSchedulerProvider()
 }

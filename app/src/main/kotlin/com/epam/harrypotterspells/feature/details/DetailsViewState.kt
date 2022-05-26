@@ -5,8 +5,8 @@ import com.epam.harrypotterspells.mvibase.MVIViewState
 
 data class DetailsViewState(
     val spell: Spell? = null,
-    val editTextsNotSet: Boolean = true,
-    val fieldsNowEditing: Set<SpellField> = setOf(),
+    val isInitial: Boolean = true,
+    val editableFields: Set<SpellField> = setOf(),
     val focus: SpellField? = null,
     val error: Throwable? = null,
 ) : MVIViewState

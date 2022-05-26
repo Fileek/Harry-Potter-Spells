@@ -58,7 +58,7 @@ class SpellsFragment : Fragment(), MVIView<SpellsIntent, SpellsViewState> {
     }
 
     override fun getIntents(): Observable<SpellsIntent> {
-        return Observable.just(SpellsIntent.LoadIntent)
+        return Observable.just(SpellsIntent.InitialIntent)
     }
 
     override fun render(state: SpellsViewState) {

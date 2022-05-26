@@ -18,11 +18,11 @@
             tools:visibility="gone" />
 
         <androidx.constraintlayout.widget.Group
-            android:id="@+id/incantation_input_group"
+            android:id="@+id/editable_incantation_group"
             android:layout_width="0dp"
             android:layout_height="0dp"
             android:visibility="gone"
-            app:constraint_referenced_ids="incantation_input, save_incantation"
+            app:constraint_referenced_ids="editable_incantation, save_incantation"
             tools:visibility="visible" />
 
         <androidx.constraintlayout.widget.Group
@@ -33,11 +33,11 @@
             tools:visibility="visible" />
 
         <androidx.constraintlayout.widget.Group
-            android:id="@+id/type_input_group"
+            android:id="@+id/editable_type_group"
             android:layout_width="0dp"
             android:layout_height="0dp"
             android:visibility="gone"
-            app:constraint_referenced_ids="type_input, save_type"
+            app:constraint_referenced_ids="editable_type, save_type"
             tools:visibility="gone" />
 
         <androidx.constraintlayout.widget.Group
@@ -48,11 +48,11 @@
             tools:visibility="visible" />
 
         <androidx.constraintlayout.widget.Group
-            android:id="@+id/effect_input_group"
+            android:id="@+id/editable_effect_group"
             android:layout_width="0dp"
             android:layout_height="0dp"
             android:visibility="gone"
-            app:constraint_referenced_ids="effect_input, save_effect"
+            app:constraint_referenced_ids="editable_effect, save_effect"
             tools:visibility="gone" />
 
         <androidx.constraintlayout.widget.Group
@@ -63,11 +63,11 @@
             tools:visibility="visible" />
 
         <androidx.constraintlayout.widget.Group
-            android:id="@+id/light_input_group"
+            android:id="@+id/editable_light_group"
             android:layout_width="0dp"
             android:layout_height="0dp"
             android:visibility="gone"
-            app:constraint_referenced_ids="light_input, save_light"
+            app:constraint_referenced_ids="editable_light, save_light"
             tools:visibility="gone" />
 
         <androidx.constraintlayout.widget.Group
@@ -78,11 +78,11 @@
             tools:visibility="visible" />
 
         <androidx.constraintlayout.widget.Group
-            android:id="@+id/creator_input_group"
+            android:id="@+id/editable_creator_group"
             android:layout_width="0dp"
             android:layout_height="0dp"
             android:visibility="gone"
-            app:constraint_referenced_ids="creator_input, save_creator"
+            app:constraint_referenced_ids="editable_creator, save_creator"
             tools:visibility="gone" />
 
         <TextView
@@ -100,7 +100,7 @@
             android:layout_height="0dp"
             app:barrierDirection="top"
             app:constraint_referenced_ids="incantation_prefix, incantation,
-        edit_incantation, incantation_input, save_incantation" />
+        edit_incantation, editable_incantation, save_incantation" />
 
         <TextView
             android:id="@+id/incantation_prefix"
@@ -135,7 +135,7 @@
             app:layout_constraintTop_toTopOf="@+id/incantation" />
 
         <EditText
-            android:id="@+id/incantation_input"
+            android:id="@+id/editable_incantation"
             style="@style/Details.Field.Input"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
@@ -150,10 +150,10 @@
             style="@style/Details.Button.Save"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            app:layout_constraintBottom_toBottomOf="@+id/incantation_input"
+            app:layout_constraintBottom_toBottomOf="@+id/editable_incantation"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toEndOf="@+id/incantation_input"
-            app:layout_constraintTop_toTopOf="@+id/incantation_input" />
+            app:layout_constraintStart_toEndOf="@+id/editable_incantation"
+            app:layout_constraintTop_toTopOf="@+id/editable_incantation" />
 
         <androidx.constraintlayout.widget.Barrier
             android:id="@+id/incantation_bottom_barrier"
@@ -161,7 +161,7 @@
             android:layout_height="0dp"
             app:barrierDirection="bottom"
             app:constraint_referenced_ids="incantation_prefix, incantation,
-        edit_incantation, incantation_input, save_incantation" />
+        edit_incantation, editable_incantation, save_incantation" />
 
         <androidx.constraintlayout.widget.Barrier
             android:id="@+id/type_top_barrier"
@@ -169,7 +169,7 @@
             android:layout_height="0dp"
             app:barrierDirection="top"
             app:constraint_referenced_ids="type_prefix, type,
-        edit_type, type_input, save_type" />
+        edit_type, editable_type, save_type" />
 
         <TextView
             android:id="@+id/type_prefix"
@@ -203,7 +203,7 @@
             app:layout_constraintTop_toTopOf="@+id/type" />
 
         <EditText
-            android:id="@+id/type_input"
+            android:id="@+id/editable_type"
             style="@style/Details.Field.Input"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
@@ -218,10 +218,10 @@
             style="@style/Details.Button.Save"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            app:layout_constraintBottom_toBottomOf="@+id/type_input"
+            app:layout_constraintBottom_toBottomOf="@+id/editable_type"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toEndOf="@+id/type_input"
-            app:layout_constraintTop_toTopOf="@+id/type_input" />
+            app:layout_constraintStart_toEndOf="@+id/editable_type"
+            app:layout_constraintTop_toTopOf="@+id/editable_type" />
 
         <androidx.constraintlayout.widget.Barrier
             android:id="@+id/type_bottom_barrier"
@@ -229,7 +229,7 @@
             android:layout_height="0dp"
             app:barrierDirection="bottom"
             app:constraint_referenced_ids="type_prefix, type,
-        edit_type, type_input, save_type" />
+        edit_type, editable_type, save_type" />
 
         <androidx.constraintlayout.widget.Barrier
             android:id="@+id/effect_top_barrier"
@@ -237,7 +237,7 @@
             android:layout_height="0dp"
             app:barrierDirection="top"
             app:constraint_referenced_ids="effect_prefix, effect,
-        edit_effect, effect_input, save_effect" />
+        edit_effect, editable_effect, save_effect" />
 
         <TextView
             android:id="@+id/effect_prefix"
@@ -271,7 +271,7 @@
             app:layout_constraintTop_toTopOf="@+id/effect" />
 
         <EditText
-            android:id="@+id/effect_input"
+            android:id="@+id/editable_effect"
             style="@style/Details.Field.Input"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
@@ -286,10 +286,10 @@
             style="@style/Details.Button.Save"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            app:layout_constraintBottom_toBottomOf="@+id/effect_input"
+            app:layout_constraintBottom_toBottomOf="@+id/editable_effect"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toEndOf="@+id/effect_input"
-            app:layout_constraintTop_toTopOf="@+id/effect_input" />
+            app:layout_constraintStart_toEndOf="@+id/editable_effect"
+            app:layout_constraintTop_toTopOf="@+id/editable_effect" />
 
         <androidx.constraintlayout.widget.Barrier
             android:id="@+id/effect_bottom_barrier"
@@ -297,7 +297,7 @@
             android:layout_height="0dp"
             app:barrierDirection="bottom"
             app:constraint_referenced_ids="effect_prefix, effect,
-        edit_effect, effect_input, save_effect" />
+        edit_effect, editable_effect, save_effect" />
 
         <androidx.constraintlayout.widget.Barrier
             android:id="@+id/light_top_barrier"
@@ -305,7 +305,7 @@
             android:layout_height="0dp"
             app:barrierDirection="top"
             app:constraint_referenced_ids="light_prefix, light,
-        edit_light, light_input, save_light" />
+        edit_light, editable_light, save_light" />
 
         <TextView
             android:id="@+id/light_prefix"
@@ -339,7 +339,7 @@
             app:layout_constraintTop_toTopOf="@+id/light" />
 
         <EditText
-            android:id="@+id/light_input"
+            android:id="@+id/editable_light"
             style="@style/Details.Field.Input"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
@@ -354,10 +354,10 @@
             style="@style/Details.Button.Save"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            app:layout_constraintBottom_toBottomOf="@+id/light_input"
+            app:layout_constraintBottom_toBottomOf="@+id/editable_light"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toEndOf="@+id/light_input"
-            app:layout_constraintTop_toTopOf="@+id/light_input" />
+            app:layout_constraintStart_toEndOf="@+id/editable_light"
+            app:layout_constraintTop_toTopOf="@+id/editable_light" />
 
         <androidx.constraintlayout.widget.Barrier
             android:id="@+id/light_bottom_barrier"
@@ -365,7 +365,7 @@
             android:layout_height="0dp"
             app:barrierDirection="bottom"
             app:constraint_referenced_ids="light_prefix, light,
-        edit_light, light_input, save_light" />
+        edit_light, editable_light, save_light" />
 
         <androidx.constraintlayout.widget.Barrier
             android:id="@+id/creator_top_barrier"
@@ -373,7 +373,7 @@
             android:layout_height="0dp"
             app:barrierDirection="top"
             app:constraint_referenced_ids="creator_prefix, creator, edit_creator,
-            creator_input, save_creator" />
+            editable_creator, save_creator" />
 
         <TextView
             android:id="@+id/creator_prefix"
@@ -407,7 +407,7 @@
             app:layout_constraintTop_toTopOf="@id/creator" />
 
         <EditText
-            android:id="@+id/creator_input"
+            android:id="@+id/editable_creator"
             style="@style/Details.Field.Input"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
@@ -422,10 +422,10 @@
             style="@style/Details.Button.Save"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            app:layout_constraintBottom_toBottomOf="@id/creator_input"
+            app:layout_constraintBottom_toBottomOf="@id/editable_creator"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toEndOf="@id/creator_input"
-            app:layout_constraintTop_toTopOf="@id/creator_input" />
+            app:layout_constraintStart_toEndOf="@id/editable_creator"
+            app:layout_constraintTop_toTopOf="@id/editable_creator" />
 
         <androidx.constraintlayout.widget.Barrier
             android:id="@+id/creator_bottom_barrier"
@@ -433,7 +433,7 @@
             android:layout_height="0dp"
             app:barrierDirection="bottom"
             app:constraint_referenced_ids="creator_prefix, creator, edit_creator,
-        creator_input, save_creator" />
+        editable_creator, save_creator" />
 
         <TextView
             android:id="@+id/can_be_verbal_prefix"

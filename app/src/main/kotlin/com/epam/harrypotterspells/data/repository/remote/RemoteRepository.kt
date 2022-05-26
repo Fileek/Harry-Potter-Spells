@@ -10,29 +10,21 @@ import io.reactivex.rxjava3.core.Single
 import javax.inject.Inject
 
 /**
- * Remote realisation of [Repository] that provides data from given [api].
- * @param api data source for the repository.
+ * [Repository] implementation that uses given [api]
+ * and [schedulerProvider] to retrieve data from network.
+ * @param api API for network requests.
  * @param schedulerProvider [SchedulerProvider] for network requests.
  */
 class RemoteRepository @Inject constructor(
     private val api: SpellApi,
     private val schedulerProvider: SchedulerProvider
-) : Repository() {
+) : Repository {
 
-    override fun loadSpells(): Single<List<Spell>> {
+    override fun getSpells(): Single<List<JsonSpell>> {
         return api.getSpells()
             .subscribeOn(schedulerProvider.getIOScheduler())
-            .map(::processSuccessResponse)
-            .onErrorReturn(::processErrorResponse)
-    }
-
-    private fun processSuccessResponse(data: List<JsonSpell>): List<Spell> {
-        spells = data.map { it.toSpell() }
-        return spells
-    }
-
-    private fun processErrorResponse(error: Throwable): List<Spell> {
-        spells = StubList.spells.map { it.toSpell() }
-        return spells
+            .onErrorReturn {
+                StubList.spells
+            }
     }
 }

@@ -3,7 +3,7 @@ package com.epam.harrypotterspells.mvibase
 import io.reactivex.rxjava3.core.Observable
 
 /**
- * Process [MVIIntent]s of given type [I] and provides [MVIViewState]s of type [S].
+ * Represents MVI ViewModel.
  */
 interface MVIViewModel<I : MVIIntent, S : MVIViewState> {
 

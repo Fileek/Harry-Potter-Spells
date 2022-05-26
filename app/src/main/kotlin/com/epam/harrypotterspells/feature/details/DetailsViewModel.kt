@@ -2,10 +2,9 @@ package com.epam.harrypotterspells.feature.details
 
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
-import com.epam.harrypotterspells.domain.UseCase
 import com.epam.harrypotterspells.entity.Spell
-import com.epam.harrypotterspells.feature.details.DetailsAction.AddInFieldsNowEditingAction
-import com.epam.harrypotterspells.feature.details.DetailsAction.SaveSpellAction
+import com.epam.harrypotterspells.feature.details.DetailsAction.SaveSpellFieldAction
+import com.epam.harrypotterspells.feature.details.DetailsAction.SwitchFieldToEditableAction
 import com.epam.harrypotterspells.feature.details.DetailsIntent.EditSpellFieldIntent
 import com.epam.harrypotterspells.feature.details.DetailsIntent.FocusOnFieldIntent
 import com.epam.harrypotterspells.feature.details.DetailsIntent.SaveSpellFieldIntent
@@ -22,7 +21,6 @@ import javax.inject.Inject
 @HiltViewModel
 class DetailsViewModel @Inject constructor(
     state: SavedStateHandle,
-    private val saveSpellUseCase: UseCase<SaveSpellAction, SaveSpellFieldResult>,
 ) : ViewModel(), MVIViewModel<DetailsIntent, DetailsViewState> {
 
     /**
@@ -33,6 +31,12 @@ class DetailsViewModel @Inject constructor(
     private val intentsSubject = BehaviorSubject.create<DetailsIntent>()
     private val initialState = DetailsViewState(spell)
     private val statesObservable = compose()
+
+    override fun processIntents(observable: Observable<DetailsIntent>) {
+        observable.subscribe(intentsSubject)
+    }
+
+    override fun getStates(): Observable<DetailsViewState> = statesObservable
 
     /**
      * Composes [DetailsViewState] based on received intents in [intentsSubject]
@@ -48,27 +52,21 @@ class DetailsViewModel @Inject constructor(
     }
 
     private fun getActionFromIntent(intent: DetailsIntent) = when (intent) {
-        is EditSpellFieldIntent -> AddInFieldsNowEditingAction(intent.field)
-        is FocusOnFieldIntent -> AddInFieldsNowEditingAction(intent.field)
-        is SaveSpellFieldIntent -> SaveSpellAction(intent.newSpell, intent.field)
+        is EditSpellFieldIntent -> SwitchFieldToEditableAction(intent.field)
+        is FocusOnFieldIntent -> SwitchFieldToEditableAction(intent.field)
+        is SaveSpellFieldIntent -> SaveSpellFieldAction(intent.newSpell, intent.field)
     }
 
     private fun processActions() = ObservableTransformer<DetailsAction, DetailsResult> { actions ->
         Observable.merge(
-            actions.ofType(AddInFieldsNowEditingAction::class.java).map {
+            actions.ofType(SwitchFieldToEditableAction::class.java).map {
                 EditSpellFieldResult(it.field)
             },
-            actions.ofType(SaveSpellAction::class.java).compose(
-                saveSpellUseCase.performAction()
-            ),
+            actions.ofType(SaveSpellFieldAction::class.java).map {
+                SaveSpellFieldResult(it.spell, it.field)
+            }
         )
     }
-
-    override fun processIntents(observable: Observable<DetailsIntent>) {
-        observable.subscribe(intentsSubject)
-    }
-
-    override fun getStates(): Observable<DetailsViewState> = statesObservable
 
     private companion object {
         private const val SPELL_KEY = "spell"
@@ -82,16 +80,18 @@ class DetailsViewModel @Inject constructor(
                 when (result) {
                     is EditSpellFieldResult -> {
                         state.copy(
-                            editTextsNotSet = false,
-                            fieldsNowEditing = state.fieldsNowEditing.plus(result.field),
+                            isInitial = false,
+                            editableFields = state.editableFields.plus(result.field),
                             focus = result.field,
                         )
                     }
                     is SaveSpellFieldResult -> {
+                        val editableFields = state.editableFields.minus(result.field)
+                        val focus = if (editableFields.isEmpty()) null else editableFields.last()
                         state.copy(
                             spell = result.spell,
-                            fieldsNowEditing = state.fieldsNowEditing.minus(result.field),
-                            focus = null
+                            editableFields = editableFields,
+                            focus = focus
                         )
                     }
                 }

@@ -3,7 +3,7 @@ package com.epam.harrypotterspells.util.scheduler
 import io.reactivex.rxjava3.core.Scheduler
 
 /**
- * Provides schedulers for three types of work: IO-bound, computational and [getUIScheduler].
+ * Provides schedulers.
  */
 interface SchedulerProvider {
     /**

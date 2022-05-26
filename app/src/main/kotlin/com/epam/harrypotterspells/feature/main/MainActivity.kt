@@ -100,10 +100,10 @@ class MainActivity : AppCompatActivity(), MVIView<MainIntent, MainViewState> {
         CompoundButton.OnCheckedChangeListener { _, checked ->
             if (checked) {
                 mainIntentsSubject.onNext(MainIntent.SwitchToRemoteIntent)
-                spellsIntentsSubject.onNext(SpellsIntent.LoadRemoteIntent)
+                spellsIntentsSubject.onNext(SpellsIntent.GetRemoteIntent)
             } else {
                 mainIntentsSubject.onNext(MainIntent.SwitchToLocalIntent)
-                spellsIntentsSubject.onNext(SpellsIntent.LoadLocalIntent)
+                spellsIntentsSubject.onNext(SpellsIntent.GetLocalIntent)
             }
         }
 
