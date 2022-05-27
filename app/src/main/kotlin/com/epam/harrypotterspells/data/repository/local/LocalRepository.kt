@@ -11,16 +11,16 @@ import java.util.Collections
  */
 class LocalRepository : Repository {
 
-    private val spells = StubList.spells
+    private val stubSpells = StubData.spells
 
-    override fun getSpells(): Single<List<JsonSpell>> = Single.just(spells)
+    override fun getSpells(): Single<List<JsonSpell>> = Single.just(stubSpells)
 
     /**
      * Saves spell by replacing the previous spell with the same [Spell.id] in the stub list.
      * @param [newSpell] spell to replace.
      */
     fun saveSpell(newSpell: JsonSpell) {
-        val oldSpell = spells.find { it.id == newSpell.id }
-        Collections.replaceAll(spells, oldSpell, newSpell)
+        val oldSpell = stubSpells.find { it.id == newSpell.id }
+        Collections.replaceAll(stubSpells, oldSpell, newSpell)
     }
 }

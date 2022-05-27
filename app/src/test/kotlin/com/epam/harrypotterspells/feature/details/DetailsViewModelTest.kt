@@ -1,12 +1,8 @@
 package com.epam.harrypotterspells.feature.details
 
 import androidx.lifecycle.SavedStateHandle
-import com.epam.harrypotterspells.data.repository.local.LocalRepository
-import com.epam.harrypotterspells.data.repository.local.StubList
-import com.epam.harrypotterspells.data.repository.remote.RemoteRepository
-import com.epam.harrypotterspells.domain.SaveSpellUseCase
+import com.epam.harrypotterspells.data.repository.local.StubData
 import io.mockk.MockKAnnotations
-import io.mockk.impl.annotations.MockK
 import io.reactivex.rxjava3.core.Observable
 import io.reactivex.rxjava3.observers.TestObserver
 import io.reactivex.rxjava3.subjects.BehaviorSubject
@@ -16,25 +12,18 @@ import org.junit.Test
 
 class DetailsViewModelTest {
 
-    @MockK
-    lateinit var localRepository: LocalRepository
-
-    @MockK
-    lateinit var remoteRepository: RemoteRepository
-
     private lateinit var viewModel: DetailsViewModel
     private lateinit var testObserver: TestObserver<DetailsViewState>
-    private val testSpell = StubList.spells.first().toSpell()
+    private val testSpell = StubData.spells.last().toSpell()
     private val initialState = DetailsViewState(testSpell)
     private val testField = SpellField.INCANTATION
-    private val editSpellFieldIntent = DetailsIntent.EditSpellFieldIntent(testField)
+    private val editIntent = DetailsIntent.EditSpellFieldIntent(testField)
 
     @Before
     fun setup() {
         MockKAnnotations.init(this, relaxUnitFun = true)
         viewModel = DetailsViewModel(
             state = SavedStateHandle(mapOf("spell" to testSpell)),
-            saveSpellUseCase = SaveSpellUseCase(localRepository, remoteRepository),
         )
         testObserver = viewModel.getStates().test()
     }
@@ -53,27 +42,66 @@ class DetailsViewModelTest {
     fun `check that EditSpellFieldIntent returns correct state`() {
         val expectedState =
             initialState.copy(
-                editTextsNotSet = false,
-                fieldsNowEditing = setOf(testField),
+                isInitial = false,
+                editableFields = setOf(testField),
                 focus = testField
             )
         viewModel.processIntents(
-            Observable.just(editSpellFieldIntent)
+            Observable.just(editIntent)
         )
         testObserver.await()
         testObserver.assertValueAt(AFTER_EDIT_STATE_INDEX, expectedState)
     }
 
     @Test
+    fun `check that several EditSpellFieldIntents return correct state`() {
+        val secondField = SpellField.LIGHT
+        val thirdField = SpellField.CREATOR
+        val expectedState =
+            initialState.copy(
+                isInitial = false,
+                editableFields = setOf(testField, secondField, thirdField),
+                focus = thirdField
+            )
+        val secondEditIntent = DetailsIntent.EditSpellFieldIntent(secondField)
+        val thirdEditIntent = DetailsIntent.EditSpellFieldIntent(thirdField)
+        viewModel.processIntents(
+            Observable.just(editIntent, secondEditIntent, thirdEditIntent)
+        )
+        testObserver.await()
+        testObserver.assertValueAt(AFTER_SEVERAL_EDIT_STATE_INDEX, expectedState)
+    }
+
+    @Test
+    fun `check that several EditSpellFieldIntents and one SaveSpellFieldIntent return correct state`() {
+        val secondField = SpellField.LIGHT
+        val thirdField = SpellField.CREATOR
+        val secondEditIntent = DetailsIntent.EditSpellFieldIntent(secondField)
+        val thirdEditIntent = DetailsIntent.EditSpellFieldIntent(thirdField)
+        val saveIntent = DetailsIntent.SaveSpellFieldIntent(testSpell, thirdField)
+        val expectedState =
+            initialState.copy(
+                isInitial = false,
+                editableFields = setOf(testField, secondField),
+                focus = secondField
+            )
+        viewModel.processIntents(
+            Observable.just(editIntent, secondEditIntent, thirdEditIntent, saveIntent)
+        )
+        testObserver.await()
+        testObserver.assertValueAt(AFTER_EDIT_AND_SAVE_STATE_INDEX, expectedState)
+    }
+
+    @Test
     fun `check that FocusOnFieldIntent returns correct state`() {
         val expectedState =
             initialState.copy(
-                editTextsNotSet = false,
-                fieldsNowEditing = setOf(testField),
+                isInitial = false,
+                editableFields = setOf(testField),
                 focus = testField
             )
         viewModel.processIntents(
-            Observable.just(editSpellFieldIntent)
+            Observable.just(editIntent)
         )
         testObserver.await()
         testObserver.assertValueAt(AFTER_EDIT_STATE_INDEX, expectedState)
@@ -81,17 +109,17 @@ class DetailsViewModelTest {
 
     @Test
     fun `check that SaveSpellFieldIntent returns correct state`() {
-        val newSpell = testSpell.copy(incantation = "test")
-        val updateIntent = DetailsIntent.SaveSpellFieldIntent(newSpell, testField)
+        val newSpell = testSpell.copy(incantation = "incantation")
+        val saveIntent = DetailsIntent.SaveSpellFieldIntent(newSpell, testField)
         val expectedState =
             initialState.copy(
                 spell = newSpell,
-                fieldsNowEditing = emptySet(),
-                editTextsNotSet = false,
+                editableFields = emptySet(),
+                isInitial = false,
                 focus = null
             )
         viewModel.processIntents(
-            Observable.just(editSpellFieldIntent, updateIntent)
+            Observable.just(editIntent, saveIntent)
         )
         testObserver.await()
         testObserver.assertValueAt(AFTER_UPDATE_STATE_INDEX, expectedState)
@@ -100,18 +128,18 @@ class DetailsViewModelTest {
     @Test
     fun `check that same intent update state only once`() {
         val intentsSubject = BehaviorSubject.create<DetailsIntent>()
-        val updateIntent = DetailsIntent.SaveSpellFieldIntent(testSpell, testField)
+        val saveIntent = DetailsIntent.SaveSpellFieldIntent(testSpell, testField)
         viewModel.processIntents(
             intentsSubject.serialize()
         )
-        intentsSubject.onNext(editSpellFieldIntent)
-        intentsSubject.onNext(editSpellFieldIntent)
-        intentsSubject.onNext(editSpellFieldIntent)
+        intentsSubject.onNext(editIntent)
+        intentsSubject.onNext(editIntent)
+        intentsSubject.onNext(editIntent)
         testObserver.assertValueCount(2)
 
-        intentsSubject.onNext(updateIntent)
-        intentsSubject.onNext(updateIntent)
-        intentsSubject.onNext(updateIntent)
+        intentsSubject.onNext(saveIntent)
+        intentsSubject.onNext(saveIntent)
+        intentsSubject.onNext(saveIntent)
         testObserver.assertValueCount(3)
     }
 
@@ -123,5 +151,7 @@ class DetailsViewModelTest {
     private companion object {
         private const val AFTER_EDIT_STATE_INDEX = 1
         private const val AFTER_UPDATE_STATE_INDEX = 2
+        private const val AFTER_SEVERAL_EDIT_STATE_INDEX = 3
+        private const val AFTER_EDIT_AND_SAVE_STATE_INDEX = 4
     }
 }

@@ -1,6 +1,8 @@
 package com.epam.harrypotterspells.entity
 
 import android.os.Parcelable
+import com.epam.harrypotterspells.entity.JsonSpell.Companion.CREATOR_STUB
+import com.epam.harrypotterspells.entity.JsonSpell.Companion.INCANTATION_STUB
 import kotlinx.parcelize.Parcelize
 
 @Parcelize
@@ -17,14 +19,14 @@ data class Spell(
 
     fun toJsonSpell() =
         JsonSpell(
-            id = this.id,
-            name = this.name,
-            incantation = this.incantation,
-            type = this.type,
-            effect = this.effect,
-            light = this.light,
-            creator = this.creator,
-            canBeVerbal = when (this.canBeVerbal) {
+            id = id,
+            name = name,
+            incantation = if (incantation == INCANTATION_STUB) null else incantation,
+            type = type,
+            effect = effect,
+            light = light,
+            creator = if (creator == CREATOR_STUB) null else creator,
+            canBeVerbal = when (canBeVerbal) {
                 CanBeVerbal.YES -> true
                 CanBeVerbal.NO -> false
                 CanBeVerbal.UNKNOWN -> null

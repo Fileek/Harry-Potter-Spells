@@ -1,24 +1,24 @@
 package com.epam.harrypotterspells.domain
 
 import com.epam.harrypotterspells.data.repository.local.LocalRepository
-import com.epam.harrypotterspells.entity.Spell
-import com.epam.harrypotterspells.feature.spells.SpellsResult
+import com.epam.harrypotterspells.feature.spells.SpellsAction.SaveSpellAction
+import com.epam.harrypotterspells.feature.spells.SpellsResult.LocalResult
 import io.reactivex.rxjava3.core.Observable
 import javax.inject.Inject
 
 /**
  * UseCase to save changed spell in [LocalRepository].
- * @param localRepository local data source to update and retrieve data.
+ * @param repository local data source to update and retrieve data.
  */
 class SaveLocalSpellUseCase @Inject constructor(
-    private val localRepository: LocalRepository,
+    private val repository: LocalRepository,
 ) : UseCase {
 
-    fun performAction(spell: Spell): Observable<SpellsResult.LocalResult> {
-        localRepository.saveSpell(spell.toJsonSpell())
-        return localRepository.getSpells()
+    fun performAction(action: SaveSpellAction): Observable<LocalResult> {
+        repository.saveSpell(action.spell.toJsonSpell())
+        return repository.getSpells()
             .map { data ->
-                SpellsResult.LocalResult(data.map { it.toSpell() })
+                LocalResult(data.map { it.toSpell() })
             }
             .toObservable()
     }

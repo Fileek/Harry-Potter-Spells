@@ -4,7 +4,6 @@ import androidx.lifecycle.ViewModel
 import com.epam.harrypotterspells.domain.GetLocalSpellsUseCase
 import com.epam.harrypotterspells.domain.GetRemoteSpellsUseCase
 import com.epam.harrypotterspells.domain.SaveLocalSpellUseCase
-import com.epam.harrypotterspells.entity.SpannedSpell
 import com.epam.harrypotterspells.entity.Spell
 import com.epam.harrypotterspells.feature.spells.SpellsAction.GetCacheAction
 import com.epam.harrypotterspells.feature.spells.SpellsAction.GetLocalAction
@@ -18,7 +17,6 @@ import com.epam.harrypotterspells.feature.spells.SpellsIntent.SearchByQueryInten
 import com.epam.harrypotterspells.feature.spells.SpellsResult.LocalResult
 import com.epam.harrypotterspells.feature.spells.SpellsResult.RemoteResult
 import com.epam.harrypotterspells.mvibase.MVIViewModel
-import com.epam.harrypotterspells.util.span.SubstringHighlighter
 import com.epam.harrypotterspells.util.scheduler.SchedulerProvider
 import dagger.hilt.android.lifecycle.HiltViewModel
 import io.reactivex.rxjava3.core.Observable
@@ -125,7 +123,7 @@ class SpellsViewModel @Inject constructor(
     private fun performSaveSpellAction() = ObservableTransformer<SaveSpellAction, SpellsResult> {
         it.flatMap { action ->
             if (isRemote) saveCachedSpell(action.spell)
-            else saveLocalSpellUseCase.performAction(action.spell)
+            else saveLocalSpellUseCase.performAction(action)
         }
     }
 
@@ -155,7 +153,8 @@ class SpellsViewModel @Inject constructor(
                 cachedSpells = result.data
                 state.copy(
                     isLoading = false,
-                    data = filterAndHighlightBySearchQuery(result.data)
+                    searchQuery = searchQuery,
+                    data = filterSpellsBySearchQuery(result.data)
                 )
             }
             is RemoteResult.Error -> {
@@ -165,45 +164,26 @@ class SpellsViewModel @Inject constructor(
     }
 
     private fun reduceLocalResult(state: SpellsViewState, result: LocalResult): SpellsViewState {
-        return state.copy(isLoading = false, data = filterAndHighlightBySearchQuery(result.data))
-    }
-
-    private fun filterAndHighlightBySearchQuery(spells: List<Spell>): List<SpannedSpell> {
-        val filteredSpells = filterSpellsBySearchQuery(spells)
-        return highlightSearchQuery(filteredSpells)
+        return state.copy(
+            isLoading = false,
+            searchQuery = searchQuery,
+            data = filterSpellsBySearchQuery(result.data)
+        )
     }
 
     private fun filterSpellsBySearchQuery(spells: List<Spell>): List<Spell> {
         return spells.filter { spell ->
             with(spell) {
                 name.contains(searchQuery, IGNORE_CASE) ||
-                incantation.contains(searchQuery, IGNORE_CASE) ||
-                effect.contains(searchQuery, IGNORE_CASE) ||
-                type.contains(searchQuery, IGNORE_CASE)
+                        incantation.contains(searchQuery, IGNORE_CASE) ||
+                        effect.contains(searchQuery, IGNORE_CASE) ||
+                        type.contains(searchQuery, IGNORE_CASE)
             }
         }
     }
 
-    private fun highlightSearchQuery(spells: List<Spell>): List<SpannedSpell> {
-        val substringHighlighter = SubstringHighlighter(searchQuery, IGNORE_CASE)
-        return spells.map { spell ->
-            with(spell) {
-                SpannedSpell(
-                    id = id,
-                    name = substringHighlighter.invoke(name),
-                    incantation = substringHighlighter.invoke(incantation),
-                    type = substringHighlighter.invoke(type),
-                    effect = substringHighlighter.invoke(effect),
-                    light = light,
-                    creator = creator,
-                    canBeVerbal = canBeVerbal
-                )
-            }
-        }
-    }
-
-    private companion object {
-        private const val IGNORE_CASE = true
+    companion object {
+        const val IGNORE_CASE = true
         private const val NUMBER_OF_OBSERVERS = 0
         private const val VIEW_STATE_BUFFER_SIZE = 1
     }

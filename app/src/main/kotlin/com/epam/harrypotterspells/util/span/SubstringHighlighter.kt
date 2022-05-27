@@ -1,6 +1,5 @@
 package com.epam.harrypotterspells.util.span
 
-import android.graphics.Color
 import android.text.Spannable
 import android.text.SpannableString
 import android.text.SpannedString
@@ -11,13 +10,13 @@ import androidx.annotation.ColorInt
  * Encapsulates the [substring] with highlight parameters for later highlighting in other strings
  * using [BackgroundColorSpan] with the given [color].
  * @param substring substring to highlight.
- * @param ignoreCase `true` to ignore character case when matching a string. By default `true`.
- * @param color color to highlight. By default [Color.BLUE]
+ * @param ignoreCase `true` to ignore character case when matching a string.
+ * @param color color to highlight.
  */
 class SubstringHighlighter(
     private val substring: String,
-    private val ignoreCase: Boolean = true,
-    @ColorInt private val color: Int = Color.BLUE
+    private val ignoreCase: Boolean,
+    @ColorInt private val color: Int
 ) {
     private val span = BackgroundColorSpan(color)
     private val flags = Spannable.SPAN_EXCLUSIVE_EXCLUSIVE

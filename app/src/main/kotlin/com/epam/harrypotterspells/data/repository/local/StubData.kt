@@ -2,7 +2,7 @@ package com.epam.harrypotterspells.data.repository.local
 
 import com.epam.harrypotterspells.entity.JsonSpell
 
-object StubList {
+object StubData {
     val spells = listOf(
         JsonSpell("1", "Blue sparks", null, "Jet of blue sparks", true, "Charm", "Blue", null),
         JsonSpell("2", "Exploding Charm", "Bombarda", "Small explosion", true, "Charm", "Transparent", null),

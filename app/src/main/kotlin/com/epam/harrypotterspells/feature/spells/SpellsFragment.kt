@@ -11,6 +11,7 @@ import com.epam.harrypotterspells.R
 import com.epam.harrypotterspells.databinding.FragmentSpellsBinding
 import com.epam.harrypotterspells.feature.spells.adapter.SpellAdapter
 import com.epam.harrypotterspells.mvibase.MVIView
+import com.epam.harrypotterspells.util.extension.highlightSubstring
 import dagger.hilt.android.AndroidEntryPoint
 import io.reactivex.rxjava3.core.Observable
 import io.reactivex.rxjava3.disposables.CompositeDisposable
@@ -63,7 +64,7 @@ class SpellsFragment : Fragment(), MVIView<SpellsIntent, SpellsViewState> {
 
     override fun render(state: SpellsViewState) {
         binding.progressBar.isVisible = state.isLoading
-        spellAdapter?.submitList(state.data)
+        spellAdapter?.submitList(state.data.highlightSubstring(state.searchQuery))
         state.error?.let { showError(state.error) }
     }
 

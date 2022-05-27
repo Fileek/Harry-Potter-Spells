@@ -2,9 +2,8 @@ package com.epam.harrypotterspells.data.repository.remote
 
 import com.epam.harrypotterspells.data.api.SpellApi
 import com.epam.harrypotterspells.data.repository.Repository
-import com.epam.harrypotterspells.data.repository.local.StubList
+import com.epam.harrypotterspells.data.repository.local.StubData
 import com.epam.harrypotterspells.entity.JsonSpell
-import com.epam.harrypotterspells.entity.Spell
 import com.epam.harrypotterspells.util.scheduler.SchedulerProvider
 import io.reactivex.rxjava3.core.Single
 import javax.inject.Inject
@@ -24,7 +23,7 @@ class RemoteRepository @Inject constructor(
         return api.getSpells()
             .subscribeOn(schedulerProvider.getIOScheduler())
             .onErrorReturn {
-                StubList.spells
+                StubData.spells
             }
     }
 }
