@@ -123,16 +123,16 @@ class SpellsViewModel @Inject constructor(
     }
 
     private fun performSaveSpellAction() = ObservableTransformer<SaveSpellAction, SpellsResult> {
-        it.map { action ->
+        it.flatMap { action ->
             if (isRemote) saveCachedSpell(action.spell)
             else saveLocalSpellUseCase.performAction(action.spell)
         }
     }
 
-    private fun saveCachedSpell(newSpell: Spell): RemoteResult {
+    private fun saveCachedSpell(newSpell: Spell): Observable<RemoteResult> {
         val oldSpell = cachedSpells.find { oldSpell -> oldSpell.id == newSpell.id }
         Collections.replaceAll(cachedSpells, oldSpell, newSpell)
-        return RemoteResult.Success(cachedSpells)
+        return Observable.just(RemoteResult.Success(cachedSpells))
     }
 
     /**
