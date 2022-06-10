@@ -67,7 +67,8 @@ lintDebug:
   interruptible: true
   stage: build
   script:
-    - ./gradlew -Pci --console=plain :app:lintDebug -PbuildDir=lint
+    - ./gradlew -Pci --console=plain :app:lintFreeDebug -PbuildDir=lint
+    - ./gradlew -Pci --console=plain :app:lintPremiumDebug -PbuildDir=lint
 
 # Make Project
 assembleDebug:
@@ -84,4 +85,5 @@ debugTests:
   interruptible: true
   stage: test
   script:
-    - ./gradlew -Pci --console=plain :app:testDebug
+    - ./gradlew -Pci --console=plain :app:testFreeReleaseUnitTest
+    - ./gradlew -Pci --console=plain :app:testPremiumReleaseUnitTest

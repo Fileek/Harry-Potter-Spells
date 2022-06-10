@@ -4,31 +4,57 @@ plugins {
     id 'kotlin-kapt'
     id 'kotlin-parcelize'
     id 'androidx.navigation.safeargs.kotlin'
+    id 'dagger.hilt.android.plugin'
 }
 
 android {
-    compileSdk 32
+    compileSdk 31
 
     defaultConfig {
-        applicationId "com.example.harrypotterspells"
+        applicationId "com.epam.harrypotterspells"
         minSdk 21
-        targetSdk 32
+        targetSdk 31
         versionCode 1
         versionName "1.0"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+        signingConfig signingConfigs.debug
+    }
+
+    buildTypes {
+        release {
+            debuggable false
+            minifyEnabled true
+            shrinkResources true
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+        }
+        debug {
+            applicationIdSuffix ".debug"
+            debuggable true
+            minifyEnabled true
+            shrinkResources true
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+        }
+    }
+    flavorDimensions "version"
+
+    productFlavors {
+        free {
+            dimension "version"
+            applicationIdSuffix ".main"
+            versionNameSuffix "-main"
+        }
+        premium {
+            dimension "version"
+            applicationIdSuffix ".premium"
+            versionNameSuffix "-premium"
+        }
     }
 
     buildFeatures {
         viewBinding true
     }
 
-    buildTypes {
-        release {
-            minifyEnabled false
-            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
-        }
-    }
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8
@@ -44,9 +70,11 @@ dependencies {
     implementation "androidx.core:core-ktx:$android_core_version"
     implementation "androidx.appcompat:appcompat:$appcompat_version"
     implementation "com.google.android.material:material:$material_version"
+    implementation "androidx.recyclerview:recyclerview:$recycler_version"
 
-    // ViewBinding delegate
-    implementation "com.github.kirich1409:viewbindingpropertydelegate-noreflection:$viewbinding_delegate_version"
+    // Hilt
+    implementation "com.google.dagger:hilt-android:$hilt_version"
+    kapt "com.google.dagger:hilt-compiler:$hilt_version"
 
     // Navigation Component
     implementation "androidx.navigation:navigation-fragment-ktx:$navigation_version"
@@ -56,16 +84,14 @@ dependencies {
     implementation "androidx.lifecycle:lifecycle-viewmodel-ktx:$lifecycle_version"
 
     // RxJava
-    implementation "io.reactivex.rxjava3:rxandroid:$rxandroid_version"
     implementation "io.reactivex.rxjava3:rxjava:$rxjava_version"
-    implementation "com.jakewharton.rxrelay3:rxrelay:$rxrelay_version"
+    implementation "io.reactivex.rxjava3:rxandroid:$rxandroid_version"
+    implementation "io.reactivex.rxjava3:rxkotlin:$rxkotlin_version"
 
     // Retrofit
     implementation "com.squareup.retrofit2:retrofit:$retrofit_version"
     implementation "com.squareup.retrofit2:converter-gson:$retrofit_version"
     implementation "com.github.akarnokd:rxjava3-retrofit-adapter:$rxjava_adapter_version"
-    implementation 'androidx.legacy:legacy-support-v4:1.0.0'
-    implementation 'androidx.recyclerview:recyclerview:1.2.1'
 
     // JUnit
     testImplementation "junit:junit:$junit_version"

@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <style name="TextAppearance.AppCompat.Widget.Switch.Main">
+        <item name="android:textColor">@color/black</item>
+    </style>
+
+    <style name="Spells">
+        <item name="android:maxLines">1</item>
+        <item name="android:ellipsize">end</item>
+    </style>
+
+    <style name="Spells.Card">
+        <item name="android:layout_marginTop">@dimen/single_spacing</item>
+        <item name="android:layout_marginBottom">@dimen/single_spacing</item>
+        <item name="android:layout_marginStart">@dimen/double_spacing</item>
+        <item name="android:layout_marginEnd">@dimen/double_spacing</item>
+        <item name="strokeWidth">@dimen/item_stroke_width</item>
+        <item name="cardElevation">@dimen/single_spacing</item>
+        <item name="cardCornerRadius">@dimen/item_corner_radius</item>
+    </style>
+
+    <style name="Spells.Name">
+        <item name="android:textAppearance">@style/TextAppearance.AppCompat.Headline</item>
+    </style>
+
+    <style name="Spells.Incantation">
+        <item name="android:textAppearance">@style/TextAppearance.AppCompat.Medium</item>
+        <item name="android:textStyle">italic</item>
+    </style>
+
+    <style name="Spells.Field">
+        <item name="android:layout_marginStart">@dimen/half_spacing</item>
+        <item name="android:textAppearance">@style/TextAppearance.AppCompat.Body1</item>
+    </style>
+
+    <style name="Details" />
+
+    <style name="Details.Title">
+        <item name="android:padding">@dimen/double_spacing</item>
+        <item name="android:gravity">center</item>
+        <item name="android:textAppearance">@style/TextAppearance.AppCompat.Title</item>
+        <item name="android:textSize">@dimen/title_text_size</item>
+    </style>
+
+    <style name="Details.Field">
+        <item name="android:layout_marginStart">@dimen/single_spacing</item>
+        <item name="android:textAppearance">@style/TextAppearance.AppCompat.Large</item>
+        <item name="android:maxLines">1</item>
+        <item name="android:ellipsize">end</item>
+    </style>
+
+    <style name="Details.Field.Prefix">
+        <item name="android:layout_marginTop">@dimen/triple_spacing</item>
+        <item name="android:layout_marginBottom">@dimen/triple_spacing</item>
+        <item name="android:layout_marginStart">0dp</item>
+        <item name="android:gravity">center</item>
+        <item name="android:textStyle">bold</item>
+    </style>
+
+    <style name="Details.Field.Input">
+        <item name="android:maxLines">3</item>
+        <item name="android:inputType">textMultiLine</item>
+    </style>
+
+    <style name="Details.Button">
+        <item name="android:layout_marginStart">@dimen/single_spacing</item>
+    </style>
+
+    <style name="Details.Button.Edit">
+        <item name="android:src">@drawable/edit_icon</item>
+        <item name="android:background">?attr/selectableItemBackground</item>
+    </style>
+
+    <style name="Details.Button.Save">
+        <item name="android:text">@string/save</item>
+    </style>
+
+    <style name="Widget.AppCompat.SearchView.Spells">
+        <item name="searchHintIcon">@null</item>
+    </style>
+</resources>
